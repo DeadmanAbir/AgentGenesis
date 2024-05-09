@@ -24,7 +24,6 @@ export default function Home() {
               height={24}
               priority
             />
-            <img src="/vercel.svg" alt="Vercel Logo" className="dark:invert" />
           </a>
         </div>
       </div>

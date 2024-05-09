@@ -5,15 +5,16 @@
     "es6": true,
     "jest": true,
     "mocha": true,
-    "browser": true
+    "browser": true,
   },
   "plugins": ["@typescript-eslint"],
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended"
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@next/next/recommended",
   ],
   "parserOptions": {
-    "ecmaVersion": 2018
+    "ecmaVersion": 2018,
   },
   "rules": {
     "strict": 0,
@@ -60,8 +61,8 @@
       {
         "requireReturn": false,
         "requireParamDescription": false,
-        "requireReturnDescription": false
-      }
+        "requireReturnDescription": false,
+      },
     ],
     "no-spaced-func": 2,
     "semi-spacing": 2,
@@ -101,7 +102,7 @@
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-this-alias": "off",
     "@typescript-eslint/no-unnecessary-type-constraint": "off",
-    "@typescript-eslint/ban-types": "off"
+    "@typescript-eslint/ban-types": "off",
   },
   "overrides": [
     {
@@ -109,8 +110,8 @@
       "rules": {
         "prefer-arrow-callback": 0,
         "@typescript-eslint/no-non-null-assertion": 0,
-        "@typescript-eslint/no-unused-vars": 0
-      }
-    }
-  ]
+        "@typescript-eslint/no-unused-vars": 0,
+      },
+    },
+  ],
 }
