@@ -3,8 +3,13 @@ import { motion } from 'framer-motion';
 import { HeroHighlight, Highlight } from '../../components/ui/hero-highlight';
 import JoinTheWaitListForm from './joinTheWaitlistForm';
 import { TypewriterEffectSmoothDemo } from './typeWriterEffect';
+import { Dispatch, SetStateAction } from 'react';
 
-export function JoinTheWaitList() {
+export function JoinTheWaitList({
+  setOpen,
+}: {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) {
   return (
     <HeroHighlight className="flex flex-col gap-12">
       <div className="w-full">
@@ -43,11 +48,11 @@ export function JoinTheWaitList() {
         }}
         className="text-2xl px-4 md:text-4xl lg:text-5xl font-bold text-white max-w-4xl leading-relaxed lg:leading-snug text-center mx-auto "
       >
-        Joint the
+        Join the
         <Highlight className="text-black dark:text-white">Waitlist.</Highlight>
       </motion.h1>
       <div className="flex items-center justify-center">
-        <JoinTheWaitListForm />
+        <JoinTheWaitListForm setOpen={setOpen} />
       </div>
     </HeroHighlight>
   );

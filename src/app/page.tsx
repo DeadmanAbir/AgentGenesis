@@ -4,7 +4,8 @@ import { JoinTheWaitList } from './_components/joinTheWaitlist';
 import ThankYouDialog from './_components/thankYouDialog';
 
 export default function Home() {
-  const [isMounted, setIsMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState<Boolean>(false);
+  const [isOpen, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -15,8 +16,8 @@ export default function Home() {
   }
   return (
     <>
-      <ThankYouDialog />
-      <JoinTheWaitList />
+      <ThankYouDialog isOpen={isOpen} setOpen={setOpen} />
+      <JoinTheWaitList setOpen={setOpen} />
     </>
   );
 }
