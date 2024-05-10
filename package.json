@@ -14,9 +14,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
+    "@tsparticles/engine": "^3.3.0",
+    "@tsparticles/react": "^3.0.0",
+    "@tsparticles/slim": "^3.3.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "fix-hydration": "^1.0.2",
     "framer-motion": "^11.1.9",
     "lucide-react": "^0.378.0",
     "mini-svg-data-uri": "^1.4.4",
