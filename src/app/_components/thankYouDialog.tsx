@@ -29,7 +29,7 @@ const ThankYouDialog = ({
             <div>
               <BadgeCheck
                 className="text-white border-none h-12 w-12"
-                fill="green"
+                fill="#985AF6"
               />
             </div>
             <div>

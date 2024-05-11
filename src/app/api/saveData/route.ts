@@ -7,9 +7,8 @@ const uri: string = process.env.DATABASE_URL || '';
 export async function POST(request: NextRequest) {
   try {
     await connect(uri);
-    const { name, email } = await request.json();
+    const { email } = await request.json();
     const person = new User({
-      name,
       email,
     });
     await person.save();

@@ -1,8 +1,6 @@
+import { Loader } from 'lucide-react';
 import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
-interface UserForm {
-  name: string;
-  email: string;
-}
+
 const JoinTheWaitListForm = ({
   setOpen,
 }: {
@@ -13,7 +11,7 @@ const JoinTheWaitListForm = ({
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [opacity, setOpacity] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<UserForm>({ name: '', email: '' });
+  const [email, setEmail] = useState<string>('');
 
   const handleMouseMove = (e: React.MouseEvent<HTMLInputElement>) => {
     if (!divRef.current || isFocused) return;
@@ -50,7 +48,7 @@ const JoinTheWaitListForm = ({
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name: data.name, email: data.email }),
+      body: JSON.stringify({ email }),
     })
       .then((res) => res.json())
       .then(() => {
@@ -68,32 +66,7 @@ const JoinTheWaitListForm = ({
     >
       <div className="relative w-full ">
         <input
-          onChange={(e) => setData({ ...data, name: e.target.value })}
-          onMouseMove={handleMouseMove}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          autoComplete="off"
-          placeholder="Enter your Name"
-          type="text"
-          name="name"
-          required
-          className="h-12 w-full cursor-default rounded-md border border-gray-800 bg-gray-950 p-3.5 text-gray-100 transition-colors duration-500 placeholder:select-none  placeholder:text-gray-500 focus:border-[#8678F9] focus:outline-none"
-        />
-        <input
-          ref={divRef}
-          disabled
-          style={{
-            border: '1px solid #8678F9',
-            opacity,
-            WebkitMaskImage: `radial-gradient(30% 30px at ${position.x}px ${position.y}px, black 45%, transparent)`,
-          }}
-          aria-hidden="true"
-          className="pointer-events-none absolute left-0 top-0 z-10 h-12 w-full cursor-default rounded-md border border-[#8678F9] bg-[transparent] p-3.5 opacity-0  transition-opacity duration-500 placeholder:select-none"
-        />
-        <input
-          onChange={(e) => setData({ ...data, email: e.target.value })}
+          onChange={(e) => setEmail(e.target.value)}
           onMouseMove={handleMouseMove}
           onFocus={handleFocus}
           onBlur={handleBlur}
@@ -125,7 +98,7 @@ const JoinTheWaitListForm = ({
       >
         <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
         <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-gray-950 px-8 py-1 text-sm font-medium text-gray-50 backdrop-blur-3xl">
-          Join
+          {loading ? <Loader className="h-10 w-10 text-[#985AF6]" /> : 'Join'}
         </span>
       </button>
     </form>
