@@ -43,7 +43,7 @@ const JoinTheWaitListForm = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    fetch(`http://localhost:3000/api/saveData`, {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/saveData`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
