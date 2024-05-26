@@ -20,7 +20,7 @@ const IndexPage = () => {
           apps. Accessible. Customizable. Open Source.
         </PageHeaderDescription>
         <PageActions>
-          <Link href="/docs" className={cn(buttonVariants())}>
+          <Link href="/agents" className={cn(buttonVariants())}>
             Get Started
           </Link>
           <Link
