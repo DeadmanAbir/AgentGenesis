@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { ChevronRightIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Balancer from 'react-wrap-balancer';
+import { Mdx } from '@/components/mdx-components';
 interface AgentsPageProps {
   params: {
     slug: string[];
@@ -55,7 +56,9 @@ export async function Agents({ params }: AgentsPageProps) {
             </p>
           )}
         </div>
-        <div className="pb-12 pt-8"></div>
+        <div className="pb-12 pt-8">
+          <Mdx code={doc.body.code} />
+        </div>
       </div>
     </main>
   );
