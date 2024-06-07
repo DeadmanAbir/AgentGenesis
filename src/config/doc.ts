@@ -27,7 +27,7 @@ export const docsConfig: DocsConfig = {
       items: [
         {
           title: 'Accordion',
-          href: '/docs/components/accordion',
+          href: '/agents/components/accordion',
           items: [],
         },
       ],

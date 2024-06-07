@@ -18,10 +18,32 @@ var Agent = defineDocumentType(() => ({
   filePathPattern: `agents/**/*.mdx`,
   contentType: "mdx",
   fields: {
-    title: { type: "string", required: true },
+    title: {
+      type: "string",
+      required: true
+    },
     description: {
       type: "string",
       required: true
+    },
+    published: {
+      type: "boolean",
+      default: true
+    },
+    featured: {
+      type: "boolean",
+      default: false,
+      required: false
+    },
+    component: {
+      type: "boolean",
+      default: false,
+      required: false
+    },
+    toc: {
+      type: "boolean",
+      default: true,
+      required: false
     }
   },
   computedFields
@@ -33,4 +55,4 @@ var contentlayer_config_default = makeSource({
 export {
   contentlayer_config_default as default
 };
-//# sourceMappingURL=compiled-contentlayer-config-4KZIUCMX.mjs.map
+//# sourceMappingURL=compiled-contentlayer-config-DAYXR4QX.mjs.map
