@@ -12,12 +12,18 @@ import {
 } from './ui/accordion';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { AccordionDemo } from './Agent1/Accordian1';
+import ComponentPreview from './component-preview';
+import { ComponentPreviewTemp } from './component-preview-temp';
 
 const components = {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
+  AccordionDemo,
+  ComponentPreview,
+  ComponentPreviewTemp,
 
   h1: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h1
