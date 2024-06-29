@@ -15,10 +15,6 @@ export type Agent = {
   type: 'Agent'
   title: string
   description: string
-  published: boolean
-  featured: boolean
-  component: boolean
-  toc: boolean
   /** MDX file body */
   body: MDX
   slug: string

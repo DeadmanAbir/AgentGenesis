@@ -3,6 +3,9 @@ import {
   makeSource,
   ComputedFields,
 } from 'contentlayer/source-files';
+import rehypeSlug from 'rehype-slug';
+import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 interface Document {
   _raw: {
     flattenedPath: string;
@@ -35,26 +38,6 @@ const Agent = defineDocumentType(() => ({
       type: 'string',
       required: true,
     },
-    published: {
-      type: 'boolean',
-      default: true,
-    },
-
-    featured: {
-      type: 'boolean',
-      default: false,
-      required: false,
-    },
-    component: {
-      type: 'boolean',
-      default: false,
-      required: false,
-    },
-    toc: {
-      type: 'boolean',
-      default: true,
-      required: false,
-    },
   },
   computedFields,
 }));
@@ -62,4 +45,22 @@ const Agent = defineDocumentType(() => ({
 export default makeSource({
   contentDirPath: './src/content',
   documentTypes: [Agent],
+  mdx: {
+    rehypePlugins: [
+      rehypeSlug,
+      // @ts-ignore
+      [rehypePrettyCode, { theme: 'material-theme-darker' }],
+      [
+        rehypeAutolinkHeadings,
+        {
+          behavior: 'wrap',
+          properties: {
+            className: ['subheading-anchor'],
+            ariaLabel: 'Link to section',
+          },
+        },
+      ],
+    ],
+    remarkPlugins: [],
+  },
 });
