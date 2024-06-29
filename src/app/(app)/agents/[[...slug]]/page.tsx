@@ -56,7 +56,7 @@ export async function Agents({ params }: AgentsPageProps) {
             </p>
           )}
         </div>
-        <div className="pb-12 pt-8 prose dark:prose-invert">
+        <div className="pb-12 pt-8 prose dark:prose-invert prose-p:my-0">
           <Mdx code={doc.body.code} />
         </div>
       </div>
