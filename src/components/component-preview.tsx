@@ -1,56 +1,92 @@
-import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AccordionDemo } from './Agent1/Accordian1';
+'use client';
 
-interface ComponentPreviewProps {
-  component?: string;
-  code?: string;
+import { Icons } from '@/components/icons';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { cn } from '@/lib/utils';
+import * as React from 'react';
+import ComponentWrapper from './component-wrapper';
+import { registry } from '@/registry';
+
+interface ComponentPreviewProps extends React.HTMLAttributes<HTMLDivElement> {
+  name: string;
+  align?: 'center' | 'start' | 'end';
 }
 
-const ComponentPreview: React.FC<ComponentPreviewProps> = ({
-  component,
-  code,
-}) => {
-  const renderComponent = () => {
-    switch (component) {
-      case 'accordion':
-        return <AccordionDemo />;
-      default:
-        return (
-          <div className="flex items-center justify-center">
-            Component does not exist
-          </div>
-        );
+export function ComponentPreview({
+  name,
+  children,
+  className,
+  ...props
+}: ComponentPreviewProps) {
+  const Codes = React.Children.toArray(children) as React.ReactElement[];
+  const Code = Codes[0]; // first child
+  console.log(Codes, 'hih');
+  const Preview = React.useMemo(() => {
+    const Component = registry[name]?.component;
+
+    if (!Component) {
+      console.error(`Component with name "${name}" not found in registry.`);
+      return (
+        <p className="text-sm text-muted-foreground">
+          Component{' '}
+          <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm">
+            {name}
+          </code>{' '}
+          not found in registry.
+        </p>
+      );
     }
-  };
+
+    return <Component />;
+  }, [name]);
 
   return (
-    <div className="component-preview">
-      <Tabs defaultValue="Preview" className="w-full relative mt-6">
-        <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0">
-          <TabsTrigger
-            className="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
-            value="Preview"
-          >
-            Preview
-          </TabsTrigger>
-          <TabsTrigger
-            className="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
-            value="code"
-          >
-            Code
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent
-          className="relative [&_h3.font-heading]:text-base [&_h3.font-heading]:font-semibold border-2 rounded-lg p-20"
-          value="Preview"
-        >
-          {renderComponent()}
+    <div
+      className={cn(
+        'relative my-4 flex flex-col space-y-2 lg:max-w-[120ch]',
+        className,
+      )}
+      {...props}
+    >
+      <Tabs defaultValue="preview" className="relative mr-auto w-full">
+        <div className="flex items-center justify-between pb-3">
+          <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0">
+            <TabsTrigger
+              value="preview"
+              className="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
+            >
+              Preview
+            </TabsTrigger>
+            <TabsTrigger
+              value="code"
+              className="relative h-9 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
+            >
+              Code
+            </TabsTrigger>
+          </TabsList>
+        </div>
+        <TabsContent value="preview" className="relative rounded-md">
+          <ComponentWrapper>
+            <React.Suspense
+              fallback={
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  Loading...
+                </div>
+              }
+            >
+              {Preview}
+            </React.Suspense>
+          </ComponentWrapper>
         </TabsContent>
-        <TabsContent value="code">{code}</TabsContent>
+        <TabsContent value="code">
+          <div className="flex flex-col space-y-4">
+            <div className="w-full rounded-md [&_pre]:my-0 [&_pre]:max-h-[350px] [&_pre]:overflow-auto">
+              {Code}
+            </div>
+          </div>
+        </TabsContent>
       </Tabs>
     </div>
   );
-};
-
-export default ComponentPreview;
+}

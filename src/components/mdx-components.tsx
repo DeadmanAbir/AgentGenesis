@@ -13,8 +13,8 @@ import {
 import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { AccordionDemo } from './Agent1/Accordian1';
-import ComponentPreview from './component-preview';
 import { ComponentPreviewTemp } from './component-preview-temp';
+import { ComponentPreview } from './component-preview';
 
 const components = {
   Accordion,
