@@ -49,7 +49,7 @@ export default makeSource({
     rehypePlugins: [
       rehypeSlug,
       // @ts-ignore
-      [rehypePrettyCode, { theme: 'material-theme-darker' }],
+      [rehypePrettyCode, { theme: 'material-theme-palenight' }],
       [
         rehypeAutolinkHeadings,
         {

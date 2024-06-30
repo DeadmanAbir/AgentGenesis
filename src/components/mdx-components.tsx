@@ -147,8 +147,6 @@ const components = {
     />
   ),
 
-  Image,
-
   Step: ({ className, ...props }: React.ComponentProps<'h3'>) => (
     <h3
       className={cn(
