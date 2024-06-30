@@ -102,6 +102,10 @@
 [data-rehype-pretty-code-figure] code {
   @apply text-sm !leading-loose md:text-base border-0 p-0;
 }
+[data-rehype-pretty-code-figure] pre {
+  @apply rounded-t-none;
+}
+
 
 [data-rehype-pretty-code-figure] code[data-line-numbers] {
   counter-reset: line;
