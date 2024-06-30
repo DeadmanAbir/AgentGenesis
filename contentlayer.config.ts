@@ -27,7 +27,7 @@ const computedFields: ComputedFields<'Agent'> = {
 
 const Agent = defineDocumentType(() => ({
   name: 'Agent',
-  filePathPattern: `agents/**/*.mdx`,
+  filePathPattern: `docs/**/*.mdx`,
   contentType: 'mdx',
   fields: {
     title: {

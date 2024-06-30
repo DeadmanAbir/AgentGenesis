@@ -23,11 +23,11 @@ export const docsConfig: DocsConfig = {
       ],
     },
     {
-      title: 'Components',
+      title: 'Document Compressor',
       items: [
         {
-          title: 'Agent 1',
-          href: '/agents/components/agent1',
+          title: 'Cohere Reranker',
+          href: '/docs/components/cohereReranker',
           items: [],
         },
       ],
