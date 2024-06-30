@@ -15,6 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { AccordionDemo } from './Agent1/Accordian1';
 import ComponentPreview from './component-preview';
 import { ComponentPreviewTemp } from './component-preview-temp';
+import { CodeBlockWrapper } from './code-block-wrapper';
 
 const components = {
   Accordion,
@@ -24,6 +25,7 @@ const components = {
   AccordionDemo,
   ComponentPreview,
   ComponentPreviewTemp,
+  CodeBlockWrapper,
 
   h1: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h1
