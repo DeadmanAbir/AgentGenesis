@@ -19,13 +19,13 @@ export function MainNav() {
       </Link>
       <nav className="flex items-center gap-4 text-sm lg:gap-6">
         <Link
-          href="/agents"
+          href="/docs"
           className={cn(
             'transition-colors hover:text-foreground/80',
-            pathname === '/agents' ? 'text-foreground' : 'text-foreground/60',
+            pathname === '/docs' ? 'text-foreground' : 'text-foreground/60',
           )}
         >
-          Agents
+          Docs
         </Link>
       </nav>
     </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AccordionDemo } from './Agent1/Accordian1';
+import { ReRankerDemo } from './DemoComponents/reRankerDemo';
 
 interface ComponentPreviewProps {
   component?: string;
@@ -14,7 +14,7 @@ const ComponentPreview: React.FC<ComponentPreviewProps> = ({
   const renderComponent = () => {
     switch (component) {
       case 'accordion':
-        return <AccordionDemo />;
+        return <ReRankerDemo />;
       default:
         return (
           <div className="flex items-center justify-center">

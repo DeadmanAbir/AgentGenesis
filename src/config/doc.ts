@@ -7,8 +7,8 @@ interface DocsConfig {
 export const docsConfig: DocsConfig = {
   mainNav: [
     {
-      title: 'Agents',
-      href: '/agents',
+      title: 'Docs',
+      href: '/docs',
     },
   ],
   sidebarNav: [
@@ -17,7 +17,7 @@ export const docsConfig: DocsConfig = {
       items: [
         {
           title: 'Introduction',
-          href: '/agents',
+          href: '/docs',
           items: [],
         },
       ],

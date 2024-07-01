@@ -1,6 +1,6 @@
 ---
 title: Cohere Reranker
-description: A vertically stacked set of interactive headings that each reveal a section of content.
+description: Supercharge your RAG applications with Cohere's advanced reranking API. Reorder and refine document relevance effortlessly.
 ---
 
 <Tabs defaultValue="preview">
@@ -12,46 +12,45 @@ description: A vertically stacked set of interactive headings that each reveal a
 
 <TabsContent value="preview">
   <ComponentPreviewTemp>
-    <AccordionDemo />
+    <ReRankerDemo />
   </ComponentPreviewTemp>
 </TabsContent>
 
 <TabsContent value="code">
+
 <CodeBlockWrapper>
-```tsx  title="Accordion Demo" showLineNumbers{}
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
-export function AccordionDemo() {
-  return (
-    <Accordion type="single" collapsible className="w-full">
-      <AccordionItem value="item-1">
-        <AccordionTrigger>Is it accessible?</AccordionTrigger>
-        <AccordionContent>
-          Yes. It adheres to the WAI-ARIA design pattern.
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="item-2">
-        <AccordionTrigger>Is it styled?</AccordionTrigger>
-        <AccordionContent>
-          Yes. It comes with default styles that matches the other
-          components&apos; aesthetic.
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="item-3">
-        <AccordionTrigger>Is it animated?</AccordionTrigger>
-        <AccordionContent>
-          Yes. It&apos;s animated by default, but you can disable it if you
-          prefer.
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
-  );
-}
+
+```tsx showLineNumbers {15-27}
+import CohereReranking from '@/utils/rerank';
+
+const docs = [
+  'Carson City is the capital city of the American state of Nevada.',
+
+  'The Commonwealth of the Northern Mariana Islands is a group of islands in the Pacific Ocean. Its capital is Saipan.',
+
+  'Capitalization or capitalisation in English grammar is the use of a capital letter at the start of a word. English usage varies from capitalization in other languages.',
+
+  'Washington, D.C. (also known as simply Washington or D.C., and officially as the District of Columbia) is the capital of the United States. It is a federal district.',
+
+  'Capital punishment (the death penalty) has existed in the United States since beforethe United States was a country. As of 2017, capital punishment is legal in 30 of the 50 states.',
+];
+
+const cohereRerank = new CohereReranking({
+  apiKey: process.env.COHERE_API_KEY as string,
+  model: 'rerank-english-v3.0',
+  topN: 4,
+  maxChunksPerDoc: 10,
+});
+const rankedDocs = await cohereRerank.rankDocuments(
+  docs,
+  'What is the capital of the United States?',
+  {
+    returnDocuments: true,
+  },
+);
+console.log(rankedDocs);
 ```
+
 </CodeBlockWrapper>
 
 </TabsContent>
@@ -60,121 +59,170 @@ export function AccordionDemo() {
 
 ## Installation
 
-<Tabs defaultValue="cli">
-
-<TabsList>
-  <TabsTrigger value="cli">CLI</TabsTrigger>
-  <TabsTrigger value="manual">Manual</TabsTrigger>
-</TabsList>
-
-<TabsContent value="cli">
-
 <Steps>
 
-<Step>Run the following command:</Step>
+<Step>Install peer dependencies:</Step>
 
 ```bash
-npx shadcn-ui@latest add accordion
+npm i -s cohere-ai
 ```
 
-<Step>Update `tailwind.config.js`</Step>
+<Step>Add Environment Variables</Step>
 
-Add the following animations to your `tailwind.config.js` file:
-
-```tsx title="tailwind.config.js" showLineNumbers {5-11}
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  theme: {
-    extend: {
-      keyframes: {
-        'accordion-down': {
-          from: { height: '0' },
-          to: { height: 'var(--radix-accordion-content-height)' },
-        },
-        'accordion-up': {
-          from: { height: 'var(--radix-accordion-content-height)' },
-          to: { height: '0' },
-        },
-      },
-      animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
-      },
-    },
-  },
-};
+```tsx title=".env" showLineNumbers {}
+COHERE_API_KEY = rCuQ8moeqVz0hpcAheBV4kHejM40c6TpNBCIZEXZ;
 ```
 
+<Step>Copy the code</Step>
+
+Add the following code to your `utils/reranker.ts` file:
+
+<CodeBlockWrapper>
+```tsx title="reranker.ts" showLineNumbers {}
+import { CohereClient } from 'cohere-ai';
+
+interface DocumentInterface<
+Result extends Record<string, any> = Record<string, any>,
+
+> {
+> content: string;
+> score: Result;
+> id?: string; // Optional identifier for the document
+> }
+
+interface CohereRerankProps {
+apiKey: string; // The API key to use
+model?: string; // The name of the model to use (default: "rerank-english-v3.0")
+topN?: number; // How many documents to return (default: document length)
+maxChunksPerDoc?: number; // The maximum number of chunks per document (default: 10)
+}
+
+export class CohereReranking {
+  private model: string;
+  private topN?: number;
+  private client: CohereClient;
+  private maxChunksPerDoc: number;
+
+constructor(props: CohereRerankProps) {
+const {
+apiKey,
+model = 'rerank-english-v3.0',
+topN,
+maxChunksPerDoc = 10,
+} = props;
+
+    if (!apiKey || apiKey.length === 0) {
+      throw new Error('No API key provided for Cohere-Rerank.');
+    }
+
+    this.client = new CohereClient({ token: apiKey });
+    this.model = model;
+    this.topN = topN;
+    this.maxChunksPerDoc = maxChunksPerDoc;
+
+}
+
+async rankDocuments(
+documents: string[],
+query: string,
+options?: { returnDocuments: boolean },
+): Promise<
+Array<DocumentInterface> | Array<{ index: number; relevanceScore: number }>
+
+> {
+
+    const { results } = await this.client.rerank({
+      model: this.model,
+      query,
+      documents,
+      topN: this.topN ?? documents.length,
+      maxChunksPerDoc: this.maxChunksPerDoc,
+    });
+
+    if (options?.returnDocuments) {
+      return results.map((result) => ({
+        content: documents[result.index],
+        score: { relevanceScore: result.relevanceScore },
+      }));
+    } else {
+      return results.map((result) => ({
+        index: result.index,
+        relevanceScore: result.relevanceScore,
+      }));
+    }
+
+}
+}
+
+````
+
+</CodeBlockWrapper>
 </Steps>
-
-</TabsContent>
-
-<TabsContent value="manual">
-
-<Steps>
-
-<Step>Install the following dependencies:</Step>
-
-```bash
-npm install @radix-ui/react-accordion
-```
-
-<Step>Copy and paste the following code into your project.</Step>
-
-<Step>Update the import paths to match your project setup.</Step>
-
-<Step>Update `tailwind.config.js`</Step>
-
-Add the following animations to your `tailwind.config.js` file:
-
-```tsx title="tailwind.config.js" showLineNumbers {1-2}
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  theme: {
-    extend: {
-      keyframes: {
-        'accordion-down': {
-          from: { height: '0' },
-          to: { height: 'var(--radix-accordion-content-height)' },
-        },
-        'accordion-up': {
-          from: { height: 'var(--radix-accordion-content-height)' },
-          to: { height: '0' },
-        },
-      },
-      animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
-      },
-    },
-  },
-};
-```
-
-</Steps>
-
-</TabsContent>
-
-</Tabs>
 
 ## Usage
 
-```tsx title="Any" showLineNumbers {}
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
-```
 
-```tsx showLineNumbers {1}
-<Accordion type="single" collapsible>
-  <AccordionItem value="item-1">
-    <AccordionTrigger>Is it accessible?</AccordionTrigger>
-    <AccordionContent>
-      Yes. It adheres to the WAI-ARIA design pattern.
-    </AccordionContent>
-  </AccordionItem>
-</Accordion>
+```tsx showLineNumbers {17-25}
+import CohereReranking from "@/utils/rerank";
+
+const docs = [
+
+      'Carson City is the capital city of the American state of Nevada.',
+
+      'The Commonwealth of the Northern Mariana Islands is a group of islands in the Pacific Ocean. Its capital is Saipan.',
+
+      'Capitalization or capitalisation in English grammar is the use of a capital letter at the start of a word. English usage varies from capitalization in other languages.',
+
+      'Washington, D.C. (also known as simply Washington or D.C., and officially as the District of Columbia) is the capital of the United States. It is a federal district.',
+
+      'Capital punishment (the death penalty) has existed in the United States since beforethe United States was a country. As of 2017, capital punishment is legal in 30 of the 50 states.',
+
+    ],
+
+  const cohereRerank = new CohereReranking({
+    apiKey: process.env.COHERE_API_KEY as string,
+    model: "rerank-english-v3.0",
+    topN: 4,
+    maxChunksPerDoc: 10
+  });
+  const rankedDocs = await cohereRerank.rankDocuments(docs, 'What is the capital of the United States?', {
+    returnDocuments: true,
+  });
+  console.log(rankedDocs);
+
+
+/**[
+  {
+    content: 'Washington, D.C. (also known as simply Washington or D.C., and officially as the District of Columbia) is the capital of the United States. It is a federal district.',
+    score: { relevanceScore: 0.999071 }
+  },
+  {
+    content: 'Capital punishment (the death penalty) has existed in the United States since beforethe United States was a country. As of 2017, capital punishment is legal in 30 of the 50 states.',
+    score: { relevanceScore: 0.7867867 }
+  },
+  {
+    content: 'Carson City is the capital city of the American state of Nevada.',
+    score: { relevanceScore: 0.32713068 }
+  },
+  {
+    content: 'The Commonwealth of the Northern Mariana Islands is a group of islands in the Pacific Ocean. Its capital is Saipan.',
+    score: { relevanceScore: 0.014899643 }
+  }
+]
 ```
+## Props
+
+| Prop        | Type            | Description                                  | Default |
+| ----------- | --------------- | -------------------------------------------- | ------- |
+| className   | string          | The class name for the component             | ""      |
+| children    | React.ReactNode | The children nodes of the component          | null    |
+| reverse     | boolean         | If true, the animation plays in reverse      | false   |
+| duration    | number          | The duration of the animation in seconds     | 20      |
+| delay       | number          | The delay before the animation starts in seconds | 10   |
+| radius      | number          | The radius of the orbit in pixels            | 50      |
+
+## Credits
+
+This component is built on top of [Cohere Rerank](https://docs.cohere.com/reference/rerank)
+
+````
