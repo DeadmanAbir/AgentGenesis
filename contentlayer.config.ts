@@ -6,6 +6,7 @@ import {
 import rehypeSlug from 'rehype-slug';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import remarkGfm from 'remark-gfm';
 interface Document {
   _raw: {
     flattenedPath: string;
@@ -46,6 +47,7 @@ export default makeSource({
   contentDirPath: './src/content',
   documentTypes: [Agent],
   mdx: {
+    remarkPlugins: [remarkGfm],
     rehypePlugins: [
       rehypeSlug,
       // @ts-ignore
@@ -61,6 +63,5 @@ export default makeSource({
         },
       ],
     ],
-    remarkPlugins: [],
   },
 });
