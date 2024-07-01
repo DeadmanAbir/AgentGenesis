@@ -96,7 +96,7 @@
   }
 }
 [data-rehype-pretty-code-figure] figcaption {
-  @apply bg-zinc-800 rounded-xl rounded-b-none px-2 py-1 tracking-wider text-zinc-200;
+  @apply bg-black/90 dark:bg-gray-600 rounded-xl rounded-b-none px-2 py-1 tracking-wider text-zinc-200;
 }
 
 [data-rehype-pretty-code-figure] code {
