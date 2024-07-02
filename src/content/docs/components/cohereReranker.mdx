@@ -212,14 +212,24 @@ const docs = [
 ```
 ## Props
 
-| Prop        | Type            | Description                                  | Default |
-| ----------- | --------------- | -------------------------------------------- | ------- |
-| className   | string          | The class name for the component             | ""      |
-| children    | React.ReactNode | The children nodes of the component          | null    |
-| reverse     | boolean         | If true, the animation plays in reverse      | false   |
-| duration    | number          | The duration of the animation in seconds     | 20      |
-| delay       | number          | The delay before the animation starts in seconds | 10   |
-| radius      | number          | The radius of the orbit in pixels            | 50      |
+### CohereReranking
+
+| Prop              | Type             | Description                                                 | Default                |
+| ----------------- | ---------------- | ----------------------------------------------------------- | ---------------------- |
+| apiKey            | string           | The api key of cohere.                               | ""                     |
+| model             | string(optional) | The model name of cohere reranker.                           | "rerank-english-v3.0"   |
+| topN              | number(optional) | The number of documents to return in results.                 | Length of document     |
+| maxChunksPerDoc   | number(optional) | The maximum number of chunks to produce internally from a document. | 10                    |
+
+### rankDocuments
+
+| Prop              | Type            | Description                               |
+| ----------------- | --------------- | ----------------------------------------- |
+| documents         | string[]        | The list of documents to be reranked.     |
+| query             | string          | The query of the user.                    |
+| returnDocuments   | boolean(optional) | If false, returns results without the doc text. |
+
+
 
 ## Credits
 
