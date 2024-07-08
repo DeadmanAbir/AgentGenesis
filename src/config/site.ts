@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: 'AgentGenesis',
-  url: 'https://ui.shadcn.com',
+  url: 'https://www.agentgenesis.dev',
   ogImage: 'https://ui.shadcn.com/og.jpg',
   description:
     'Beautifully designed components that you can copy and paste into your apps. Accessible. Customizable. Open Source.',
