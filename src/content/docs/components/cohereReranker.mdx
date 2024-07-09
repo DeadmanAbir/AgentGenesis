@@ -21,7 +21,7 @@ description: Supercharge your RAG applications with Cohere's advanced reranking 
 <CodeBlockWrapper>
 
 ```tsx showLineNumbers {15-27}
-import CohereReranking from '@/utils/rerank';
+import { CohereReranking } from '@/utils/rerank';
 
 const docs = [
   'Carson City is the capital city of the American state of Nevada.',
@@ -163,7 +163,7 @@ Array<DocumentInterface> | Array<{ index: number; relevanceScore: number }>
 
 
 ```tsx showLineNumbers {17-25}
-import CohereReranking from "@/utils/rerank";
+import {CohereReranking} from "@/utils/rerank";
 
 const docs = [
 
@@ -209,6 +209,7 @@ const docs = [
     score: { relevanceScore: 0.014899643 }
   }
 ]
+**/
 ```
 ## Props
 
