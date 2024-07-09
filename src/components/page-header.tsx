@@ -28,7 +28,7 @@ function PageHeaderHeading({
   return (
     <h1
       className={cn(
-        'text-center text-3xl font-bold leading-tight tracking-normal text-balance md:text-7xl lg:leading-[1.1]',
+        'text-center text-3xl font-bold leading-tight tracking-normal text-balance md:text-7xl lg:leading-[1.1]  animate-text-animate ',
         className,
       )}
       {...props}
@@ -43,7 +43,7 @@ function PageHeaderDescription({
   return (
     <Balance
       className={cn(
-        'max-w-[750px] text-center text-lg font-light text-foreground',
+        'max-w-[750px] text-center text-lg font-light text-foreground animate-in slide-in-from-bottom-10 duration-700',
         className,
       )}
       {...props}
@@ -58,7 +58,7 @@ function PageActions({
   return (
     <div
       className={cn(
-        'flex w-full items-center justify-center space-x-4 py-4 md:pb-10',
+        'flex w-full items-center justify-center space-x-4 py-4 md:pb-10 animate-in slide-in-from-bottom-10 duration-1000 fade-in-100',
         className,
       )}
       {...props}
