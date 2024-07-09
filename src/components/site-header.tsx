@@ -13,10 +13,10 @@ const SiteHeader = () => {
   return (
     <header className=" w-full  fixed top-2 z-40 ">
       <div
-        className={`container   mx-auto flex h-14 max-w-[1240px] items-center rounded-full transition duration-500 ${scrolled ? 'dark:bg-neutral-900 bg-white  ' : ' bg-transparent'}   `}
+        className={`container   mx-auto flex h-14 max-w-[1440px] items-center rounded-full transition duration-500 ${scrolled ? 'dark:bg-neutral-900 bg-white  ' : ' bg-transparent'}   `}
       >
         <div
-          className={`absolute inset-0 h-full w-full max-w-[1240px] mx-auto bg-[#F9F9F9] dark:bg-neutral-800 pointer-events-none [mask-image:linear-gradient(to_bottom,white,transparent,white)] rounded-full transition duration-500  ${scrolled ? 'opacity-100 border-[2px]' : 'opacity-0'}`}
+          className={`absolute inset-0 h-full w-full max-w-[1440px] mx-auto bg-[#F9F9F9] dark:bg-neutral-800 pointer-events-none [mask-image:linear-gradient(to_bottom,white,transparent,white)] rounded-full transition duration-500  ${scrolled ? 'opacity-100 border-[2px]' : 'opacity-0'}`}
         ></div>
         <MainNav />
         <MobileNav />
