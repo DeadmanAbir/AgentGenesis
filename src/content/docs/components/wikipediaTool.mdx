@@ -1,0 +1,233 @@
+---
+title: Wikipedia Tool
+description: Your agents and chains are connected to Wikipedia using the WikipediaCustomTool.
+---
+
+<Tabs defaultValue="preview">
+
+<TabsList>
+  <TabsTrigger value="preview">Preview</TabsTrigger>
+  <TabsTrigger value="code">Code</TabsTrigger>
+</TabsList>
+
+<TabsContent value="preview">
+  <ComponentPreviewTemp>
+    <ReRankerDemo />
+  </ComponentPreviewTemp>
+</TabsContent>
+
+<TabsContent value="code">
+
+<CodeBlockWrapper>
+
+```tsx showLineNumbers {3-7}
+import { WikipediaCustomTool } from '@/utils/wikipediaTool';
+
+const wikiResults = new WikipediaCustomTool({
+  topKResults: 3,
+});
+
+const data = await wikiResults.search('Gen AI');
+
+console.log(data);
+```
+
+</CodeBlockWrapper>
+
+</TabsContent>
+
+</Tabs>
+
+## Installation
+
+<Steps>
+
+<Step>Copy the code</Step>
+
+Add the following code to your `utils/wikipediaTool.ts` file:
+
+<CodeBlockWrapper>
+```tsx title="wikipediaTool.ts" showLineNumbers {}
+interface WikipediaCustomToolProps {
+  topKResults?: number;
+  baseUrl?: string;
+}
+
+interface WikipediaSearchResults {
+query: {
+search: Array<{
+title: string;
+}>;
+};
+}
+
+interface WikipediaPage {
+pageid: number;
+ns: number;
+title: string;
+extract: string;
+}
+
+interface WikipediaPageResult {
+batchcomplete: string;
+query: {
+pages: Record<string, WikipediaPage>;
+};
+}
+
+interface WikipediaCustomToolResponse {
+page: string;
+details: string;
+}
+
+export class WikipediaCustomTool {
+  private topKResults: number;
+  private baseUrl: string;
+
+constructor(params: WikipediaCustomToolProps) {
+this.topKResults = params.topKResults ?? 3; // Default to 3 if not provided
+this.baseUrl = params.baseUrl ?? "https://en.wikipedia.org/w/api.php"; // Default Wikipedia English API URL if not provided
+}
+
+async search(query: string): Promise<WikipediaCustomToolResponse[] | string> {
+try {
+const searchResults = await this.fetchSearchResults(query);
+
+      const results: WikipediaCustomToolResponse[] = [];
+
+      for (
+        let i = 0;
+        i < Math.min(this.topKResults, searchResults.query.search.length);
+        i++
+      ) {
+        const page = searchResults.query.search[i].title;
+        const pageDetails = await this.fetchPage(page, true);
+
+        if (pageDetails) {
+          const data: WikipediaCustomToolResponse = {
+            page: page,
+            details: pageDetails.extract,
+          };
+          results.push(data);
+        }
+      }
+
+      if (results.length === 0) {
+        return "No good Wikipedia Search Result was found";
+      } else {
+        return results;
+      }
+    } catch (error) {
+      console.error("Error during Wikipedia search:", error);
+      return "Error during Wikipedia search";
+    }
+
+}
+
+private async fetchSearchResults(
+query: string
+): Promise<WikipediaSearchResults> {
+const searchParams = new URLSearchParams({
+action: "query",
+list: "search",
+srsearch: query,
+format: "json",
+});
+
+    const response = await fetch(`${this.baseUrl}?${searchParams.toString()}`);
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    return response.json() as Promise<WikipediaSearchResults>;
+
+}
+
+private async fetchPage(
+page: string,
+redirect: boolean
+): Promise<WikipediaPage> {
+const params = new URLSearchParams({
+action: "query",
+prop: "extracts",
+explaintext: "true",
+redirects: redirect ? "1" : "0",
+format: "json",
+titles: page,
+});
+
+    const response = await fetch(`${this.baseUrl}?${params.toString()}`);
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data: WikipediaPageResult = await response.json();
+    const { pages } = data.query;
+    const pageId = Object.keys(pages)[0];
+
+    return pages[pageId];
+
+}
+}
+
+````
+
+</CodeBlockWrapper>
+</Steps>
+
+## Usage
+
+
+```tsx showLineNumbers {3-7}
+import {WikipediaCustomTool} from "@/utils/wikipediaTool";
+
+ const wikiResults = new WikipediaCustomTool({
+    topKResults: 3,
+  });
+
+const data = await wikiResults.search("Gen AI");
+
+console.log(data);
+
+
+/**
+  [
+    {
+      "page": "Generative artificial intelligence",
+      "details": "Generative artificial intelligence (generative AI, GenAI, or GAI) is artificial intelligence capable of generating text, images, videos, or other data using generative models, often in response to prompts. Generative AI models learn the patterns and structure of their input training data and then generate new data that has similar characteristics.\nImprovements in transformer-based deep neural networks, particularly large language models (LLMs), enabled an AI boom of generative AI systems in the early 2020s. These include chatbots such as ChatGPT, Copilot, Gemini and LLaMA, text-to-image artificial intelligence image generation systems such as Stable Diffusion, Midjourney and DALL-E, and text-to-video AI generators such as Sora. Companies such as OpenAI, Anthropic, Microsoft, Google, and Baidu as well as numerous smaller firms have developed generative AI models.\nGenerative AI has uses across a wide range of industries, including software development, healthcare, finance, entertainment, customer service, sales and marketing, art, writing, fashion, and product design. However, concerns have been raised about the potential misuse of generative AI such as cybercrime, the use of fake news or deepfakes to deceive or manipulate people, and the mass replacement of human jobs....
+      },
+    {
+      "page": "Runway (company)",
+      "details": "Runway AI, Inc. (also known as Runway and RunwayML) is an American company headquartered in New York City that specializes in generative artificial intelligence research and technologies. The company is primarily focused on creating products and models for generating videos, images, and various multimedia content. It is most notable for developing the commercial text-to-video and video generative AI models Gen-1, Gen-2 and Gen-3 Alpha.\nRunway's tools and AI models have been utilized in films such as Everything Everywhere All At Once, in music videos for artists including A$AP Rocky, Kanye West, Brockhampton, and The Dandy Warhols, and in editing television shows like The Late Show and Top Gear.\n\n\n== History ==\nThe company was founded in 2018 by the Chileans Cristóbal Valenzuela, Alejandro Matamala, and the Greek Anastasis Germanidis after they met at New York University Tisch School of the Arts ITP...
+      },
+    {
+      "page": "Artificial intelligence",
+      "details": "Artificial intelligence (AI), in its broadest sense, is intelligence exhibited by machines, particularly computer systems. It is a field of research in computer science that develops and studies methods and software that enable machines to perceive their environment and use learning and intelligence to take actions that maximize their chances of achieving defined goals. Such machines may be called AIs.\nSome high-profile applications of AI include advanced web search engines (e.g., Google Search); recommendation systems (used by YouTube, Amazon, and Netflix); interacting via human speech (e.g., Google Assistant, Siri, and Alexa); autonomous vehicles (e.g., Waymo); generative and creative tools (e.g., ChatGPT, Apple Intelligence, and AI art); and superhuman play and analysis in strategy games (e.g., chess and Go). However, many AI applications are not perceived as AI: \"A lot of cutting edge AI has filtered into general applications, often without being called AI because once something becomes useful enough and common enough it's not labeled AI anymore.\"\nAlan Turing was the first person to conduct substantial research in the field that he called machine intelligence...
+      }
+  ]
+**/
+```
+## Props
+
+### WikipediaCustomToolProps
+| Prop        | Type               | Description                                           | Default                                  |
+| ----------- | ------------------ | ----------------------------------------------------- | ---------------------------------------- |
+| topKResults | number (optional)  | Top k results to be extracted from Wikipedia.         | 3                                        |
+| baseUrl     | string (optional)  | Wikipedia API URL.                                    | https://en.wikipedia.org/w/api.php       |
+
+### search
+
+| Prop   | Type   | Description                |
+| ------ | ------ | -------------------------- |
+| query  | string | Search query for Wikipedia. |
+
+
+
+
+## Credits
+
+This tool is built on top of [Wikipedia API](https://www.mediawiki.org/wiki/API:Main_page)
+
+````

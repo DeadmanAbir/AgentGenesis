@@ -1,0 +1,160 @@
+---
+title: Calculator Tool
+description: LLMs are inefficient while performing arithmetic operations. The Calculator Tool is a simple and efficient tool for performing arithmetic operations.
+---
+
+<Tabs defaultValue="preview">
+
+<TabsList>
+  <TabsTrigger value="preview">Preview</TabsTrigger>
+  <TabsTrigger value="code">Code</TabsTrigger>
+</TabsList>
+
+<TabsContent value="preview">
+  <ComponentPreviewTemp>
+    <ReRankerDemo />
+  </ComponentPreviewTemp>
+</TabsContent>
+
+<TabsContent value="code">
+
+<CodeBlockWrapper>
+
+```tsx showLineNumbers {3-16}
+import { CalculatorTool } from '@/utils/calculatorTool';
+
+const calculator = new CalculatorTool();
+
+//for simple expressions
+const simpleExpression = '2 * (3 + 4) - 100 / (99 - 1)';
+const simpleResult = await calculator.evaluate(simpleExpression);
+
+// For complex expressions
+const complexExpression = '2 * (a + b) - 100 / (c - 1)';
+const variables = { a: 3, b: 4, c: 99 };
+
+const complexResult = await calculator.evaluateMultiVar(
+  complexExpression,
+  variables,
+);
+```
+
+</CodeBlockWrapper>
+
+</TabsContent>
+
+</Tabs>
+
+## Installation
+
+<Steps>
+
+<Step>Install peer dependencies:</Step>
+
+```bash
+npm i expr-eval
+```
+
+<Step>Copy the code</Step>
+
+Add the following code to your `utils/calculatorTool.ts` file:
+
+<CodeBlockWrapper>
+```tsx title="calculatorTool.ts" showLineNumbers {}
+import { Parser } from "expr-eval";
+
+export class CalculatorTool {
+  async evaluate(input: string): Promise<string> {
+    try {
+      return Parser.evaluate(input).toString();
+    } catch (error) {
+      console.error("Error calculating expression:", error);
+      return "Error Calculating Expression";
+    }
+  }
+
+async evaluateMultiVar(
+expression: string,
+variables: Record<string, number>
+): Promise<string> {
+try {
+const substitutedExpression = this.substituteVariables(
+expression,
+variables
+);
+return Parser.evaluate(substitutedExpression).toString();
+} catch (error) {
+console.error("Error evaluating multi-variable expression:", error);
+return "Error evaluating expression";
+}
+}
+
+private substituteVariables(
+expression: string,
+variables: Record<string, number>
+): string {
+Object.entries(variables).forEach(([variable, value]) => {
+expression = expression.replace(
+new RegExp(variable, "g"),
+value.toString()
+);
+});
+return expression;
+}
+}
+
+````
+
+</CodeBlockWrapper>
+</Steps>
+
+## Usage
+
+
+```tsx showLineNumbers {3-16}
+import { CalculatorTool } from "@/utils/calculatorTool";
+
+ const calculator = new CalculatorTool();
+
+ //for simple expressions
+  const simpleExpression = "2 * (3 + 4) - 100 / (99 - 1)";
+  const simpleResult = await calculator.evaluate(simpleExpression);
+
+  // For complex expressions
+  const complexExpression = "2 * (a + b) - 100 / (c - 1)";
+  const variables = { a: 3, b: 4, c: 99 };
+
+  const complexResult = await calculator.evaluateMultiVar(
+    complexExpression,
+    variables
+  );
+  console.log( "Simple Result: ", simpleResult, "Complex Result : ", complexResult);
+
+/**
+ Simple Result:  12.979591836734693 Complex Result :  12.979591836734693
+**/
+```
+## Props
+
+### evaluate
+
+| Prop       | Type   | Description                              |
+| ---------- | ------ | ---------------------------------------- |
+| input      | string | The mathematical input string.            |
+
+
+### evaluateMultiVar
+
+| Prop       | Type                    | Description                              |
+| ---------- | ----------------------- | ---------------------------------------- |
+| expression | string                  | The mathematical input expression.       |
+| variables  |                         | Variables of the mathematical expression.|
+
+
+
+
+## Credits
+
+This component is built on top of [Langchain's Calculator Tool](https://v02.api.js.langchain.com/classes/langchain_community_tools_calculator.Calculator.html)
+
+````
