@@ -1,0 +1,231 @@
+---
+title: SearchApi Tool
+description: Using the SearchApi tool, you may link your chains and agents to Google. An abstraction layer for the Search API. When searching Google for answers to issues on current events, this tool comes in helpful.
+---
+
+<Tabs defaultValue="preview">
+
+<TabsList>
+  <TabsTrigger value="preview">Preview</TabsTrigger>
+  <TabsTrigger value="code">Code</TabsTrigger>
+</TabsList>
+
+<TabsContent value="preview">
+  <ComponentPreviewTemp>
+    <ReRankerDemo />
+  </ComponentPreviewTemp>
+</TabsContent>
+
+<TabsContent value="code">
+
+<CodeBlockWrapper>
+
+```tsx showLineNumbers {3-9}
+import { SearchApiTool } from '@/utils/searchapiTool';
+
+const searchApi = new SearchApiTool({
+  apiKey: process.env.SEARCHAPI_API as string,
+});
+
+const query = 'How to get into Y Combinator?';
+
+const searchResult = await searchApi.search(query);
+
+console.log(searchResult);
+```
+
+</CodeBlockWrapper>
+
+</TabsContent>
+
+</Tabs>
+
+## Installation
+
+<Steps>
+
+<Step>Add Environment Variables</Step>
+
+```tsx title=".env" showLineNumbers {}
+SEARCHAPI_API = aSdWytUQZUkBbPpGcXNAG4X0;
+/* You can get one from - https://www.searchapi.io */
+```
+
+<Step>Copy the code</Step>
+
+Add the following code to your `utils/searchapiTool.ts` file:
+
+<CodeBlockWrapper>
+```tsx title="searchapiTool.ts" showLineNumbers {}
+type ExtraOptions = {
+  device?: "desktop" | "mobile" | "tablet";
+  location?: string;
+  uule?: string;
+  google_domain?: string;
+  gl?: string;
+  hl?: string;
+  lr?: string;
+  cr?: string;
+  nfpr?: 0 | 1;
+  filter?: 0 | 1;
+  safe?: "active" | "off";
+  time_period?:
+    | "last_hour"
+    | "last_day"
+    | "last_week"
+    | "last_month"
+    | "last_year";
+  time_period_min?: string;
+  time_period_max?: string;
+  num?: number;
+  page?: number;
+};
+
+interface SearchApiToolProps {
+apiKey: string;
+options?: ExtraOptions;
+}
+
+interface SearchApiToolResults {
+title?: string;
+link?: string;
+snippet: string;
+}
+
+export class SearchApiTool {
+  private apiKey: string;
+  private options?: ExtraOptions;
+
+constructor(props: SearchApiToolProps) {
+const { apiKey, options } = props;
+if (!apiKey || apiKey.length === 0) {
+throw new Error(
+"SearchApi requires an API key. Please set it as SEARCHAPI_API_KEY in your .env file, AND pass it as a parameter to the SearchApi constructor."
+);
+}
+
+    this.apiKey = apiKey;
+    this.options = options;
+
+}
+
+async search(query: string): Promise<SearchApiToolResults[] | string> {
+const url = this.buildUrl(query);
+try {
+const response = await fetch(url);
+const json = await response.json();
+
+      if (json.error) {
+        throw new Error(
+          `Failed to load search results from SearchApi due to: ${json.error}`
+        );
+      }
+
+      if (json.answer_box?.answer) {
+        return json.answer_box.answer;
+      }
+
+      if (json.organic_results) {
+        const data: SearchApiToolResults[] = json.organic_results
+          .filter((result: any) => result.snippet)
+          .map((result: any) => ({
+            title: result.title || null,
+            link: result.link || null,
+            snippet: result.snippet,
+          }));
+
+        return data;
+      }
+
+      return "No valid search results found";
+    } catch (error: any) {
+      throw new Error(`Failed to fetch from SearchApi: ${error.message}`);
+    }
+
+}
+
+private buildUrl(query: string): string {
+const params: Record<string, string | number | undefined> = {
+engine: "google",
+api_key: this.apiKey,
+...this.options,
+q: query,
+};
+
+    const searchParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        searchParams.append(key, `${value}`);
+      }
+    });
+
+    return `https://www.searchapi.io/api/v1/search?${searchParams.toString()}`;
+
+}
+}
+
+````
+
+</CodeBlockWrapper>
+</Steps>
+
+## Usage
+
+
+```tsx showLineNumbers {3-9}
+import { SearchApiTool } from "@/utils/searchapiTool";
+
+const searchApi = new SearchApiTool({
+  apiKey: process.env.SEARCHAPI_API as string,
+});
+
+const query = "How to get into Y Combinator?";
+
+const searchResult = await searchApi.search(query);
+
+console.log(searchResult);
+
+/**
+ [
+    {
+      "title": "Apply to Y Combinator",
+      "link": "https://www.ycombinator.com/apply",
+      "snippet": "To apply for the Y Combinator program, submit an application form. We accept companies twice a year in two batches. The program includes dinners every ..."
+    },
+    {
+      "title": "How To Actually Get Into Y Combinator: Tales from a Founder",
+      "link": "https://thelennyjohnson.medium.com/how-to-actually-get-into-y-combinator-tales-from-a-founder-f376a0444920",
+      "snippet": "Have Ivy League founders: It's easier to get into YC if you went to the same school as Mark Zuckerberg or Bill Gates. And it's not hard to see ..."
+    },
+   ...,
+    {
+      "title": "How to have an outstanding Y Combinator application",
+      "link": "https://scet.berkeley.edu/how-to-have-an-outstanding-y-combinator-application/",
+      "snippet": "YC does fund companies that apply with only an idea. Founders also need to be working on the startup full time once they've been funded by YC."
+    }
+  ]
+**/
+```
+## Props
+
+### SearchApiTool
+
+| Prop    | Type   | Description                              | Default |
+| ------- | ------ | ---------------------------------------- | ------- |
+| apiKey  | string | The API key of Search API.               | ""      |
+| options | object | Different configurations for Search API. | {}      |
+
+### search
+
+| Prop  | Type   | Description                                     |
+| ----- | ------ | ----------------------------------------------- |
+| query | string | The query of the user to be searched on Google. |
+
+
+
+
+## Credits
+
+This component is built on top of [Langchain's SearchApi Tool](https://js.langchain.com/v0.2/docs/integrations/tools/searchapi/) & [Search Api](https://www.searchapi.io/docs/google)
+
+````

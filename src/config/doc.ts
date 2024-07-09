@@ -32,5 +32,25 @@ export const docsConfig: DocsConfig = {
         },
       ],
     },
+    {
+      title: 'Tools',
+      items: [
+        {
+          title: 'Wikipedia Tool',
+          href: '/docs/components/wikipediaTool',
+          items: [],
+        },
+        {
+          title: 'SearchApi Tool',
+          href: '/docs/components/searchapiTool',
+          items: [],
+        },
+        {
+          title: 'Calculator Tool',
+          href: '/docs/components/calculatorTool',
+          items: [],
+        },
+      ],
+    },
   ],
 };
