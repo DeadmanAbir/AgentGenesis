@@ -1,6 +1,7 @@
 import Banner from '@/components/banner';
 import Footer from '@/components/footer';
 import { Icons } from '@/components/icons';
+import ImageDisplay from '@/components/image-display';
 import {
   PageActions,
   PageHeader,
@@ -39,7 +40,7 @@ const IndexPage = () => {
             </Link>
           </PageActions>
         </PageHeader>
-
+        <ImageDisplay />
         <Banner />
       </div>
       <Footer />
