@@ -11,7 +11,7 @@ import useScrollTop from '@/hooks/use-scroll';
 const SiteHeader = () => {
   const scrolled = useScrollTop();
   return (
-    <header className=" w-full  fixed top-2 z-40 ">
+    <header className=" w-full  fixed top-2 z-50 ">
       <div
         className={`container   mx-auto flex h-14 max-w-[1440px] items-center rounded-full transition duration-500 ${scrolled ? 'dark:bg-neutral-900 bg-white  ' : ' bg-transparent'}   `}
       >

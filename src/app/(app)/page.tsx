@@ -41,8 +41,8 @@ const IndexPage = () => {
           </PageActions>
         </PageHeader>
         <ImageDisplay />
-        <Banner />
       </div>
+      <Banner />
       <Footer />
     </>
   );
