@@ -1,0 +1,351 @@
+---
+title: LinkedIn Tool
+description: Provide the URL to a profile or company to get all of its details using the LinkedIn tool.
+---
+
+<Tabs defaultValue="preview">
+
+<TabsList>
+  <TabsTrigger value="preview">Preview</TabsTrigger>
+  <TabsTrigger value="code">Code</TabsTrigger>
+</TabsList>
+
+<TabsContent value="preview">
+  <ComponentPreviewTemp>
+    <ReRankerDemo />
+  </ComponentPreviewTemp>
+</TabsContent>
+
+<TabsContent value="code">
+
+<CodeBlockWrapper>
+
+```tsx showLineNumbers {3-13}
+import { LinkedinTool } from '@/utils/linkedinTool';
+
+const tool = new LinkedinTool({
+  apiKey: process.env.PROXYCURL_API_KEY as string,
+});
+
+const profileData = await tool.searchProfile(
+  'https://www.linkedin.com/in/abir-dutta-408759223/',
+);
+
+const companyData = await tool.searchCompany(
+  'https://www.linkedin.com/company/perplexity-ai/',
+);
+```
+
+</CodeBlockWrapper>
+
+</TabsContent>
+
+</Tabs>
+
+## Installation
+
+<Steps>
+
+<Step>Add Environment Variables</Step>
+
+```tsx title=".env" showLineNumbers {}
+PROXYCURL_API_KEY = _520KzIffvwNHGgBGJYXdZ;
+/* You can get one from - https://nubela.co/proxycurl/linkedin */
+```
+
+<Step>Copy the code</Step>
+
+Add the following code to your `utils/linkedinTool.ts` file:
+
+<CodeBlockWrapper>
+```tsx title="linkedinTool.ts" showLineNumbers {}
+interface LinkedinToolProps {
+  apiKey: string;
+}
+
+export class LinkedinTool {
+  private apiKey: string;
+
+constructor(props: LinkedinToolProps) {
+const { apiKey } = props;
+if (!apiKey || apiKey.length === 0) {
+throw new Error(
+"ProxyCurl requires an API key. Please set it as PROXYCURL_API_KEY in your .env file, AND pass it as a parameter to the LinkedinTool constructor."
+);
+}
+this.apiKey = apiKey;
+}
+
+async searchProfile(profileUrl: string): Promise<Record<string, any>> {
+if (!this.isValidLinkedInUrl(profileUrl)) {
+throw new Error("Invalid LinkedIn profile URL");
+}
+
+    const url = "https://nubela.co/proxycurl/api/v2/linkedin";
+    const params = new URLSearchParams({ url: profileUrl });
+
+    const response = await this.fetchData(url, params);
+
+    return this.formatData(response);
+
+}
+
+async searchCompany(companyUrl: string): Promise<Record<string, any>> {
+if (!this.isValidLinkedInUrl(companyUrl)) {
+throw new Error("Invalid LinkedIn company URL");
+}
+
+    const apiEndpoint = "https://nubela.co/proxycurl/api/linkedin/company";
+    const params = new URLSearchParams({
+      url: companyUrl,
+      categories: "include",
+      funding_data: "include",
+      exit_data: "include",
+      acquisitions: "include",
+      extra: "include",
+      use_cache: "if-present",
+      fallback_to_cache: "on-error",
+    });
+
+    const response = await this.fetchData(apiEndpoint, params);
+
+    return this.formatData(response);
+
+}
+
+private async fetchData(url: string, params: URLSearchParams) {
+const response = await fetch(`${url}?${params.toString()}`, {
+headers: {
+Authorization: `Bearer ${this.apiKey}`,
+},
+});
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch data from LinkedIn API. Status: ${response.status}`
+      );
+    }
+
+    return await response.json();
+
+}
+
+private formatData(data: Record<string, any>): Record<string, any> {
+function cleanEmptyKeys(obj: Record<string, any>) {
+for (const key in obj) {
+if (Object.prototype.hasOwnProperty.call(obj, key)) {
+if (
+obj[key] === null ||
+obj[key] === undefined ||
+obj[key] === "" ||
+(typeof obj[key] === "object" &&
+Object.keys(obj[key]).length === 0) ||
+(Array.isArray(obj[key]) && obj[key].length === 0)
+) {
+delete obj[key];
+} else if (typeof obj[key] === "string") {
+obj[key] = obj[key].replace(/[\n+\\]/g, "").trim();
+} else if (Array.isArray(obj[key])) {
+obj[key].forEach((item) => {
+if (typeof item === "object") {
+cleanEmptyKeys(item);
+}
+});
+if (obj[key].length === 0) {
+delete obj[key];
+}
+} else if (typeof obj[key] === "object") {
+cleanEmptyKeys(obj[key]);
+if (Object.keys(obj[key]).length === 0) {
+delete obj[key];
+}
+}
+}
+}
+}
+
+    cleanEmptyKeys(data);
+
+    delete data.people_also_viewed;
+    delete data.similarly_named_profiles;
+    delete data.activities;
+
+    return data;
+
+}
+
+private isValidLinkedInUrl(url: string): boolean {
+const linkedinUrlRegex =
+/^https:\/\/www\.linkedin\.com\/(in|company)\/[a-zA-Z0-9-]+\/?$/;
+return linkedinUrlRegex.test(url);
+}
+}
+
+````
+
+</CodeBlockWrapper>
+</Steps>
+
+## Usage
+
+
+```tsx showLineNumbers {3-13}
+import { LinkedinTool } from "@/utils/linkedinTool";
+
+const tool = new LinkedinTool({
+  apiKey: process.env.PROXYCURL_API_KEY as string,
+});
+
+const profileData = await tool.searchProfile(
+  "https://www.linkedin.com/in/abir-dutta-408759223/"
+);
+
+const companyData = await tool.searchCompany(
+  "https://www.linkedin.com/company/perplexity-ai/"
+);
+
+console.log(profileData, companyData);
+
+/**
+
+// Profile Data
+{
+  public_identifier: 'abir-dutta-408759223',
+  profile_pic_url: 'https://s3.us-west-000.backblazeb2.com/proxycurl/person/abir-dutta-408759223/profile?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=0004d7f56a0400b0000000001%2F20240710%2Fus-west-000%2Fs3%2Faws4_request&X-Amz-Date=20240710T100503Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=474c7486cdfe61db517d633f0c1a7d0753ba3f0f1e93d5a0700a93fceda6f125',
+  first_name: 'Abir',
+  last_name: 'Dutta',
+  full_name: 'Abir Dutta',
+  follower_count: 1265,
+  occupation: 'Founding Member at Kirak.ai',
+  headline: '💻 Full Stack Developer | ✍🏻 Technical Writer | 🌐 Open Source | Building @kirak.ai',
+  summary: "Hello! I'm a full-stack developer with expertise in the MERN stack, TypeScript, and Next.js. I thrive on creating real-life problem-solving projects, blending my skills to bring ideas from concept to reality. My journey began with a curiosity for understanding how things work, evolving into a passion for crafting applications that address practical challenges.Proficient in the MERN stack, I leverage MongoDB, Express.js, React, and Node.js to build robust and scalable solutions. TypeScript enhances my code quality, while Next.js simplifies the creation of server-side rendered and statically generated websites, optimizing performance
+and user experience.Beyond coding, I've embraced the open source world, connecting with a global community of developers. I see open source as a platform for collaborative learning, innovation, and shared knowledge. As I continue to contribute and learn, I remain dedicated to staying at the forefront of technology, maintaining a healthy work-life balance, and using my skills to make a positive impact. Thank you for taking a glimpse into my journey as a developer!",
+  country: 'IN',
+  country_full_name: 'India',
+  city: 'New Delhi',
+  state: 'Delhi',
+  experiences: [
+    {
+      starts_at: [Object],
+      company: 'Kirak.ai',
+      company_linkedin_profile_url: 'https://www.linkedin.com/company/kirak-labs',
+      title: 'Founding Member',
+      location: 'Remote',
+      logo_url: 'https://s3.us-west-000.backblazeb2.com/proxycurl/company/kirak-labs/profile?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=0004d7f56a0400b0000000001%2F20240710%2Fus-west-000%2Fs3%2Faws4_request&X-Amz-Date=20240710T100503Z&X-Amz-Expires=1800&X-Amz-SignedHeaders=host&X-Amz-Signature=abde32005f92343e76ef3dd001089978035c8d0a4d4cba10a4b2e239b1afbe8c'
+    },
+    {
+      starts_at: [Object],
+      ends_at: [Object],
+      company: 'Kirak.ai',
+      company_linkedin_profile_url: 'https://www.linkedin.com/company/kirak-labs',
+      title: 'Full Stack Developer Intern',
+      description: "I've played a key role in the successful implementation of RAG applications using Langchain and OpenAI technologies. Presently, my primary responsibilities involve extending our backend capabilities through the integration of TRPC and further enhancing our use of AI by leveraging the capabilities offered
+by Langchain. This involves comprehensive work on the entire backend system, ensuring a seamless and intelligent user experience.",
+      location: 'Remote · Remote',
+      logo_url: 'https://s3.us-west-000.backblazeb2.com/proxycurl/company/kirak-labs/profile?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=0004d7f56a0400b0000000001%2F20240710%2Fus-west-000%2Fs3%2Faws4_request&X-Amz-Date=20240710T100503Z&X-Amz-Expires=1800&X-Amz-SignedHeaders=host&X-Amz-Signature=abde32005f92343e76ef3dd001089978035c8d0a4d4cba10a4b2e239b1afbe8c'
+    }
+  ],
+  education: [
+    {
+      starts_at: [Object],
+      ends_at: [Object],
+      degree_name: 'B.Tech',
+      school: 'Guru Gobind Singh Indraprastha University',
+      school_linkedin_profile_url: 'https://www.linkedin.com/company/9584148/',
+      logo_url: 'https://s3.us-west-000.backblazeb2.com/proxycurl/company/guru-gobind-singh-indraprastha-university/profile?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=0004d7f56a0400b0000000001%2F20240710%2Fus-west-000%2Fs3%2Faws4_request&X-Amz-Date=20240710T100503Z&X-Amz-Expires=1800&X-Amz-SignedHeaders=host&X-Amz-Signature=db5e4d8a4218e828fd3e7fab476e153e1e70702cba086f3864686048c870f3b2',
+      activities_and_societies: 'Football, Coding'
+    },
+    {
+      starts_at: [Object],
+      ends_at: [Object],
+      field_of_study: 'PCM',
+      degree_name: 'Higher Secondary',
+      school: 'KHEMS',
+      grade: '88.3 percentage in class 12'
+    }
+  ],
+  accomplishment_projects: [
+    {
+      starts_at: [Object],
+      title: 'DevScribe AI',
+      description: 'DevScribe AI is an online assiatant for users to summarise youtube videos with ease. Users get generated notes and keu concepts from the video. Also the project have a chat functionality to chat with video content.'
+    },
+    {
+      starts_at: [Object],
+      title: 'Kirak AI',
+      description: 'Web-based GEN AI platform that allows users to chat with different files including PDF files, videos, websites etc, enabling users to create FlashCards, Quizzes, Notes and much more from their desired documents.'
+    }
+  ],
+  connections: 1050,
+  groups: [
+    {
+      profile_pic_url: 'https://media.licdn.com/dms/image/D4D07AQEBtBCk53sBtg/group-logo_image-shrink_400x400/0/1681084215691?e=1715274000&v=beta&t=hzqH-1yvuz0bTkASQI2G5rCiVcMAN7Ted2YSY9JiMiU',
+      name: 'Find Remote Jobs',
+      url: 'https://www.linkedin.com/groups/14097458'
+    },
+    {
+      profile_pic_url: 'https://media.licdn.com/dms/image/C5107AQE4jFoHbvq4jA/group-logo_image-shrink_48x48/0/1552626854731?e=1715274000&v=beta&t=86Npk9Ioe8m49wnjlMbmlnzpjoTXNx9sNTU0nOfhhZg',
+      name: 'Blockchain Developer Group',
+      url: 'https://www.linkedin.com/groups/10388080'
+    }
+  ]
+}
+
+// Company Data
+{
+  linkedin_internal_id: '88007673',
+  description: 'The most powerful answer engine. Powering curiosity with answers backed by up-to-date sources. This is where knowledge begins.',
+  website: 'https://www.perplexity.ai',
+  industry: 'Software Development',
+  company_size: [ 11, 50 ],
+  company_size_on_linkedin: 108,
+  hq: {
+    country: 'US',
+    city: 'San Francisco',
+    state: 'California',
+    postal_code: '94105',
+    line_1: '575 Market St. SF 4th Floor',
+    is_hq: true,
+  },
+  company_type: 'PRIVATELY_HELD',
+  founded_year: 2022,
+  locations: [
+    {
+      country: 'US',
+      city: 'San Francisco',
+      postal_code: '94105',
+      line_1: '575 Market St. SF 4th Floor',
+      is_hq: true,
+      state: 'California'
+    }
+  ],
+  name: 'Perplexity'
+}
+**/
+
+```
+## Props
+
+### LinkedinTool
+
+| Prop   | Type   | Description             | Default |
+| ------ | ------ | ----------------------- | ------- |
+| apiKey | string | The API key of ProxyCurl | ""      |
+
+### searchProfile | searchCompany
+
+| Prop       | Type   | Description               |
+| ---------- | ------ | ------------------------- |
+| profileUrl | string | The LinkedIn URL of user  |
+| companyUrl | string | The LinkedIn URL of company |
+
+
+
+
+
+## Credits
+
+This component is built on top of [ProxyCurl API](https://nubela.co/proxycurl/linkedin)
+
+
+````

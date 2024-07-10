@@ -50,6 +50,11 @@ export const docsConfig: DocsConfig = {
           href: '/docs/components/calculatorTool',
           items: [],
         },
+        {
+          title: 'LinkedIn Tool',
+          href: '/docs/components/linkedinTool',
+          items: [],
+        },
       ],
     },
   ],
