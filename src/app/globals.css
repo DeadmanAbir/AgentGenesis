@@ -140,12 +140,16 @@
 }
 
 #path {
-  stroke-dasharray: 39px 679px;
+  stroke-dasharray: 39px 979px;
   animation: line-anim 2s ease infinite;
 }
 #path2 {
   stroke-dasharray: 39px 679px;
-  animation: line-anim 2s ease infinite;
+  animation: line-anim 3s ease infinite;
+}
+#path3 {
+  stroke-dasharray: 39px 679px;
+  animation: line-anim 1s ease infinite;
 }
 
 
