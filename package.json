@@ -8,8 +8,8 @@
     "start": "next start",
     "lint:check": "eslint --max-warnings 0 --config .eslintrc .",
     "lint:fix": "eslint --max-warnings 0 --config .eslintrc . --fix",
-    "format:fix": "prettier --write \"**/*.{ts,tsx,json, mdx}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,json, mdx}\"",
+    "format:fix": "prettier --write \"**/*.{ts,tsx,json,mdx}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,mdx}\"",
     "prepare": "husky install",
     "lint": "next lint"
   },
