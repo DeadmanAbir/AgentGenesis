@@ -849,8 +849,9 @@ const Banner = () => {
                 xmlns="http://www.w3.org/2000/svg"
                 className="text-neutral-100 dark:text-neutral-800"
               >
-                <path d="M0.5 0.5H479" stroke="currentColor"></path>
+                <path id="path" d="M0.5 0.5H479" stroke="currentColor"></path>
                 <path
+                  id="path"
                   d="M0.5 0.5H479"
                   stroke="url(#gradient-:Rid9sv9uja:)"
                   strokeWidth="1"
@@ -864,9 +865,9 @@ const Banner = () => {
                     x2="190.52869700535666"
                     y2="0"
                   >
-                    <stop offset="0%" stopColor="transparent"></stop>
-                    <stop offset="50%" stopColor="var(--neutral-200)"></stop>
-                    <stop offset="100%" stopColor="transparent"></stop>
+                    <stop offset="0%" stopColor="#CCCCCC"></stop>
+                    <stop offset="50%" stopColor="#999999"></stop>
+                    <stop offset="100%" stopColor="#666666"></stop>
                   </linearGradient>
                 </defs>
               </svg>
@@ -880,11 +881,13 @@ const Banner = () => {
               className="text-neutral-100 dark:text-neutral-800 ml-3"
             >
               <path
+                id="path2"
                 d="M0.5 0.5V479"
                 stroke="currentColor"
                 strokeWidth="2"
               ></path>
               <path
+                id="path2"
                 d="M0.5 0.5V479"
                 stroke="url(#gradient-:R4d9sv9uja:)"
                 strokeWidth="2"
@@ -898,9 +901,9 @@ const Banner = () => {
                   x2="2"
                   y2="8.032248451490887"
                 >
-                  <stop offset="0%" stopColor="transparent"></stop>
-                  <stop offset="50%" stopColor="var(--neutral-200)"></stop>
-                  <stop offset="100%" stopColor="transparent"></stop>
+                  <stop offset="0%" stopColor="#CCCCCC"></stop>
+                  <stop offset="50%" stopColor="#999999"></stop>
+                  <stop offset="100%" stopColor="#666666"></stop>
                 </linearGradient>
               </defs>
             </svg>
@@ -4159,7 +4162,7 @@ const Banner = () => {
         </div>
       </div>
 
-      <div className=" relative items-center justify-center mx-auto  mb-20 rounded-lg md:p-20 p-5 bg-gradient-to-br from-slate-800  to-zinc-900  max-w-[1440px] w-full ">
+      <div className=" hidden items-center justify-center mx-auto  mb-20 rounded-lg md:p-20 p-5 bg-gradient-to-br from-slate-800  to-zinc-900  max-w-[1440px] w-full ">
         <div className="absolute rounded-md inset-0 w-full h-full opacity-10  [mask-image:radial-gradient(#fff,transparent,75%)]  bg-[url('/noise.webp')]  bg-contain z-40"></div>
 
         <div className="z-40 flex flex-col items-center justify-center gap-3  ">

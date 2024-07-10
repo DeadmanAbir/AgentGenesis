@@ -138,3 +138,22 @@
 .subheading-anchor {
   @apply no-underline hover:underline;
 }
+
+#path {
+  stroke-dasharray: 39px 679px;
+  animation: line-anim 2s ease infinite;
+}
+#path2 {
+  stroke-dasharray: 39px 679px;
+  animation: line-anim 2s ease infinite;
+}
+
+
+@keyframes line-anim {
+  0% {
+    stroke-dashoffset: 0px;
+  }
+  100% {
+    stroke-dashoffset: -579px;
+  }
+}
