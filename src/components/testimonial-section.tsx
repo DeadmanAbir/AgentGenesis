@@ -80,7 +80,7 @@ const TestimonialSection = () => {
           fan bases and people fight for us over twitter.
         </p>
       </div>
-      <div className="relative   h-[700px] w-full  grid md:grid-cols-3 grid-cols-1 overflow-hidden rounded-lg  md:shadow-xl">
+      <div className="relative   h-[700px] w-full  grid md:grid-cols-3 grid-cols-1 overflow-hidden rounded-lg ">
         <div className="hidden md:block">
           <Marquee vertical className="[--duration:5s]">
             {firstRow.map((review) => (
