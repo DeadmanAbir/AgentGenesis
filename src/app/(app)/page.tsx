@@ -8,6 +8,7 @@ import {
   PageHeaderDescription,
   PageHeaderHeading,
 } from '@/components/page-header';
+import TestimonialSection from '@/components/testimonial-section';
 import { buttonVariants } from '@/components/ui/button';
 import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
@@ -41,6 +42,7 @@ const IndexPage = () => {
           </PageActions>
         </PageHeader>
         <ImageDisplay />
+        <TestimonialSection />
       </div>
       <Banner />
       <Footer />
