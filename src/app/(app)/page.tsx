@@ -1,5 +1,6 @@
 import Banner from '@/components/banner';
 import Footer from '@/components/footer';
+import GridSection from '@/components/grid-section';
 import { Icons } from '@/components/icons';
 import ImageDisplay from '@/components/image-display';
 import {
@@ -43,6 +44,7 @@ const IndexPage = () => {
         </PageHeader>
         <ImageDisplay />
         <TestimonialSection />
+        <GridSection />
       </div>
       <Banner />
       <Footer />
