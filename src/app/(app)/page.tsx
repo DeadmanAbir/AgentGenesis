@@ -19,9 +19,7 @@ const IndexPage = () => {
   return (
     <>
       <PageHeader className=" relative z-30  ">
-        <div className="absolute inset-x-0 bottom-0 z-0 h-40 w-full bg-gradient-to-r from-transparent via-white to-white dark:via-black/50 dark:to-black  pointer-events-none"></div>
-
-        <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:50px_50px] dark:bg-[linear-gradient(to_right,#2d2d2d_1px,transparent_1px),linear-gradient(to_bottom,#2d2d2d_1px,transparent_1px)] dark:bg-[size:50px_50px]"></div>
+        <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:50px_50px] dark:bg-[linear-gradient(to_right,#2d2d2d_1px,transparent_1px),linear-gradient(to_bottom,#2d2d2d_1px,transparent_1px)] dark:bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_200%)]"></div>
         <PageHeaderHeading className="z-20">
           Generate Images, Text and Videos with AI
         </PageHeaderHeading>
