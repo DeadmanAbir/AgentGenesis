@@ -1,5 +1,6 @@
 import Banner from '@/components/banner';
 import { Beam } from '@/components/beam';
+import BentoGrid from '@/components/bento';
 import Footer from '@/components/footer';
 import GridSection from '@/components/grid-section';
 import { Icons } from '@/components/icons';
@@ -46,6 +47,7 @@ const IndexPage = () => {
       </PageHeader>
       <div className="container relative">
         <ImageDisplay />
+        <BentoGrid />
         <TestimonialSection />
         <GridSection />
       </div>
