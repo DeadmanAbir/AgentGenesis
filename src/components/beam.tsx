@@ -9,10 +9,10 @@ export const Beam = () => {
       viewBox="0 0 156 63"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="absolute top-16 -left-5 ml-60 mt-8"
+      className="absolute top-[70px] -left-[5px] ml-60 mt-8"
     >
       <path
-        d="M40 1h40M0 1h40m40 50h40m-1 0h40m-1 40h40M80 40V0m80 80V40"
+        d="M40 1h40M0 1h40m40 60h40m-1 0h40m-1 40h40M80 90V0m80 80V40"
         stroke="url(#grad1)"
         strokeWidth={1.5}
       />

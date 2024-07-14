@@ -22,7 +22,7 @@ const IndexPage = () => {
     <>
       <PageHeader className=" relative z-30  ">
         <Beam />
-        <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:50px_50px] dark:bg-[linear-gradient(to_right,#2d2d2d_1px,transparent_1px),linear-gradient(to_bottom,#2d2d2d_1px,transparent_1px)] dark:bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_200%)]"></div>
+        <div className="absolute inset-0 -z-10 h-full w-full  dark:bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[radial-gradient(#000000_1px,transparent_1px)] [background-size:30px_30px]  [mask-image:radial-gradient(ellipse_80%_50%_at_10%_0%,#000_20%,transparent_200%)]"></div>
         <PageHeaderHeading className="z-20">
           Generate Images, Text and Videos with AI
         </PageHeaderHeading>
