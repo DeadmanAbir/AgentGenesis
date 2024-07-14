@@ -5,6 +5,9 @@ import { ChevronRightIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Balancer from 'react-wrap-balancer';
 import { Mdx } from '@/components/mdx-components';
+import { getTableOfContents } from '@/lib/toc';
+import { ScrollArea } from '@/components/scroll-area';
+import { DashboardTableOfContents } from '@/components/toc';
 interface AgentsPageProps {
   params: {
     slug: string[];
@@ -35,7 +38,7 @@ export async function Agents({ params }: AgentsPageProps) {
   if (!doc) {
     notFound();
   }
-
+  const toc = await getTableOfContents(doc.body.raw);
   return (
     <main className="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px] mt-14 ">
       <div className="mx-auto w-full min-w-0">
@@ -60,6 +63,17 @@ export async function Agents({ params }: AgentsPageProps) {
           <Mdx code={doc.body.code} />
         </div>
       </div>
+      {doc.toc && (
+        <div className="hidden text-sm xl:block">
+          <div className="sticky top-16 -mt-10 pt-4">
+            <ScrollArea className="pb-10">
+              <div className="sticky top-16 -mt-10 h-[calc(100vh-3.5rem)] py-12">
+                <DashboardTableOfContents toc={toc} />
+              </div>
+            </ScrollArea>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
