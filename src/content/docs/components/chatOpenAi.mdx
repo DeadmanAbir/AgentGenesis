@@ -1,0 +1,409 @@
+---
+title: ChatOpenAI
+description: Use different OpenAI's text generation models by following these instructions:.
+---
+
+<Tabs defaultValue="preview">
+
+<TabsList>
+  <TabsTrigger value="preview">Preview</TabsTrigger>
+  <TabsTrigger value="code">Code</TabsTrigger>
+</TabsList>
+
+<TabsContent value="preview">
+  <ComponentPreviewTemp>
+    <ReRankerDemo />
+  </ComponentPreviewTemp>
+</TabsContent>
+
+<TabsContent value="code">
+
+<CodeBlockWrapper>
+
+```tsx showLineNumbers {4-7}
+import { ChatOpenAI } from "@/utils/chatOpenAi.ts";
+
+// Initialize Client
+const chatOpenAI = new ChatOpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+  model: "gpt-3.5-turbo-0125",
+});
+
+// Single call chat
+const data = await chatOpenAI.chat({
+  prompt: "what is gemini ai? Respond in markdown format!",
+});
+
+
+// Call with Chat History
+const dataWithHistory = await chatOpenAI.chat({
+  prompt: "Who I am?",
+  chatHistory: [
+    { user: "Hello", assistant: "Hi there! How can I help you today?" },
+    { user: "My name is John Doe, and I am a AI developer!", assistant: "Sure, I will remember that!" },
+  ],
+});
+
+
+// Call with Output Format
+const dataWithFormat = await chatOpenAI.chat({
+  prompt: "Who I am?",
+  chatHistory: [
+    { user: "Hello", assistant: "Hi there! How can I help you today?" },
+    { user: "My name is John Doe, and I am a AI developer!", assistant: "Sure, I will remember that!" },
+  ],
+  outputFormat: `{"name: "", occupation: ""}`,
+});
+
+
+// Adding Context and other optional parameters
+const dataWithContext = await chatOpenAI.chat({
+  prompt: "Who I am?",
+  chatHistory: [
+    { user: "Hello", assistant: "Hi there! How can I help you today?" },
+    { user: "My name is John Doe, and I am a AI developer!", assistant: "Sure, I will remember that!" },
+  ],
+  context: "John Doe is a AI developer, specialized in chatbot development and RAG research.",
+  systemInstruction: "You're a helpful assistant and your name is AgentGenesis!",
+  outputFormat: `{"name: "", occupation: "", speciality: "", your_name : ""}`,
+  temperature: 0.6,
+  options: {
+    max_tokens: 100,
+    stream: false,
+  },
+});
+
+
+
+
+// Handling Streaming output
+const dataWithStreaming = await chatOpenAI.chat({
+  prompt: "Who I am?",
+  chatHistory: [
+    { user: "Hello", assistant: "Hi there! How can I help you today?" },
+    { user: "My name is John Doe, and I am a AI developer!", assistant: "Sure, I will remember that!" },
+  ],
+  context: "John Doe is a AI developer, specialized in chatbot development and RAG research.",
+  systemInstruction: "You're a helpful assistant and your name is AgentGenesis!",
+  temperature: 0.6,
+  options: {
+    max_tokens: 100,
+    stream: true,
+  },
+});
+
+// @ts-ignore
+for await (const chunk of dataWithStreaming) {
+  process.stdout.write(chunk.choices[0]?.delta?.content || "");
+}
+
+```
+
+</CodeBlockWrapper>
+
+</TabsContent>
+
+</Tabs>
+
+## Installation
+
+<Steps>
+
+<Step>Install peer dependencies:</Step>
+
+```bash
+npm install openai
+```
+<Step>Add Environment Variables</Step>
+
+```tsx title=".env" showLineNumbers {}
+OPENAI_API_KEY = aSdWytUQZUkBbPpGcXNAG4X0;
+/* You can get one from - https://platform.openai.com/api-keys */
+```
+
+<Step>Copy the code</Step>
+
+Add the following code to your `utils/chatOpenAi.ts` file:
+
+<CodeBlockWrapper>
+```tsx title="chatOpenAi.ts" showLineNumbers {}
+import OpenAI from "openai";
+import { ClientOptions } from "openai";
+import {
+  ChatCompletion,
+  ChatCompletionMessageParam,
+  ChatModel,
+} from "openai/resources/index.mjs";
+import { ChatCompletionChunk } from "openai/src/resources/index.js";
+import { Stream } from "openai/streaming.mjs";
+
+type ChatOpenAICompletionProps = {
+  stream?: boolean;
+  max_tokens?: number;
+};
+interface ChatOpenAiArgs extends ClientOptions {
+  model: ChatModel;
+}
+
+interface OpenAICallProps {
+  prompt: string;
+  context?: string;
+  systemInstruction?: string;
+  outputFormat?: string;
+  chatHistory?: Record<"assistant" | "user", string>[];
+  temperature?: number;
+  options?: ChatOpenAICompletionProps;
+}
+
+interface ChatCompletionOutput {
+  prompt_tokens: number;
+  completion_tokens: number;
+  output: string;
+}
+
+export class ChatOpenAI {
+  private client: OpenAI;
+  private model: ChatModel;
+
+  constructor(props: ChatOpenAiArgs) {
+    const { apiKey, model } = props;
+
+    if (!apiKey || apiKey.length === 0) {
+      throw new Error("No API key provided for OpenAI.");
+    }
+
+    this.client = new OpenAI({ apiKey });
+    this.model = model;
+  }
+
+  async chat(
+    props: OpenAICallProps
+  ): Promise<
+    Stream<ChatCompletionChunk> | ChatCompletion | ChatCompletionOutput
+  > {
+    const {
+      prompt,
+      context,
+      outputFormat,
+      options,
+      chatHistory,
+      temperature,
+      systemInstruction,
+    } = props;
+
+    let userMessages: Array<ChatCompletionMessageParam> = [];
+
+    if (systemInstruction) {
+      userMessages.push({ role: "system", content: systemInstruction });
+    }
+
+    if (chatHistory && chatHistory.length > 0) {
+      chatHistory.forEach((chat) => {
+        userMessages.push({ role: "user", content: chat.user });
+        userMessages.push({ role: "assistant", content: chat.assistant });
+      });
+    }
+
+    const content = this.createContext(prompt, context, outputFormat);
+    userMessages.push({ role: "user", content });
+
+    const chatCompletion = await this.client.chat.completions.create({
+      messages: userMessages,
+      model: this.model,
+      temperature: temperature ?? 0.5,
+      ...options,
+    });
+
+    if (!options?.stream) {
+      return {
+        // @ts-ignore
+        prompt_tokens: chatCompletion.usage?.prompt_tokens ?? 0,
+        // @ts-ignore
+        completion_tokens: chatCompletion.usage?.completion_tokens ?? 0,
+        output:
+          // @ts-ignore
+          chatCompletion.choices[0].message?.content
+            .replace("```json\n", "")
+            .replace("\n```", "") ?? "",
+      };
+    }
+
+    return chatCompletion;
+  }
+
+  private createContext(
+    prompt: string,
+    context?: string,
+    outputFormat?: string
+  ): string {
+    let content = prompt;
+
+    if (context) {
+      content += `\ncontext:\n${context}`;
+    }
+
+    if (outputFormat) {
+      content += `\noutput format:\n${outputFormat}`;
+    }
+
+    return content;
+  }
+}
+
+````
+
+</CodeBlockWrapper>
+</Steps>
+
+## Usage
+
+### Initialize client
+
+```tsx showLineNumbers 
+import { ChatOpenAI } from "@/utils/chatOpenAi.ts";
+
+const chatOpenAI = new ChatOpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+  model: "gpt-3.5-turbo-0125",
+});
+
+```
+### Simple Chat
+
+```tsx showLineNumbers 
+const data = await chatOpenAI.chat({
+  prompt: "What is YCombinator? Respond in one liner!",
+});
+
+console.log(data);
+
+/**
+{
+  "prompt_tokens": 19,
+  "completion_tokens": 12,
+  "output": "YCombinator is a seed money startup accelerator program."
+}
+**/
+
+```
+
+### Multi Conversational chat
+
+```tsx showLineNumbers 
+const dataWithHistory = await chatOpenAI.chat({
+  prompt: "Who I am?",
+  chatHistory: [
+    { user: "Hello", assistant: "Hi there! How can I help you today?" },
+    { user: "My name is John Doe, and I am a AI developer!", assistant: "Sure, I will remember that!" },
+  ],
+});
+
+console.log(dataWithHistory);
+
+/**
+{
+  "prompt_tokens": 58,
+  "completion_tokens": 17,
+  "output": "You are John Doe, an AI developer. How can I assist you further today?"
+}
+**/
+```
+### Defining Output Format
+
+```tsx showLineNumbers 
+const dataWithFormat = await chatOpenAI.chat({
+  prompt: "Who I am?",
+  chatHistory: [
+    { user: "Hello", assistant: "Hi there! How can I help you today?" },
+    { user: "My name is John Doe, and I am a AI developer!", assistant: "Sure, I will remember that!" },
+  ],
+  outputFormat: `{"name: "", occupation: ""}`,
+});
+
+console.log(dataWithFormat);
+
+/**
+{
+  "prompt_tokens": 69,
+  "completion_tokens": 14,
+  "output": "{\"name\": \"John Doe\", \"occupation\": \"AI developer\"}"
+}
+**/
+```
+
+### Defining Context and other optional parameters
+```tsx showLineNumbers 
+const dataWithContext = await chatOpenAI.chat({
+  prompt: "Who I am?",
+  chatHistory: [
+    { user: "Hello", assistant: "Hi there! How can I help you today?" },
+    { user: "My name is John Doe, and I am a AI developer!", assistant: "Sure, I will remember that!" },
+  ],
+  context: "John Doe is a AI developer, specialized in chatbot development and RAG research.",
+  systemInstruction: "You're a helpful assistant and your name is AgentGenesis!",
+  outputFormat: `{"name: "", occupation: "", speciality: "", your_name : ""}`,
+  temperature: 0.6,
+  options: {
+    max_tokens: 100,
+    stream: false,
+  },
+});
+
+console.log(dataWithContext);
+
+/**
+{
+  "prompt_tokens": 112,
+  "completion_tokens": 41,
+  "output": "{\n    \"name\": \"John Doe\",\n    \"occupation\": \"AI developer\",\n    \"speciality\": \"chatbot development and RAG research\",\n    \"your_name\": \"AgentGenesis\"\n}"
+}
+**/
+
+```
+### Streaming text
+```tsx showLineNumbers 
+const dataWithStreaming = await chatOpenAI.chat({
+  prompt: "Who I am?",
+  chatHistory: [
+    { user: "Hello", assistant: "Hi there! How can I help you today?" },
+    { user: "My name is John Doe, and I am a AI developer!", assistant: "Sure, I will remember that!" },
+  ],
+  context: "John Doe is a AI developer, specialized in chatbot development and RAG research.",
+  systemInstruction: "You're a helpful assistant and your name is AgentGenesis!",
+  temperature: 0.6,
+  options: {
+    max_tokens: 100,
+    stream: true,
+  },
+});
+
+// @ts-ignore
+for await (const chunk of dataWithStreaming) {
+  process.stdout.write(chunk.choices[0]?.delta?.content || "");
+}
+
+/**
+You are John Doe, an AI developer specialized in chatbot development and RAG research. How can I assist you further, John?
+**/
+```
+
+## Props
+
+### chat
+
+| Prop               | Type                        | Description                                             | Default |
+| ------------------ | --------------------------- | ------------------------------------------------------- | ------- |
+| prompt             | string                      | Prompt provided by user.                                | ""      |
+| context            | string?                     | Additional context user wants to provide.               | ""      |
+| outputFormat       | string?                     | Particular format in which the user wants their output. | ""      |
+| chatHistory        | optional                    | Conversational history.                                 | ""      |
+| temperature        | number?                     | Randomness of the LLM.                                  | 0.5     |
+| systemInstruction  | string?                     | Any specific instruction to the system user wants to feed. | ""      |
+| options            | ChatOpenAICompletionProps?  | Additional args as per OpenAI docs.                     | {}      |
+
+
+
+## Credits
+
+This component is built on top of [Open AI's node sdk](https://github.com/openai/openai-node)
+

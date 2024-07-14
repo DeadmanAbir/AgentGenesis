@@ -1,0 +1,458 @@
+---
+title: ChatGemini
+description: Use different google's Gemini's text generation models by following these instructions:.
+---
+
+<Tabs defaultValue="preview">
+
+<TabsList>
+  <TabsTrigger value="preview">Preview</TabsTrigger>
+  <TabsTrigger value="code">Code</TabsTrigger>
+</TabsList>
+
+<TabsContent value="preview">
+  <ComponentPreviewTemp>
+    <ReRankerDemo />
+  </ComponentPreviewTemp>
+</TabsContent>
+
+<TabsContent value="code">
+
+<CodeBlockWrapper>
+
+```tsx showLineNumbers {4-7}
+import { ChatGemini } from "@/utils/chatGemini.ts";
+
+// Initialize the Client
+const chatGemini = new ChatGemini({
+  apiKey: process.env.GEMINI_API_KEY as string,
+  model: "gemini-1.5-flash",
+});
+
+// Single Call Chat
+const responseText = await chatGemini.chat({
+  prompt: "Who are you? What's your name?",
+});
+
+// Call With Chat History
+const responseTextWithHistory = await chatGemini.chatWithHistory({
+  chatHistory: [
+    { user: "Hello", model: "Hi there! How can I help you today?" },
+    {
+      user: "My name is John Doe and I have 2 dogs!",
+      model: "Sure, I will remember that!",
+    },
+  ],
+  prompt: "What's my name? How many dogs?",
+});
+
+
+// Adding Context and other optional parameters
+const responseTextWithContext = await chatGemini.chatWithHistory({
+  systemInstruction: "You are a helpful language translator. Your name is AgentGenesis!.",
+  chatHistory: [
+    { user: "Hello", model: "Hi there! How can I help you today?" },
+    {
+      user: "My name is John Doe and I have 2 dogs!",
+      model: "Sure, I will remember that!",
+    },
+  ],
+  context: "John Doe is an AI developer who loves dogs.",
+  outputFormat: `{description: "",your_name : "",my_name : "", dog_count : ""}`,
+  prompt: "Who are you? What's your name and my name? How many dogs?",
+});
+
+
+// Handling Streaming output
+const responseTextStreaming = await chatGemini.chatWithHistory({
+  systemInstruction: "You are a helpful language translator. Your name is AgentGenesis!.",
+  chatHistory: [
+    { user: "Hello", model: "Hi there! How can I help you today?" },
+    {
+      user: "My name is John Doe and I have 2 dogs!",
+      model: "Sure, I will remember that!",
+    },
+  ],
+  context: "John Doe is an AI developer who loves dogs.",
+  prompt: "Who are you? What's your name and my name? How many dogs?",
+  stream: true,
+});
+
+// @ts-ignore
+for await (const chunk of responseTextStreaming.stream) {
+  const chunkText = chunk.text();
+  process.stdout.write(chunkText);
+}
+
+const responseTextWithStream = await chatGemini.chat({
+  prompt: "Who are you? What's your name? Tell something about me.",
+  systemInstruction: "You are a helpful language translator. Your name is AgentGenesis!.",
+  context: "John Doe is an AI developer who loves dogs.",
+  stream: true,
+});
+
+// @ts-ignore
+for await (const chunk of responseTextWithStream.stream) {
+  const chunkText = chunk.text();
+  process.stdout.write(chunkText);
+}
+
+```
+
+</CodeBlockWrapper>
+
+</TabsContent>
+
+</Tabs>
+
+## Installation
+
+<Steps>
+
+<Step>Install peer dependencies:</Step>
+
+```bash
+npm install @google/generative-ai
+```
+<Step>Add Environment Variables</Step>
+
+```tsx title=".env" showLineNumbers {}
+GEMINI_API_KEY = aSdWytUQZUkBbPpGcXNAG4X0;
+/* You can get one from - https://aistudio.google.com/app/apikey */
+```
+
+<Step>Copy the code</Step>
+
+Add the following code to your `utils/chatGemini.ts` file:
+
+<CodeBlockWrapper>
+```tsx title="chatGemini.ts" showLineNumbers {}
+import {
+  Content,
+  GenerateContentStreamResult,
+  GenerativeModel,
+  GoogleGenerativeAI,
+  Part,
+  RequestOptions,
+} from "@google/generative-ai";
+
+interface ChatGeminiArgs {
+  apiKey: string;
+  model: string;
+}
+
+interface GeminiChatProps {
+  prompt: string;
+  stream?: boolean;
+  systemInstruction?: string;
+  options?: RequestOptions;
+  context?: string;
+  outputFormat?: string;
+}
+
+interface GeminiChatWithHistoryProps extends GeminiChatProps {
+  chatHistory: Record<"model" | "user", string>[];
+  maxOutputTokens?: number;
+}
+
+interface ChatGeminiResponse {
+  content: string;
+  promptTokenCount: number | null;
+  candidatesTokenCount: number | null;
+}
+
+export class ChatGemini {
+  private client: GoogleGenerativeAI;
+  private model: string;
+
+  constructor(props: ChatGeminiArgs) {
+    const { apiKey, model } = props;
+    if (!apiKey || apiKey.length === 0) {
+      throw new Error("No API key provided for Gemini AI.");
+    }
+    this.client = new GoogleGenerativeAI(apiKey);
+    this.model = model;
+  }
+
+  async chat(
+    props: GeminiChatProps
+  ): Promise<ChatGeminiResponse | GenerateContentStreamResult> {
+    const {
+      prompt,
+      stream = false,
+      options,
+      systemInstruction,
+      context,
+      outputFormat,
+    } = props;
+
+    const client = this.createClient(this.model, systemInstruction, options);
+
+    const content = this.createContext(prompt, context, outputFormat);
+
+    if (!stream) {
+      const result = await client.generateContent(content);
+      const response = await result.response;
+      const text = await response.text();
+
+      return {
+        content: text.replace("```json\n", "").replace("\n```", "") ?? "",
+        promptTokenCount: response?.usageMetadata?.promptTokenCount ?? null,
+        candidatesTokenCount:
+          response?.usageMetadata?.candidatesTokenCount ?? null,
+      };
+    }
+
+    const result = await client.generateContentStream(content);
+    return result;
+  }
+
+  async chatWithHistory(
+    props: GeminiChatWithHistoryProps
+  ): Promise<ChatGeminiResponse | GenerateContentStreamResult> {
+    const {
+      prompt,
+      stream = false,
+      options,
+      systemInstruction,
+      context,
+      outputFormat,
+      chatHistory,
+      maxOutputTokens,
+    } = props;
+
+    const client = this.createClient(this.model, systemInstruction, options);
+
+    const content = this.createContext(prompt, context, outputFormat);
+
+    const history = this.createChatHistory(chatHistory);
+
+    const chat = client.startChat({
+      history,
+      generationConfig: {
+        maxOutputTokens,
+      },
+    });
+
+    if (!stream) {
+      const result = await chat.sendMessage(content);
+      const response = await result.response;
+      const text = await response.text();
+
+      return {
+        content: text.replace("```json\n", "").replace("\n```", "") ?? "",
+        promptTokenCount: response?.usageMetadata?.promptTokenCount ?? null,
+        candidatesTokenCount:
+          response?.usageMetadata?.candidatesTokenCount ?? null,
+      };
+    }
+
+    const result = await chat.sendMessageStream(content);
+    return result;
+  }
+
+  private createChatHistory(
+    chatHistory: Record<"model" | "user", string>[]
+  ): Content[] {
+    return chatHistory.flatMap((entry) => [
+      { role: "user" as const, parts: [{ text: entry.user }] },
+      { role: "model" as const, parts: [{ text: entry.model }] },
+    ]);
+  }
+  private createClient(
+    model: string,
+    systemInstruction?: string,
+    options?: RequestOptions
+  ): GenerativeModel {
+    return this.client.getGenerativeModel({
+      model,
+      systemInstruction,
+      ...options,
+    });
+  }
+
+  private createContext(
+    prompt: string,
+    context?: string,
+    outputFormat?: string
+  ): string {
+    let content = prompt;
+
+    if (context) {
+      content += `\ncontext:\n${context}`;
+    }
+
+    if (outputFormat) {
+      content += `\noutput format:\n${outputFormat}`;
+    }
+
+    return content;
+  }
+}
+
+````
+
+</CodeBlockWrapper>
+</Steps>
+
+## Usage
+
+### Initialize client
+
+```tsx showLineNumbers 
+import { ChatGemini } from "@/utils/chatGemini.ts";
+
+const chatGemini = new ChatGemini({
+  apiKey: process.env.GEMINI_API_KEY as string,
+  model: "gemini-1.5-flash",
+});
+
+```
+### Simple Chat
+
+```tsx showLineNumbers 
+const responseText = await chatGemini.chat({
+  prompt: "Who are you? What's your name?",
+});
+
+console.log(responseText);
+/**
+{
+  "content": "I am a large language model, trained by Google. I do not have a name. \n\nYou can think of me as a sophisticated AI assistant, capable of understanding and responding to a wide range of prompts and questions. I can:\n\n* Provide information on various topics\n* Generate creative text formats\n* Translate languages\n* Write different kinds of creative content\n\nI am still under development, and I am always learning new things. 😊\n",
+  "promptTokenCount": 11,
+  "candidatesTokenCount": 90
+}
+**/
+```
+
+### Multi Conversational chat
+
+```tsx showLineNumbers 
+const responseTextWithHistory = await chatGemini.chatWithHistory({
+  chatHistory: [
+    { user: "Hello", model: "Hi there! How can I help you today?" },
+    {
+      user: "My name is John Doe and I have 2 dogs!",
+      model: "Sure, I will remember that!",
+    },
+  ],
+  prompt: "What's my name? How many dogs?",
+});
+
+console.log(responseTextWithHistory);
+
+/**
+{
+  "content": "Your name is John Doe and you have 2 dogs! 🐶🐶 \n\nIs there anything else I can help you with? 😊 \n",
+  "promptTokenCount": 46,
+  "candidatesTokenCount": 28
+}
+**/
+```
+
+
+### Defining Context and other optional parameters
+```tsx showLineNumbers 
+const responseTextWithContext = await chatGemini.chatWithHistory({
+  systemInstruction: "You are a helpful language translator. Your name is AgentGenesis!.",
+  chatHistory: [
+    { user: "Hello", model: "Hi there! How can I help you today?" },
+    {
+      user: "My name is John Doe and I have 2 dogs!",
+      model: "Sure, I will remember that!",
+    },
+  ],
+  context: "John Doe is an AI developer who loves dogs.",
+  outputFormat: `{description: "",your_name : "",my_name : "", dog_count : ""}`,
+  prompt: "Who are you? What's your name and my name? How many dogs?",
+});
+
+console.log(responseTextWithContext);
+
+/**
+{
+  "content": "{\n  \"description\": \"I am a helpful language translator, here to assist you.\",\n  \"your_name\": \"AgentGenesis\",\n  \"my_name\": \"John Doe\",\n  \"dog_count\": 2\n} \n",
+  "promptTokenCount": 104,
+  "candidatesTokenCount": 57
+}
+**/
+```
+### Streaming text
+```tsx showLineNumbers 
+const responseTextStreaming = await chatGemini.chatWithHistory({
+  systemInstruction: "You are a helpful language translator. Your name is AgentGenesis!.",
+  chatHistory: [
+    { user: "Hello", model: "Hi there! How can I help you today?" },
+    {
+      user: "My name is John Doe and I have 2 dogs!",
+      model: "Sure, I will remember that!",
+    },
+  ],
+  context: "John Doe is an AI developer who loves dogs.",
+  prompt: "Who are you? What's your name and my name? How many dogs?",
+  stream: true,
+});
+
+// @ts-ignore
+for await (const chunk of responseTextStreaming.stream) {
+  const chunkText = chunk.text();
+  process.stdout.write(chunkText);
+}
+
+/**
+Hi John! I'm AgentGenesis, your friendly AI assistant. I know you love dogs and have two of them! 🐶🐶
+Is there anything else I can help you with today?
+**/
+
+const responseTextWithStream = await chatGemini.chat({
+  prompt: "Who are you? What's your name? Tell something about me.",
+  systemInstruction: "You are a helpful language translator. Your name is AgentGenesis!.",
+  context: "John Doe is an AI developer who loves dogs.",
+  stream: true,
+});
+
+// @ts-ignore
+for await (const chunk of responseTextWithStream.stream) {
+  const chunkText = chunk.text();
+  process.stdout.write(chunkText);
+}
+
+/**
+It seems you're asking about John Doe, an AI developer with a passion for dogs! That's pretty cool! It sounds like you might be interested in AI development and have a soft spot for furry friends.
+Is there anything else I can help you with today?
+**/
+```
+
+## Props
+
+### chat
+
+| Prop               | Type                        | Description                                             | Default |
+| ------------------ | --------------------------- | ------------------------------------------------------- | ------- |
+| prompt             | string                      | Prompt provided by user.                                | ""      |
+| context            | string?                     | Additional context user wants to provide.               | ""      |
+| stream             | boolean?                    | If yes, there will be stream output of texts.           | false   |
+| outputFormat       | string?                     | Particular format in which the user wants their output. | ""      |
+| chatHistory        | optional                    | Conversational history.                                 | ""      |
+| systemInstruction  | RequestOptions?             | Any specific instruction to the system user wants to feed. | ""   |
+| options            | RequestOptions?             | Additional args as per Google Gemini docs.              | {}      |
+
+### chatWithHistory
+
+| Prop               | Type            | Description                                              | Default |
+| ------------------ | --------------- | -------------------------------------------------------- | ------- |
+| prompt             | string          | Prompt provided by user.                                 | ""      |
+| context            | string?         | Additional context user wants to provide.                | ""      |
+| stream             | boolean?        | If yes, there will be stream output of texts.            | false   |
+| outputFormat       | string?         | Particular format in which the user wants their output.  | ""      |
+| chatHistory        | optional        | Conversational history.                                  | ""      |
+| systemInstruction  | RequestOptions? | Any specific instruction to the system user wants to feed. | ""      |
+| maxOutputTokens    | number?         | Specifying the limitation of output tokens.              | ""      |
+| options            | RequestOptions? | Additional args as per Google Gemini docs.               | {}      |
+
+
+
+## Credits
+
+This component is built on top of [Gemini AI's node sdk](https://github.com/google-gemini/generative-ai-js)
+
