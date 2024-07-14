@@ -1,10 +1,8 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import React from 'react';
 import { ThemeProvider } from '@/components/theme-provider';
-
-const inter = Inter({ subsets: ['latin'] });
+import { GeistSans } from 'geist/font/sans';
 
 export const metadata: Metadata = {
   title: 'AgentGenesis',
@@ -30,7 +28,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/logo.png" type="image/svg+xml+png" />
       </head>
-      <body className={inter.className}>
+      <body className={GeistSans.className}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
