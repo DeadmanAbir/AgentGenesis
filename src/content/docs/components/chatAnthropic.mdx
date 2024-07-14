@@ -1,0 +1,374 @@
+---
+title: ChatAnthropic
+description: Use different Claude's text generation models by following these instructions:.
+---
+
+<Tabs defaultValue="preview">
+
+<TabsList>
+  <TabsTrigger value="preview">Preview</TabsTrigger>
+  <TabsTrigger value="code">Code</TabsTrigger>
+</TabsList>
+
+<TabsContent value="preview">
+  <ComponentPreviewTemp>
+    <ReRankerDemo />
+  </ComponentPreviewTemp>
+</TabsContent>
+
+<TabsContent value="code">
+
+<CodeBlockWrapper>
+
+```tsx showLineNumbers {4-7}
+import { ChatAnthropic } from "@/utils/chatAnthropic";
+
+// Initialize Client
+const client = new ChatAnthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+  model: "claude-3-opus-20240229",
+});
+
+// Single Call Chat
+const data = await client.message({
+  prompt: "Who are you? What's your name?",
+});
+
+// Call with Chat History
+const dataWithHistory = await client.message({
+  chatHistory: [
+    {
+      user: "You're a personal assistant named as AgentGenesis!.",
+      assistant: "OK, sure!",
+    },
+    {
+      user: "Hello, I am John Doe!",
+      assistant: "Hello, I am AgentGenesis! How can I help you today?",
+    },
+  ],
+  prompt: "Who are you? What's your name?",
+});
+
+
+// Call with optional parameters
+const dataWithOptionalParams = await client.message({
+  chatHistory: [
+    {
+      user: "You're a personal assistant named as AgentGenesis!.",
+      assistant: "OK, sure!",
+    },
+    {
+      user: "Hello, I am John Doe!",
+      assistant: "Hello, I am AgentGenesis! How can I help you today?",
+    },
+  ],
+  context: "John Doe is an AI engineer, and he loves dogs.",
+  outputFormat: `{"about_yourself": "", "about_me": ""}`,
+  prompt: "Who are you? What's your name? Who am I?",
+});
+
+// Streaming Output
+const dataStreaming = await client.message({
+  chatHistory: [
+    {
+      user: "You're a personal assistant named as AgentGenesis!.",
+      assistant: "OK, sure!",
+    },
+    {
+      user: "Hello, I am John Doe!",
+      assistant: "Hello, I am AgentGenesis! How can I help you today?",
+    },
+  ],
+  context: "John Doe is an AI engineer, and he loves dogs.",
+  outputFormat: `{"about_yourself": "", "about_me": ""}`,
+  maxTokens: 1000,
+  stream: true,
+  prompt: "Who are you? What's your name? Who am I?",
+});
+
+// @ts-ignore
+dataStreaming.on("text", (text) => {
+  console.log(text);
+});
+```
+
+</CodeBlockWrapper>
+
+</TabsContent>
+
+</Tabs>
+
+## Installation
+
+<Steps>
+
+<Step>Install peer dependencies:</Step>
+
+```bash
+npm install @anthropic-ai/sdk
+```
+
+<Step>Add Environment Variables</Step>
+
+```tsx title=".env" showLineNumbers {}
+ANTHROPIC_API_KEY = aSdWytUQZUkBbPpGcXNAG4X0;
+/* You can get one from - https://console.anthropic.com/settings/keys */
+```
+
+<Step>Copy the code</Step>
+
+Add the following code to your `utils/chatAnthropic.ts` file:
+
+<CodeBlockWrapper>
+```tsx title="chatAnthropic.ts" showLineNumbers {}
+import Anthropic from "@anthropic-ai/sdk";
+import { ClientOptions } from "@anthropic-ai/sdk";
+import {
+  MessageParam,
+  MessageStream,
+} from "@anthropic-ai/sdk/resources/messages.mjs";
+
+interface ChatAnthropicConfig extends ClientOptions {
+  model:
+    | "claude-3-5-sonnet-20240620"
+    | "claude-3-opus-20240229"
+    | "claude-3-sonnet-20240229"
+    | "claude-3-haiku-20240307"
+    | "claude-2.1"
+    | "claude-2.0"
+    | "claude-instant-1.2"
+    | (string & {});
+}
+
+interface AnthropicMessageOptions {
+  chatHistory?: Array<{ assistant: string; user: string }>;
+  prompt: string;
+  stream?: boolean;
+  outputFormat?: string;
+  context?: string;
+  maxTokens?: number;
+}
+
+interface AnthropicMessageResult {
+  text: string;
+  inputTokens: number;
+  outputTokens: number;
+}
+
+export class ChatAnthropic {
+  private client: Anthropic;
+  private model: string;
+
+  constructor(config: ChatAnthropicConfig) {
+    const { apiKey, model } = config;
+
+    if (!apiKey || apiKey.length === 0) {
+      throw new Error("No API key provided for Anthropic AI.");
+    }
+
+    this.client = new Anthropic({ apiKey, ...config });
+    this.model = model;
+  }
+
+  async message(
+    options: AnthropicMessageOptions
+  ): Promise<AnthropicMessageResult | MessageStream> {
+    const { chatHistory, prompt, stream, context, outputFormat, maxTokens } =
+      options;
+    const userMessages: MessageParam[] = [];
+
+    if (chatHistory && chatHistory.length > 0) {
+      chatHistory.forEach((chat) => {
+        userMessages.push({ role: "user", content: chat.user });
+        userMessages.push({ role: "assistant", content: chat.assistant });
+      });
+    }
+
+    const messageContent = this.buildMessageContent(
+      prompt,
+      context,
+      outputFormat
+    );
+    userMessages.push({ role: "user", content: messageContent });
+
+    if (!stream) {
+      const message = await this.client.messages.create({
+        messages: userMessages,
+        model: this.model,
+        max_tokens: maxTokens ?? 1024,
+      });
+
+      return {
+        text:
+          // @ts-ignore
+          message.content[0].text
+            .replace("```json\n", "")
+            .replace("\n```", "") ?? "",
+        inputTokens: message.usage.input_tokens,
+        outputTokens: message.usage.output_tokens,
+      };
+    }
+
+    const messageStream = await this.client.messages.stream({
+      messages: userMessages,
+      model: this.model,
+      max_tokens: maxTokens ?? 1024,
+    });
+
+    return messageStream;
+  }
+
+  private buildMessageContent(
+    prompt: string,
+    context?: string,
+    outputFormat?: string
+  ): string {
+    let content = prompt;
+
+    if (context) {
+      content += `\ncontext:\n${context}`;
+    }
+
+    if (outputFormat) {
+      content += `\noutput format:\n${outputFormat}`;
+    }
+
+    return content;
+  }
+}
+
+````
+
+</CodeBlockWrapper>
+</Steps>
+
+## Usage
+
+### Initialize client
+
+```tsx showLineNumbers
+import { ChatAnthropic } from "@/utils/chatAnthropic";
+
+const client = new ChatAnthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+  model: "claude-3-opus-20240229",
+});
+
+```
+### Simple Chat
+
+```tsx showLineNumbers
+const data = await client.message({
+  prompt: "Who are you? What's your name?",
+});
+console.log(data);
+
+/**
+{
+  "text": "I am an AI assistant created by Anthropic. I don't have a specific name, but you're welcome to call me whatever you'd like! Let me know if you have any other questions.",
+  "inputTokens": 16,
+  "outputTokens": 44
+}
+```
+
+### Multi Conversational chat
+
+```tsx showLineNumbers
+const dataWithHistory = await client.message({
+  chatHistory: [
+    {
+      user: "You're a personal assistant named as AgentGenesis!.",
+      assistant: "OK, sure!",
+    },
+    {
+      user: "Hello, I am John Doe!",
+      assistant: "Hello, I am AgentGenesis! How can I help you today?",
+    },
+  ],
+  prompt: "Who are you? What's your name?",
+});
+console.log(dataWithHistory);
+
+/**
+{
+  "text": "As I mentioned, my name is AgentGenesis and I'm an AI-powered personal assistant. It's nice to meet you, John! Please let me know if there is anything I can assist you with.",
+  "inputTokens": 71,
+  "outputTokens": 47
+}
+**/
+```
+
+### Defining Context and other optional parameters
+```tsx showLineNumbers
+const dataWithOptionalParams = await client.message({
+  chatHistory: [
+    {
+      user: "You're a personal assistant named as AgentGenesis!.",
+      assistant: "OK, sure!",
+    },
+    {
+      user: "Hello, I am John Doe!",
+      assistant: "Hello, I am AgentGenesis! How can I help you today?",
+    },
+  ],
+  context: "John Doe is an AI engineer, and he loves dogs.",
+  outputFormat: `{"about_yourself": "", "about_me": ""}`,
+  prompt: "Who are you? What's your name? Who am I?",
+});
+console.log(dataWithOptionalParams);
+
+/**
+{
+  "text": "{\n\"about_yourself\": \"My name is AgentGenesis and I am an AI assistant. I am here to help you with any tasks or questions you may have. Please let me know what I can assist with!\",\n\n\"about_me\": \"Your name is John Doe and you mentioned that you are an AI engineer. You also said that you love dogs.\"\n}",
+  "inputTokens": 110,
+  "outputTokens": 94
+}
+**/
+
+
+```
+### Streaming text
+```tsx showLineNumbers
+const dataStreaming = await client.message({
+  chatHistory: [
+    {
+      user: "You're a personal assistant named as AgentGenesis!.",
+      assistant: "OK, sure!",
+    },
+    {
+      user: "Hello, I am John Doe!",
+      assistant: "Hello, I am AgentGenesis! How can I help you today?",
+    },
+  ],
+  context: "John Doe is an AI engineer, and he loves dogs.",
+  outputFormat: `{"about_yourself": "", "about_me": ""}`,
+  maxTokens: 1000,
+  stream: true,
+  prompt: "Who are you? What's your name? Who am I?",
+});
+
+// @ts-ignore
+dataStreaming.on("text", (text) => {
+  console.log(text);
+});
+```
+
+## Props
+
+### message
+
+| Prop               | Type            | Description                                              | Default |
+| ------------------ | --------------- | -------------------------------------------------------- | ------- |
+| prompt             | string          | Prompt provided by user.                                 | ""      |
+| context            | string?         | Additional context user wants to provide.                | ""      |
+| outputFormat       | string?         | Particular format in which the user wants their output.  | ""      |
+| chatHistory        | optional        | Conversational history.                                  | ""      |
+| stream             | boolean?        | If true, then the output will be a stream of text.       | false   |
+| maxTokens          | number?         | The maximum number of tokens to generate before stopping.| 1024    |
+
+
+
+
+## Credits
+
+This component is built on top of [Anthropic TypeScript API Library](https://github.com/anthropics/anthropic-sdk-typescript)
