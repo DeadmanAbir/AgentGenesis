@@ -15,7 +15,7 @@ const BentoGrid = () => {
       {/* <div className="border-t-2 border-white overflow-hidden border-dashed  -top-[0px] w-[105%] " ></div> */}
       <div className="w-full relative mt-10">
         <div className="grid grid-cols-1 md:grid-cols-6 w-full    ">
-          <div className=" col-span-1 md:col-span-4 h-[500px] p-10  ">
+          <div className=" col-span-1 md:col-span-4 h-[500px] md:p-10   ">
             <div className="md:text-4xl text-3xl font-semibold">
               Generate images with text
             </div>
@@ -33,7 +33,7 @@ const BentoGrid = () => {
               />
             </div>
           </div>
-          <div className="p-5 col-span-1 md:col-span-2 h-[500px] md:border-l-2 border-white/30">
+          <div className=" col-span-1 md:col-span-2 h-[500px] ">
             <div className="w-full h-full  ">
               <Image
                 src="https://assets.lummi.ai/assets/QmRMtRgBJzA7wEwbHHasK1AwmVP5cxFhpn7yfVoziwQiYu?auto=format&w=1500"
@@ -62,7 +62,7 @@ const BentoGrid = () => {
                 alt="iamge"
                 height={200}
                 width={800}
-                className="overflow-hidden object-cover h-[300px] p-10 dark:bg-black bg-neutral-500"
+                className="overflow-hidden object-cover h-[300px] md:p-10 dark:bg-black bg-neutral-500"
               />
             </div>
           </div>
