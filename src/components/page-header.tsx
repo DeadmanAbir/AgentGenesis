@@ -28,7 +28,7 @@ function PageHeaderHeading({
   return (
     <h1
       className={cn(
-        'text-center text-8xl font-bold leading-tight tracking-normal text-balance md:text-7xl lg:leading-[1.1]  animate-text-animate max-w-[900px] ',
+        'text-center text-3xl font-bold leading-tight tracking-normal text-balance md:text-7xl lg:leading-[1.1]  animate-text-animate max-w-[900px] ',
         className,
       )}
       {...props}
