@@ -50,6 +50,31 @@ export const docsConfig: DocsConfig = {
           href: '/docs/components/calculatorTool',
           items: [],
         },
+        {
+          title: 'LinkedIn Tool',
+          href: '/docs/components/linkedinTool',
+          items: [],
+        },
+      ],
+    },
+    {
+      title: 'Chat Models',
+      items: [
+        {
+          title: 'ChatOpenAI',
+          href: '/docs/components/chatOpenAi',
+          items: [],
+        },
+        {
+          title: 'ChatGemini',
+          href: '/docs/components/chatGemini',
+          items: [],
+        },
+        {
+          title: 'ChatAnthropic',
+          href: '/docs/components/chatAnthropic',
+          items: [],
+        },
       ],
     },
   ],
