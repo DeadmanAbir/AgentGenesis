@@ -9,6 +9,7 @@ import { getTableOfContents } from '@/lib/toc';
 import { ScrollArea } from '@/components/scroll-area';
 import { DashboardTableOfContents } from '@/components/toc';
 import { Contribute } from '@/components/contribute';
+import { DocPager } from '@/components/pager';
 interface AgentsPageProps {
   params: {
     slug: string[];
@@ -63,6 +64,7 @@ export async function Agents({ params }: AgentsPageProps) {
         <div className="pb-12 pt-8 prose dark:prose-invert prose-p:my-0">
           <Mdx code={doc.body.code} />
         </div>
+        <DocPager doc={doc} />
       </div>
       {doc.toc && (
         <div className="hidden text-sm xl:block">
