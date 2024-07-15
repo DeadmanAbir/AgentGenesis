@@ -8,6 +8,7 @@ import { Mdx } from '@/components/mdx-components';
 import { getTableOfContents } from '@/lib/toc';
 import { ScrollArea } from '@/components/scroll-area';
 import { DashboardTableOfContents } from '@/components/toc';
+import { Contribute } from '@/components/contribute';
 interface AgentsPageProps {
   params: {
     slug: string[];
@@ -67,8 +68,9 @@ export async function Agents({ params }: AgentsPageProps) {
         <div className="hidden text-sm xl:block">
           <div className="sticky top-16 -mt-10 pt-4">
             <ScrollArea className="pb-10">
-              <div className="sticky top-16 -mt-10 h-[calc(100vh-3.5rem)] py-12">
+              <div className="sticky top-16 -mt-10 h-[calc(100vh-3.5rem)] py-12 flex flex-col gap-4">
                 <DashboardTableOfContents toc={toc} />
+                <Contribute doc={doc} />
               </div>
             </ScrollArea>
           </div>
