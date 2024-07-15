@@ -29,10 +29,13 @@ const SiteHeader = () => {
         <MobileNav />
         <div className="flex flex-1 items-center  space-x-2 justify-end">
           {pathname.includes('docs') && (
-            <div>
-              <div className="inline-flex h-full animate-background-shine cursor-pointer  items-center justify-center rounded-full border hover:border-1 dark:hover:border-stone-400  border-gray-800 dark:bg-[linear-gradient(110deg,#A9A9A9,45%,#FFFFFF,55%,#A9A9A9)]  bg-[linear-gradient(110deg,#000,45%,#4D4B4B,55%,#000)] bg-[length:250%_100%] px-3 py-1 text-xs  font-semibold text-gray-300 dark:text-gray-800 ">
-                <Github className="h-3 w-4" />
-                Star us on Github
+            <div className="flex items-center">
+              <div className="relative inline-block overflow-hidden rounded-full p-[1px]">
+                <div className="absolute inset-[-1000%] animate-[spin_5s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+                <div className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-gray-950 px-3 py-1 text-xs font-medium text-gray-50 backdrop-blur-3xl">
+                  <Github className="h-3 w-4" />
+                  Star us on Github
+                </div>
               </div>
             </div>
           )}
