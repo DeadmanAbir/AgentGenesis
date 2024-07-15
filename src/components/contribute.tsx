@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BugIcon } from 'lucide-react';
+import { BugIcon, LightbulbIcon } from 'lucide-react';
 
 import { getGitHubIssueUrl } from '@/lib/github';
 import { Agent } from 'contentlayer/generated';
@@ -15,6 +15,17 @@ export function Contribute({ doc }: { doc: Agent }) {
         title: `[bug]: ${doc.slug}`,
         labels: ['bug', 'documentation'],
         template: 'bug_report.md',
+      }),
+    },
+    {
+      text: 'Request a feature',
+      icon: LightbulbIcon,
+      href: getGitHubIssueUrl({
+        owner: 'DeadmanAbir',
+        repo: 'AgentGenesis',
+        title: `[feat]: ${doc.slug}`,
+        labels: ['enhancement'],
+        template: 'feature_request.md',
       }),
     },
   ];
