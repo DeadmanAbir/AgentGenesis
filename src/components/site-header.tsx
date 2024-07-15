@@ -30,7 +30,7 @@ const SiteHeader = () => {
         <div className="flex flex-1 items-center  space-x-2 justify-end">
           {pathname.includes('docs') && (
             <div>
-              <div className="inline-flex h-full animate-background-shine cursor-pointer  items-center justify-center rounded-full border hover:border-1 dark:hover:border-stone-400  border-gray-800 bg-[linear-gradient(110deg,#000,45%,#4D4B4B,55%,#000)] bg-[length:250%_100%] px-3 py-1 text-xs font-medium text-gray-300 ">
+              <div className="inline-flex h-full animate-background-shine cursor-pointer  items-center justify-center rounded-full border hover:border-1 dark:hover:border-stone-400  border-gray-800 dark:bg-[linear-gradient(110deg,#A9A9A9,45%,#FFFFFF,55%,#A9A9A9)]  bg-[linear-gradient(110deg,#000,45%,#4D4B4B,55%,#000)] bg-[length:250%_100%] px-3 py-1 text-xs  font-semibold text-gray-300 dark:text-gray-800 ">
                 <Github className="h-3 w-4" />
                 Star us on Github
               </div>
