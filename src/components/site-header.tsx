@@ -29,7 +29,7 @@ const SiteHeader = () => {
         <MobileNav />
         <div className="flex flex-1 items-center  space-x-2 justify-end">
           {pathname.includes('docs') && (
-            <div className="flex items-center">
+            <div className="flex items-center hidden lg:block">
               <div className="relative group inline-block overflow-hidden rounded-full p-[1px] h-8  ">
                 <div className="absolute inset-[-1000%] animate-[spin_5s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
                 <div className="inline-flex gap-1 h-full w-full cursor-pointer items-center justify-center rounded-full bg-gray-950 px-3 py-1 text-sm font-medium text-gray-50 backdrop-blur-3xl">
