@@ -129,6 +129,7 @@ Add the following code to your `utils/chatGemini.ts` file:
 ```tsx title="chatGemini.ts" showLineNumbers {}
 import {
   Content,
+  CountTokensResponse,
   GenerateContentStreamResult,
   GenerativeModel,
   GoogleGenerativeAI,
@@ -159,6 +160,18 @@ interface ChatGeminiResponse {
   content: string;
   promptTokenCount: number | null;
   candidatesTokenCount: number | null;
+}
+
+interface ChatGeminiHistoryCountTokensProps {
+  chatHistory: Record<"model" | "user", string>[];
+  options?: RequestOptions;
+}
+
+interface ChatGeminiCountTokensProps {
+  prompt: string;
+  options?: RequestOptions;
+  context?: string;
+  outputFormat?: string;
 }
 
 export class ChatGemini {
@@ -251,6 +264,40 @@ export class ChatGemini {
     return result;
   }
 
+  async countChatHistoryTokens(
+    props: ChatGeminiHistoryCountTokensProps
+  ): Promise<CountTokensResponse> {
+    const { options, chatHistory } = props;
+
+    const client = this.createClient(this.model, undefined, options);
+
+    chatHistory && chatHistory.length > 0;
+    const history = this.createChatHistory(chatHistory);
+    const chat = client.startChat({
+      history,
+    });
+
+    const countResult = await client.countTokens({
+      generateContentRequest: { contents: await chat.getHistory() },
+    });
+
+    return countResult;
+  }
+
+  async countTokens(
+    props: ChatGeminiCountTokensProps
+  ): Promise<CountTokensResponse> {
+    const { prompt, context, outputFormat, options } = props;
+
+    const client = this.createClient(this.model, undefined, options);
+
+    const content = this.createContext(prompt, context, outputFormat);
+
+    const result = await client.countTokens(content);
+
+    return result;
+  }
+
   private createChatHistory(
     chatHistory: Record<"model" | "user", string>[]
   ): Content[] {
@@ -259,6 +306,7 @@ export class ChatGemini {
       { role: "model" as const, parts: [{ text: entry.model }] },
     ]);
   }
+
   private createClient(
     model: string,
     systemInstruction?: string,
@@ -299,6 +347,8 @@ export class ChatGemini {
 
 ### Initialize client
 
+Initialize the ChatGemini client.
+
 ```tsx showLineNumbers 
 import { ChatGemini } from "@/utils/chatGemini.ts";
 
@@ -309,6 +359,8 @@ const chatGemini = new ChatGemini({
 
 ```
 ### Simple Chat
+
+Sample chat with a simple single prompt.
 
 ```tsx showLineNumbers 
 const responseText = await chatGemini.chat({
@@ -326,6 +378,8 @@ console.log(responseText);
 ```
 
 ### Multi Conversational chat
+
+Sampe chats involving addition of chat history.
 
 ```tsx showLineNumbers 
 const responseTextWithHistory = await chatGemini.chatWithHistory({
@@ -378,6 +432,10 @@ console.log(responseTextWithContext);
 **/
 ```
 ### Streaming text
+
+Sample example of creating and handling stream responses.
+
+
 ```tsx showLineNumbers 
 const responseTextStreaming = await chatGemini.chatWithHistory({
   systemInstruction: "You are a helpful language translator. Your name is AgentGenesis!.",
@@ -422,6 +480,49 @@ It seems you're asking about John Doe, an AI developer with a passion for dogs! 
 Is there anything else I can help you with today?
 **/
 ```
+### Counting Tokens
+
+Sample example of counting input tokens, including prompts, and chat histories.
+
+
+```tsx showLineNumbers 
+// Counting tokens with single prompts, context etc.
+
+const countTokens = await chatGemini.countTokens({
+  context: "John Doe is an AI developer who loves dogs.",
+  prompt: "Who are you? What's your name and my name? How many Dogs?",
+});
+
+console.log(countTokens);
+
+/*
+{
+  "totalTokens": 32
+}
+*/
+
+// Counting tokens with chat history
+
+const countHistoryTokens = await chatGemini.countChatHistoryTokens({
+  chatHistory: [
+    { user: "Hello", model: "Hi there! How can I help you today?" },
+    {
+      user: "My name is John Doe and I have 2 dogs!",
+      model: "Sure, I will remember that! Have a good day!",
+    },
+  ],
+});
+
+console.log(countHistoryTokens);
+
+/*
+{
+  "totalTokens": 39
+}
+*/
+
+
+```
 
 ## Props
 
@@ -450,6 +551,21 @@ Is there anything else I can help you with today?
 | maxOutputTokens    | number?         | Specifying the limitation of output tokens.              | ""      |
 | options            | RequestOptions? | Additional args as per Google Gemini docs.               | {}      |
 
+### countChatHistoryTokens
+
+| Prop               | Type            | Description                                              | Default |
+| ------------------ | --------------- | -------------------------------------------------------- | ------- |
+| chatHistory        | required        | Conversational history.                                  | ""      |
+| options            | RequestOptions? | Additional args as per Google Gemini docs.               | {}      |
+
+### countTokens
+
+| Prop         | Type            | Description                                           | Default |
+|--------------|-----------------|-------------------------------------------------------|---------|
+| prompt       | string          | Prompt provided by user.                              | ""      |
+| options      | RequestOptions? | Additional args as per Google Gemini docs.            | {}      |
+| context      | string?         | Additional context user wants to provide.             | ""      |
+| outputFormat | string?         | Particular format in which the user wants their output. | ""    |
 
 
 ## Credits

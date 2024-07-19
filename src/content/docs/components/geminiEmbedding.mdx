@@ -1,0 +1,229 @@
+---
+title: GeminiEmbeddings
+description: Use different Google's text embedding models to generate embeddings.
+---
+
+<Tabs defaultValue="preview">
+
+<TabsList>
+  <TabsTrigger value="preview">Preview</TabsTrigger>
+  <TabsTrigger value="code">Code</TabsTrigger>
+</TabsList>
+
+<TabsContent value="preview">
+  <ComponentPreviewTemp>
+    <ReRankerDemo />
+  </ComponentPreviewTemp>
+</TabsContent>
+
+<TabsContent value="code">
+
+<CodeBlockWrapper>
+
+```tsx showLineNumbers {4-10}
+import { GeminiAIEmbeddingsParams, GeminiEmbeddings } from "@/utils/geminiEmbedding.ts"; // Adjust the path as required
+
+// Initialize Client
+const params: GeminiAIEmbeddingsParams = {
+  apiKey: process.env.GEMINI_API_KEY as string,
+  model: "embedding-001",
+  removeNewLines: true,
+};
+
+const customEmbeddings = new GeminiEmbeddings(params);
+
+// Embedding a single text prompt
+const query = "What would be a good company name for a company that makes colorful socks?";
+const singleQueryResult = await customEmbeddings.embedSingleQuery(query);
+
+// Embedding a string of texts
+const multipleDocumentsResult = await customEmbeddings.embedMultipleDocuments(["hello", "world"]);
+```
+
+</CodeBlockWrapper>
+
+</TabsContent>
+
+</Tabs>
+
+## Installation
+
+<Steps>
+
+<Step>Install peer dependencies:</Step>
+
+```bash
+npm install @google/generative-ai
+```
+<Step>Add Environment Variables</Step>
+
+```tsx title=".env" showLineNumbers {}
+GEMINI_API_KEY = aSdWytUQZUkBbPpGcXNAG4X0;
+/* You can get one from - https://aistudio.google.com/app/apikey */
+```
+
+<Step>Copy the code</Step>
+
+Add the following code to your `utils/geminiEmbedding.ts` file:
+
+<CodeBlockWrapper>
+```tsx title="geminiEmbedding.ts" showLineNumbers {}
+import { GoogleGenerativeAI, GenerativeModel } from "@google/generative-ai";
+import type { EmbedContentRequest } from "@google/generative-ai";
+
+export interface GeminiAIEmbeddingsParams {
+  model: string;
+
+  removeNewLines?: boolean;
+
+  apiKey: string;
+}
+
+export class GeminiEmbeddings {
+  private apiKey: string;
+
+  private model = "embedding-001";
+
+  private removeNewLines = true;
+
+  private maxBatchSize = 100;
+
+  private client: GenerativeModel;
+
+  constructor(fields: GeminiAIEmbeddingsParams) {
+    this.model = fields.model;
+
+    this.apiKey = fields.apiKey;
+
+    if (!this.apiKey || this.apiKey.length === 0) {
+      throw new Error(
+        "Please set an API key for Google GenerativeAI " +
+          "in the environment variable GEMINI_API_KEY " +
+          "or in the `apiKey` field of the " +
+          "GeminiEmbeddings constructor"
+      );
+    }
+
+    this.client = new GoogleGenerativeAI(this.apiKey).getGenerativeModel({
+      model: this.model,
+    });
+  }
+  private chunkArray = <T>(arr: T[], chunkSize: number) =>
+    arr.reduce((chunks, elem, index) => {
+      const chunkIndex = Math.floor(index / chunkSize);
+      const chunk = chunks[chunkIndex] || [];
+      // eslint-disable-next-line no-param-reassign
+      chunks[chunkIndex] = chunk.concat([elem]);
+      return chunks;
+    }, [] as T[][]);
+
+  private convertToContent(text: string): EmbedContentRequest {
+    const cleanedText = this.removeNewLines ? text.replace(/\n/g, " ") : text;
+    return {
+      content: { role: "user", parts: [{ text: cleanedText }] },
+    };
+  }
+
+  private async embedSingleQueryContent(text: string): Promise<number[]> {
+    const req = this.convertToContent(text);
+    const res = await this.client.embedContent(req);
+    return res.embedding.values ?? [];
+  }
+
+  private async embedMultipleDocumentsContent(
+    documents: string[]
+  ): Promise<number[][]> {
+    const batchEmbedChunks: string[][] = this.chunkArray<string>(
+      documents,
+      this.maxBatchSize
+    );
+
+    const batchEmbedRequests = batchEmbedChunks.map((chunk) => ({
+      requests: chunk.map((doc) => this.convertToContent(doc)),
+    }));
+    const responses = await Promise.allSettled(
+      batchEmbedRequests.map((req) => this.client.batchEmbedContents(req))
+    );
+
+    const embeddings = responses.flatMap((res, idx) => {
+      if (res.status === "fulfilled") {
+        return res.value.embeddings.map((e) => e.values || []);
+      } else {
+        return Array(batchEmbedChunks[idx].length).fill([]);
+      }
+    });
+
+    return embeddings;
+  }
+
+  embedSingleQuery(document: string): Promise<number[]> {
+    return this.embedSingleQueryContent(document);
+  }
+
+  embedMultipleDocuments(documents: string[]): Promise<number[][]> {
+    return this.embedMultipleDocumentsContent(documents);
+  }
+}
+
+
+```
+
+</CodeBlockWrapper>
+</Steps>
+
+## Usage
+
+### Initialize client
+
+Initialize the GeminiEmbeddings with the required parameters.
+
+```tsx showLineNumbers 
+import { GeminiAIEmbeddingsParams, GeminiEmbeddings } from "@/utils/geminiEmbedding.ts"; // Adjust the path as required
+
+const params: GeminiAIEmbeddingsParams = {
+  apiKey: process.env.GEMINI_API_KEY as string,
+  model: "embedding-001",
+  removeNewLines: true,
+};
+
+const customEmbeddings = new GeminiEmbeddings(params);
+```
+### Embedding a single text prompt
+
+Creating embeddings for a single text prompt.
+
+```tsx showLineNumbers 
+const query = "What would be a good company name for a company that makes colorful socks?";
+const singleQueryResult = await customEmbeddings.embedSingleQuery(query);
+```
+
+### Embedding a string of texts
+
+Creating embeddings for an array of text inputs.
+
+```tsx showLineNumbers 
+const multipleDocumentsResult = await customEmbeddings.embedMultipleDocuments(["hello", "world"]);
+```
+
+
+## Props
+
+### embedSingleQuery
+
+| Prop     | Type   | Description                | Default |
+| -------- | ------ | -------------------------- | ------- |
+| document | string | Input provided by user.    | ""      |
+
+### embedMultipleDocuments
+
+| Prop      | Type     | Description                             | Default |
+| --------- | -------- | --------------------------------------- | ------- |
+| documents | string[] | Array of text documents provided by user. | ""      |
+
+
+
+
+## Credits
+
+This component is inspired from [Langchain GoogleAI embedding class](https://js.langchain.com/v0.2/docs/integrations/text_embedding/google_generativeai)
+

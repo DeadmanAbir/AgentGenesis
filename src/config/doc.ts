@@ -77,5 +77,20 @@ export const docsConfig: DocsConfig = {
         },
       ],
     },
+    {
+      title: 'Embedding Models',
+      items: [
+        {
+          title: 'OpenAIEmbeddings',
+          href: '/docs/components/openAiEmbedding',
+          items: [],
+        },
+        {
+          title: 'GeminiEmbeddings',
+          href: '/docs/components/geminiEmbedding',
+          items: [],
+        },
+      ],
+    },
   ],
 };

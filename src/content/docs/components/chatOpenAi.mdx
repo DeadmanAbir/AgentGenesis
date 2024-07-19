@@ -129,6 +129,7 @@ Add the following code to your `utils/chatOpenAi.ts` file:
 ```tsx title="chatOpenAi.ts" showLineNumbers {}
 import OpenAI from "openai";
 import { ClientOptions } from "openai";
+import { RequestOptions } from "openai/core.mjs";
 import {
   ChatCompletion,
   ChatCompletionMessageParam,
@@ -142,7 +143,11 @@ type ChatOpenAICompletionProps = {
   max_tokens?: number;
 };
 interface ChatOpenAiArgs extends ClientOptions {
-  model: ChatModel;
+  model:
+    | ChatModel
+    | "text-moderation-latest"
+    | "text-moderation-stable"
+    | "text-moderation-007";
 }
 
 interface OpenAICallProps {
@@ -161,9 +166,18 @@ interface ChatCompletionOutput {
   output: string;
 }
 
+interface OpenAiThreatDetectionProps {
+  input: string;
+  options?: RequestOptions;
+}
+
 export class ChatOpenAI {
   private client: OpenAI;
-  private model: ChatModel;
+  private model:
+    | ChatModel
+    | "text-moderation-latest"
+    | "text-moderation-stable"
+    | "text-moderation-007";
 
   constructor(props: ChatOpenAiArgs) {
     const { apiKey, model } = props;
@@ -231,6 +245,20 @@ export class ChatOpenAI {
     return chatCompletion;
   }
 
+  async detectThreat(
+    props: OpenAiThreatDetectionProps
+  ): Promise<OpenAI.Moderations.ModerationCreateResponse> {
+    const { input, options } = props;
+
+    const moderation = await this.client.moderations.create({
+      input: input,
+      model: this.model,
+      ...options,
+    });
+
+    return moderation;
+  }
+
   private createContext(
     prompt: string,
     context?: string,
@@ -250,6 +278,7 @@ export class ChatOpenAI {
   }
 }
 
+
 ```
 
 </CodeBlockWrapper>
@@ -259,6 +288,7 @@ export class ChatOpenAI {
 
 ### Initialize client
 
+Initialize the ChatOpenAI client.
 ```tsx showLineNumbers 
 import { ChatOpenAI } from "@/utils/chatOpenAi.ts";
 
@@ -269,6 +299,8 @@ const chatOpenAI = new ChatOpenAI({
 
 ```
 ### Simple Chat
+
+Sample chat with a simple single prompt.
 
 ```tsx showLineNumbers 
 const data = await chatOpenAI.chat({
@@ -288,6 +320,8 @@ console.log(data);
 ```
 
 ### Multi Conversational chat
+
+Sampe chats involving addition of chat history.
 
 ```tsx showLineNumbers 
 const dataWithHistory = await chatOpenAI.chat({
@@ -309,6 +343,8 @@ console.log(dataWithHistory);
 **/
 ```
 ### Defining Output Format
+
+Example of defining output format. Though it's not 100% accurate, LLM can hallucinate sometime.
 
 ```tsx showLineNumbers 
 const dataWithFormat = await chatOpenAI.chat({
@@ -360,7 +396,12 @@ console.log(dataWithContext);
 **/
 
 ```
+
+
+
 ### Streaming text
+Sample example of creating and handling stream responses.
+
 ```tsx showLineNumbers 
 const dataWithStreaming = await chatOpenAI.chat({
   prompt: "Who I am?",
@@ -386,6 +427,21 @@ for await (const chunk of dataWithStreaming) {
 You are John Doe, an AI developer specialized in chatbot development and RAG research. How can I assist you further, John?
 **/
 ```
+### Threat Detection
+
+Detecting input prompts that can violate OpenAI's policy & rules.
+
+```tsx showLineNumbers 
+const chatOpenAI = new ChatOpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+  model: "text-moderation-stable",
+});
+
+const data = await chatOpenAI.detectThreat({
+  input: "sample_text",
+});
+
+```
 
 ## Props
 
@@ -400,6 +456,16 @@ You are John Doe, an AI developer specialized in chatbot development and RAG res
 | temperature        | number?                     | Randomness of the LLM.                                  | 0.5     |
 | systemInstruction  | string?                     | Any specific instruction to the system user wants to feed. | ""      |
 | options            | ChatOpenAICompletionProps?  | Additional args as per OpenAI docs.                     | {}      |
+
+
+
+### detectThreat
+| Prop    | Type           | Description                                | Default |
+|---------|----------------|--------------------------------------------|---------|
+| input   | string         | Text prompt provided by user.              | ""      |
+| options | RequestOptions?| Additional args as per OpenAI docs.        | ""      |
+
+
 
 
 
