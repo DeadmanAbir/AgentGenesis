@@ -1,0 +1,207 @@
+---
+title: OpenAIEmbeddings
+description: Use different OpenAI's text embedding models to generate embeddings.
+---
+
+<Tabs defaultValue="preview">
+
+<TabsList>
+  <TabsTrigger value="preview">Preview</TabsTrigger>
+  <TabsTrigger value="code">Code</TabsTrigger>
+</TabsList>
+
+<TabsContent value="preview">
+  <ComponentPreviewTemp>
+    <ReRankerDemo />
+  </ComponentPreviewTemp>
+</TabsContent>
+
+<TabsContent value="code">
+
+<CodeBlockWrapper>
+
+```tsx showLineNumbers {4-7}
+import { OpenAIEmbeddingClass } from "@/utils/openAiEmbedding.ts"; // Adjust the path as required
+
+// Initialize Client
+const model = new OpenAIEmbeddingClass({
+  apiKey: process.env.OPENAI_API_KEY,
+  modelName: "text-embedding-3-large",
+});
+
+// Embedding a single text prompt
+const singleTextData = await model.embedText("Hello, world!");
+
+// Embedding a string of texts
+const documentsData = await model.embedDocuments([
+  "Hello World!.",
+  "Bye World"
+]);
+```
+
+</CodeBlockWrapper>
+
+</TabsContent>
+
+</Tabs>
+
+## Installation
+
+<Steps>
+
+<Step>Install peer dependencies:</Step>
+
+```bash
+npm install openai
+```
+<Step>Add Environment Variables</Step>
+
+```tsx title=".env" showLineNumbers {}
+OPENAI_API_KEY = aSdWytUQZUkBbPpGcXNAG4X0;
+/* You can get one from - https://platform.openai.com/api-keys */
+```
+
+<Step>Copy the code</Step>
+
+Add the following code to your `utils/openAiEmbedding.ts` file:
+
+<CodeBlockWrapper>
+```tsx title="openAiEmbedding.ts" showLineNumbers {}
+import { ClientOptions, OpenAI as OpenAIClient } from "openai";
+
+export interface OpenAIEmbeddingsParams {
+  modelName?: string;
+  batchSize?: number;
+  stripNewLines?: boolean;
+  apiKey?: string;
+}
+
+function chunkArray<T>(array: T[], chunkSize: number): T[][] {
+  const chunks: T[][] = [];
+  for (let i = 0; i < array.length; i += chunkSize) {
+    chunks.push(array.slice(i, i + chunkSize));
+  }
+  return chunks;
+}
+
+export class OpenAIEmbeddingClass {
+  private modelName: string;
+  private batchSize: number;
+  private stripNewLines: boolean;
+  private apiKey: string;
+  private client: OpenAIClient;
+
+  constructor(props: OpenAIEmbeddingsParams) {
+    const { modelName, batchSize, stripNewLines, apiKey } = props;
+    this.modelName = modelName ?? "text-embedding-ada-002";
+    this.batchSize = batchSize ?? 512;
+    this.stripNewLines = stripNewLines ?? true;
+    this.apiKey = apiKey ?? "";
+
+    if (!this.apiKey) {
+      throw new Error("API key is required");
+    }
+
+    const clientConfig: ClientOptions = {
+      apiKey: this.apiKey,
+    };
+
+    this.client = new OpenAIClient(clientConfig);
+  }
+
+  async embedDocuments(texts: string[]): Promise<number[][]> {
+    const batches = chunkArray(
+      this.stripNewLines ? texts.map((t) => t.replace(/\n/g, " ")) : texts,
+      this.batchSize
+    );
+
+    const batchRequests = batches.map((batch) => {
+      const params = {
+        model: this.modelName,
+        input: batch,
+      };
+      return this.client.embeddings.create(params);
+    });
+
+    const batchResponses = await Promise.all(batchRequests);
+
+    const embeddings: number[][] = [];
+    for (const batchResponse of batchResponses) {
+      for (const embedding of batchResponse.data) {
+        embeddings.push(embedding.embedding);
+      }
+    }
+    return embeddings;
+  }
+
+  async embedText(text: string): Promise<number[]> {
+    const params = {
+      model: this.modelName,
+      input: this.stripNewLines ? text.replace(/\n/g, " ") : text,
+    };
+    const response = await this.client.embeddings.create(params);
+    return response.data[0].embedding;
+  }
+}
+
+
+```
+
+</CodeBlockWrapper>
+</Steps>
+
+## Usage
+
+### Initialize client
+
+Initialize the OpenAIEmbeddingClass with the required parameters.
+
+```tsx showLineNumbers 
+import { OpenAIEmbeddingClass } from "@/utils/openAiEmbedding.ts"; // Adjust the path as required
+
+const model = new OpenAIEmbeddingClass({
+  apiKey: process.env.OPENAI_API_KEY,
+  modelName: "text-embedding-3-large",
+});
+
+```
+### Embedding a single text prompt
+
+Creating embeddings for a single text prompt.
+
+```tsx showLineNumbers 
+const singleTextData = await model.embedText("Hello, world!");
+```
+
+### Embedding a string of texts
+
+Creating embeddings for an array of text inputs.
+
+```tsx showLineNumbers 
+const documentsData = await model.embedDocuments([
+  "Hello World!.",
+  "Bye World"
+]);
+```
+
+
+## Props
+
+### embedText
+
+| Prop   | Type   | Description                          | Default |
+| ------ | ------ | ------------------------------------ | ------- |
+| text   | string | Prompt provided by user.             | ""      |
+
+### embedDocuments
+
+| Prop   | Type     | Description                          | Default |
+| ------ | -------- | ------------------------------------ | ------- |
+| texts  | string[] | Array of texts provided by user.     | ""      |
+
+
+
+## Credits
+
+This component is inspired from [Langchain OpenAI embedding class](https://js.langchain.com/v0.2/docs/integrations/text_embedding/openai/)
+

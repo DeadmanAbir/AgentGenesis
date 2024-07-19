@@ -1,6 +1,6 @@
 ---
 title: ChatAnthropic
-description: Use different Claude's text generation models by following these instructions:.
+description: Use different Claude's text generation models by following these instructions.
 ---
 
 <Tabs defaultValue="preview">
@@ -147,6 +147,7 @@ interface AnthropicMessageOptions {
   outputFormat?: string;
   context?: string;
   maxTokens?: number;
+  temperature?: number;
 }
 
 interface AnthropicMessageResult {
@@ -173,8 +174,15 @@ export class ChatAnthropic {
   async message(
     options: AnthropicMessageOptions
   ): Promise<AnthropicMessageResult | MessageStream> {
-    const { chatHistory, prompt, stream, context, outputFormat, maxTokens } =
-      options;
+    const {
+      chatHistory,
+      prompt,
+      stream,
+      context,
+      outputFormat,
+      maxTokens,
+      temperature,
+    } = options;
     const userMessages: MessageParam[] = [];
 
     if (chatHistory && chatHistory.length > 0) {
@@ -196,6 +204,7 @@ export class ChatAnthropic {
         messages: userMessages,
         model: this.model,
         max_tokens: maxTokens ?? 1024,
+        temperature: temperature ?? 1.0,
       });
 
       return {
@@ -213,6 +222,7 @@ export class ChatAnthropic {
       messages: userMessages,
       model: this.model,
       max_tokens: maxTokens ?? 1024,
+      temperature: temperature ?? 1.0,
     });
 
     return messageStream;
@@ -246,6 +256,8 @@ export class ChatAnthropic {
 
 ### Initialize client
 
+Initialize the ChatAnthropic client.
+
 ```tsx showLineNumbers
 import { ChatAnthropic } from "@/utils/chatAnthropic";
 
@@ -256,6 +268,8 @@ const client = new ChatAnthropic({
 
 ```
 ### Simple Chat
+
+Sample chat with a simple single prompt.
 
 ```tsx showLineNumbers
 const data = await client.message({
@@ -272,6 +286,9 @@ console.log(data);
 ```
 
 ### Multi Conversational chat
+
+Sampe chats involving addition of chat history.
+
 
 ```tsx showLineNumbers
 const dataWithHistory = await client.message({
@@ -314,6 +331,7 @@ const dataWithOptionalParams = await client.message({
   context: "John Doe is an AI engineer, and he loves dogs.",
   outputFormat: `{"about_yourself": "", "about_me": ""}`,
   prompt: "Who are you? What's your name? Who am I?",
+  temperature: 0.5,
 });
 console.log(dataWithOptionalParams);
 
@@ -328,6 +346,9 @@ console.log(dataWithOptionalParams);
 
 ```
 ### Streaming text
+
+Sample example of creating and handling stream responses.
+
 ```tsx showLineNumbers
 const dataStreaming = await client.message({
   chatHistory: [
@@ -343,8 +364,9 @@ const dataStreaming = await client.message({
   context: "John Doe is an AI engineer, and he loves dogs.",
   outputFormat: `{"about_yourself": "", "about_me": ""}`,
   maxTokens: 1000,
-  stream: true,
   prompt: "Who are you? What's your name? Who am I?",
+  temperature: 0.5,
+  stream: true,
 });
 
 // @ts-ignore
@@ -357,14 +379,16 @@ dataStreaming.on("text", (text) => {
 
 ### message
 
-| Prop               | Type            | Description                                              | Default |
-| ------------------ | --------------- | -------------------------------------------------------- | ------- |
-| prompt             | string          | Prompt provided by user.                                 | ""      |
-| context            | string?         | Additional context user wants to provide.                | ""      |
-| outputFormat       | string?         | Particular format in which the user wants their output.  | ""      |
-| chatHistory        | optional        | Conversational history.                                  | ""      |
-| stream             | boolean?        | If true, then the output will be a stream of text.       | false   |
-| maxTokens          | number?         | The maximum number of tokens to generate before stopping.| 1024    |
+| Prop          | Type            | Description                                              | Default |
+|---------------|-----------------|----------------------------------------------------------|---------|
+| prompt        | string          | Prompt provided by user.                                 | ""      |
+| context       | string?         | Additional context user wants to provide.                | ""      |
+| outputFormat  | string?         | Particular format in which the user wants their output.  | ""      |
+| chatHistory   | optional        | Conversational history.                                  | ""      |
+| stream        | boolean?        | If true, then the output will be a stream of text.       | false   |
+| maxTokens     | number?         | The maximum number of tokens to generate before stopping.| 1024    |
+| temperature   | number?         | Randomness of the LLM.                                   | 1.0     |
+
 
 
 
