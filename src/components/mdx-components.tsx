@@ -16,6 +16,7 @@ import { ReRankerDemo } from './DemoComponents/reRankerDemo';
 import ComponentPreview from './component-preview';
 import { ComponentPreviewTemp } from './component-preview-temp';
 import { CodeBlockWrapper } from './code-block-wrapper';
+import { Pre } from './pre-component';
 
 const components = {
   Accordion,
@@ -26,6 +27,7 @@ const components = {
   ComponentPreview,
   ComponentPreviewTemp,
   CodeBlockWrapper,
+  pre: Pre,
 
   h1: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h1
