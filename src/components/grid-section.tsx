@@ -24,11 +24,12 @@ const GridSection = () => {
         <div className="text-lg font-bold mb-2 relative z-10 px-10">
           <div className="absolute left-0 inset-y-0 h-6 w-1 rounded-tr-full rounded-br-full bg-neutral-300 dark:bg-neutral-700 group-hover:bg-blue-500 transition duration-200"></div>
           <span className="group-hover:translate-x-2 transition duration-200 inline-block">
-            Built for developers
+            Seamless AI Integration
           </span>
         </div>
         <p className="text-sm text-slate-700 dark:text-slate-300 max-w-xs mx-auto relative z-10 px-10">
-          Built for engineers, developers, dreamers, thinkers and doers.
+          Integrate AI seamlessly with our ready-to-use, copy-paste code
+          snippets{' '}
         </p>
       </div>
       <div className="flex flex-col lg:border-r py-10 relative group lg:border-b dark:border-neutral-800">
@@ -52,11 +53,11 @@ const GridSection = () => {
         <div className="text-lg font-bold mb-2 relative z-10 px-10">
           <div className="absolute left-0 inset-y-0 h-6 w-1 rounded-tr-full rounded-br-full bg-neutral-300 dark:bg-neutral-700 group-hover:bg-blue-500 transition duration-200"></div>
           <span className="group-hover:translate-x-2 transition duration-200 inline-block">
-            Ease of use
+            Fully Open Source
           </span>
         </div>
         <p className="text-sm text-slate-700 dark:text-slate-300 max-w-xs mx-auto relative z-10 px-10">
-          It's as easy as using an Apple, and as expensive as buying one.
+          Enjoy open-source flexibility with AgentGenesis, licensed under MIT.{' '}
         </p>
       </div>
       <div className="flex flex-col lg:border-r py-10 relative group lg:border-b dark:border-neutral-800">
@@ -81,12 +82,11 @@ const GridSection = () => {
         <div className="text-lg font-bold mb-2 relative z-10 px-10">
           <div className="absolute left-0 inset-y-0 h-6 w-1 rounded-tr-full rounded-br-full bg-neutral-300 dark:bg-neutral-700 group-hover:bg-blue-500 transition duration-200"></div>
           <span className="group-hover:translate-x-2 transition duration-200 inline-block">
-            Pricing like no other
+            Developer-Friendly Solutions
           </span>
         </div>
         <p className="text-sm text-slate-700 dark:text-slate-300 max-w-xs mx-auto relative z-10 px-10">
-          Our prices are best in the market. No cap, no lock, no credit card
-          required.
+          Simplify development with our extensive library of reusable code.{' '}
         </p>
       </div>
       <div className="flex flex-col lg:border-r py-10 relative group lg:border-b dark:border-neutral-800">
@@ -110,11 +110,11 @@ const GridSection = () => {
         <div className="text-lg font-bold mb-2 relative z-10 px-10">
           <div className="absolute left-0 inset-y-0 h-6 w-1 rounded-tr-full rounded-br-full bg-neutral-300 dark:bg-neutral-700 group-hover:bg-blue-500 transition duration-200"></div>
           <span className="group-hover:translate-x-2 transition duration-200 inline-block">
-            100% Uptime guarantee
+            Build on Top of Robust Foundations
           </span>
         </div>
         <p className="text-sm text-slate-700 dark:text-slate-300 max-w-xs mx-auto relative z-10 px-10">
-          We just cannot be taken down by anyone.
+          Start with solid, well-documented, and maintainable code bases.{' '}
         </p>
       </div>
       <div className="flex flex-col lg:border-r py-10 relative group lg:border-l dark:border-neutral-800">
@@ -143,11 +143,11 @@ const GridSection = () => {
         <div className="text-lg font-bold mb-2 relative z-10 px-10">
           <div className="absolute left-0 inset-y-0 h-6 w-1 rounded-tr-full rounded-br-full bg-neutral-300 dark:bg-neutral-700 group-hover:bg-blue-500 transition duration-200"></div>
           <span className="group-hover:translate-x-2 transition duration-200 inline-block">
-            Multi-tenant Architecture
+            Accelerate AI Development
           </span>
         </div>
         <p className="text-sm text-slate-700 dark:text-slate-300 max-w-xs mx-auto relative z-10 px-10">
-          You can simply share passwords instead of buying new seats
+          Speed up projects with pre-built components for rapid innovation.
         </p>
       </div>
       <div className="flex flex-col lg:border-r py-10 relative group dark:border-neutral-800">
@@ -173,11 +173,11 @@ const GridSection = () => {
         <div className="text-lg font-bold mb-2 relative z-10 px-10">
           <div className="absolute left-0 inset-y-0 h-6 w-1 rounded-tr-full rounded-br-full bg-neutral-300 dark:bg-neutral-700 group-hover:bg-blue-500 transition duration-200"></div>
           <span className="group-hover:translate-x-2 transition duration-200 inline-block">
-            24/7 Customer Support
+            Comprehensive Code Library
           </span>
         </div>
         <p className="text-sm text-slate-700 dark:text-slate-300 max-w-xs mx-auto relative z-10 px-10">
-          We are available a 100% of the time. Atleast our AI Agents are.
+          Access a wide range of AI templates, including RAG flows and QnA bots.
         </p>
       </div>
       <div className="flex flex-col lg:border-r py-10 relative group dark:border-neutral-800">
@@ -210,11 +210,11 @@ const GridSection = () => {
         <div className="text-lg font-bold mb-2 relative z-10 px-10">
           <div className="absolute left-0 inset-y-0 h-6 w-1 rounded-tr-full rounded-br-full bg-neutral-300 dark:bg-neutral-700 group-hover:bg-blue-500 transition duration-200"></div>
           <span className="group-hover:translate-x-2 transition duration-200 inline-block">
-            Money back guarantee
+            Community-Driven Improvements
           </span>
         </div>
         <p className="text-sm text-slate-700 dark:text-slate-300 max-w-xs mx-auto relative z-10 px-10">
-          If you donot like EveryAI, we will convince you to like us.
+          Benefit from ongoing enhancements by a dedicated developer community.
         </p>
       </div>
       <div className="flex flex-col lg:border-r py-10 relative group dark:border-neutral-800">
@@ -238,11 +238,11 @@ const GridSection = () => {
         <div className="text-lg font-bold mb-2 relative z-10 px-10">
           <div className="absolute left-0 inset-y-0 h-6 w-1 rounded-tr-full rounded-br-full bg-neutral-300 dark:bg-neutral-700 group-hover:bg-blue-500 transition duration-200"></div>
           <span className="group-hover:translate-x-2 transition duration-200 inline-block">
-            And everything else
+            Easy Customization
           </span>
         </div>
         <p className="text-sm text-slate-700 dark:text-slate-300 max-w-xs mx-auto relative z-10 px-10">
-          I just ran out of copy ideas. Accept my sincere apologies
+          Tailor reusable code to perfectly match your project's unique needs.{' '}
         </p>
       </div>
     </div>
