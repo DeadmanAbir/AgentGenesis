@@ -89,14 +89,14 @@
   }
 }
 [data-rehype-pretty-code-figure] figcaption {
-  @apply bg-black/90 dark:bg-gray-600 rounded-xl rounded-b-none px-2 py-1 tracking-wider text-zinc-200;
+  @apply  px-2 py-1 tracking-wider  dark:text-zinc-200 text-black;
 }
 
 [data-rehype-pretty-code-figure] code {
   @apply text-sm !leading-loose md:text-base border-0 p-0;
 }
 [data-rehype-pretty-code-figure] pre {
-  @apply rounded-t-none;
+  @apply rounded-lg;
 }
 
 
