@@ -4,12 +4,11 @@ const BentoGrid = () => {
   return (
     <div className="flex flex-col items-center justify-center relative py-20 ">
       <div className="flex flex-col items-center justify-center gap-6">
-        <div className="md:text-6xl text-4xl text-balance text-center">
-          Loved by people all over the universe
+        <div className="md:text-6xl text-4xl text-balance font-semibold text-center">
+          Build , Iterate And Ship Fast
         </div>
         <p className="max-w-[500px] text-center ">
-          Every AI is used by millions of people around the globe.Our APIs have
-          fan bases and people fight for us over twitter.
+          Transforming Developer Experience in Generative AI with AgentGenesis
         </p>
       </div>
       {/* <div className="border-t-2 border-white overflow-hidden border-dashed  -top-[0px] w-[105%] " ></div> */}

@@ -38,11 +38,11 @@ const IndexPage = () => {
           />
         </div>
         <PageHeaderHeading className="z-20 tracking-wide">
-          Generate Images, Text and Videos with AI
+          Handy AI Components for Developers
         </PageHeaderHeading>
         <PageHeaderDescription className="z-20">
-          Beautifully designed components that you can copy and paste into your
-          apps. Accessible. Customizable. Open Source.
+          Seamlessly build custom RAG flows and AI agents using open-source,
+          copy-paste components.
         </PageHeaderDescription>
         <PageActions className="z-20">
           <Link href="/docs" className={cn(buttonVariants())}>
