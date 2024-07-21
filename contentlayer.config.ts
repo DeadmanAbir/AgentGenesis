@@ -56,7 +56,7 @@ export default makeSource({
     rehypePlugins: [
       rehypeSlug,
       // @ts-ignore
-      [rehypePrettyCode, { theme: 'aurora-x' }],
+      [rehypePrettyCode, { theme: 'github-dark' }],
       [
         rehypeAutolinkHeadings,
         {
