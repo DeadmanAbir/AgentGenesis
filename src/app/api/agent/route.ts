@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 
 const mdxContent = `
-# My MDX Table
 
 | Header 1 | Header 2 | Header 3 |
 | -------- | -------- | -------- |
