@@ -13,6 +13,7 @@ import {
 } from '@/components/page-header';
 import TestimonialSection from '@/components/testimonial-section';
 import { buttonVariants } from '@/components/ui/button';
+import UseCasesTabs from '@/components/use-cases-tabs';
 import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
 import { Star } from 'lucide-react';
@@ -62,6 +63,7 @@ const IndexPage = () => {
       <div className="container relative">
         <ImageDisplay />
         <BentoGrid />
+        <UseCasesTabs />
         <GridSection />
         <TestimonialSection />
       </div>
