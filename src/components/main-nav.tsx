@@ -6,13 +6,20 @@ import { usePathname } from 'next/navigation';
 
 import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import { useTheme } from 'next-themes';
 
 export function MainNav() {
   const pathname = usePathname();
-
+  const theme = useTheme();
   return (
     <div className="mr-4 hidden md:flex  ">
-      <Link href="/" className="mr-6 flex items-center space-x-2">
+      <Link href="/" className="mr-6 flex items-center space-x-1">
+        {theme.theme === 'dark' ? (
+          <Image src="/logo-white.png" alt="Logo" height={20} width={20} />
+        ) : (
+          <Image src="/logo-black.png" alt="Logo" height={20} width={20} />
+        )}
         <span className="hidden font-bold sm:inline-block">
           {siteConfig.name}
         </span>

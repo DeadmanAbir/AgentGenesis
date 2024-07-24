@@ -11,9 +11,12 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/scroll-area';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
 
 export function MobileNav() {
   const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -57,9 +60,14 @@ export function MobileNav() {
       <SheetContent side="left" className="pr-0">
         <MobileLink
           href="/"
-          className="flex items-center"
+          className="flex items-center px-4 space-x-1"
           onOpenChange={setOpen}
         >
+          {theme.theme === 'dark' ? (
+            <Image src="/logo-white.png" alt="Logo" height={20} width={20} />
+          ) : (
+            <Image src="/logo-black.png" alt="Logo" height={20} width={20} />
+          )}
           <span className="font-bold">{siteConfig.name}</span>
         </MobileLink>
         <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
