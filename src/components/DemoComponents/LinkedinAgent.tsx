@@ -21,9 +21,10 @@ const LinkedinAgent: React.FC = () => {
   const [type, setType] = useState<string>('');
   const [model, setModel] = useState<string>('');
   const [modelKey, setModelKey] = useState<string>('');
+  const [proxyUrlKey, setProxyUrlKey] = useState<string>('');
 
   const handleClick = async () => {
-    if (!inputValue.trim() || !type || !model || !modelKey) {
+    if (!inputValue.trim() || !type || !model || !modelKey || !proxyUrlKey) {
       return;
     }
 
@@ -41,6 +42,7 @@ const LinkedinAgent: React.FC = () => {
           type,
           model,
           modelKey,
+          proxyUrlKey,
         }),
       });
       const data = await response.json();
@@ -49,6 +51,7 @@ const LinkedinAgent: React.FC = () => {
       setModel('');
       setModelKey('');
       setInputValue('');
+      setProxyUrlKey('');
     } catch (e) {
       console.log('Error');
       setType('');
@@ -88,7 +91,14 @@ const LinkedinAgent: React.FC = () => {
           <Button
             className="rounded-l-none bg-white text-black border-2 dark:bg-black dark:text-white hover:bg-slate-200 border-r-0 rounded-r-none"
             onClick={handleClick}
-            disabled={loading || !type || !model || !modelKey || !inputValue}
+            disabled={
+              loading ||
+              !type ||
+              !model ||
+              !modelKey ||
+              !inputValue ||
+              !proxyUrlKey
+            }
           >
             {loading ? 'Sending...' : 'Send'}
           </Button>
@@ -123,6 +133,11 @@ const LinkedinAgent: React.FC = () => {
                 placeholder="Enter your model key"
                 value={modelKey}
                 onChange={(e) => setModelKey(e.target.value)}
+              />
+              <Input
+                placeholder="Proxy URL api key"
+                value={proxyUrlKey}
+                onChange={(e) => setProxyUrlKey(e.target.value)}
               />
             </PopoverContent>
           </Popover>
