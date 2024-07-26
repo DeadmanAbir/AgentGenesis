@@ -14,16 +14,16 @@ import {
   SelectValue,
 } from '../ui/select';
 
-// Function to find tables in the text
-// Function to generate HTML tables
-
 const LinkedinAgent: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [mdxContent, setMdxContent] = useState<string>('');
+  const [type, setType] = useState<string>('');
+  const [model, setModel] = useState<string>('');
+  const [modelKey, setModelKey] = useState<string>('');
 
   const handleClick = async () => {
-    if (!inputValue.trim()) {
+    if (!inputValue.trim() || !type || !model || !modelKey) {
       return;
     }
 
@@ -31,12 +31,30 @@ const LinkedinAgent: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/agent');
+      const response = await fetch('/api/agent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          url: inputValue,
+          type,
+          model,
+          modelKey,
+        }),
+      });
       const data = await response.json();
-      console.log(data, 'response');
       setMdxContent(data.content);
+      setType('');
+      setModel('');
+      setModelKey('');
+      setInputValue('');
     } catch (e) {
       console.log('Error');
+      setType('');
+      setModel('');
+      setModelKey('');
+      setInputValue('');
     } finally {
       setLoading(false);
     }
@@ -70,7 +88,7 @@ const LinkedinAgent: React.FC = () => {
           <Button
             className="rounded-l-none bg-white text-black border-2 dark:bg-black dark:text-white hover:bg-slate-200 border-r-0 rounded-r-none"
             onClick={handleClick}
-            disabled={loading}
+            disabled={loading || !type || !model || !modelKey || !inputValue}
           >
             {loading ? 'Sending...' : 'Send'}
           </Button>
@@ -84,27 +102,28 @@ const LinkedinAgent: React.FC = () => {
               side="top"
               className="flex flex-col items-center gap-3 "
             >
-              <Select>
+              <Select onValueChange={setType}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Theme" />
+                  <SelectValue placeholder="Type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="light">Light</SelectItem>
-                  <SelectItem value="dark">Dark</SelectItem>
-                  <SelectItem value="system">System</SelectItem>
+                  <SelectItem value="company">Company</SelectItem>
+                  <SelectItem value="profile">Profile</SelectItem>
                 </SelectContent>
               </Select>
-              <Select>
+              <Select onValueChange={setModel}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Theme" />
+                  <SelectValue placeholder="Select Model" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="light">Light</SelectItem>
-                  <SelectItem value="dark">Dark</SelectItem>
-                  <SelectItem value="system">System</SelectItem>
+                  <SelectItem value="gpt-4o">gpt-4o</SelectItem>
                 </SelectContent>
               </Select>
-              <Input />
+              <Input
+                placeholder="Enter your model key"
+                value={modelKey}
+                onChange={(e) => setModelKey(e.target.value)}
+              />
             </PopoverContent>
           </Popover>
         </div>
