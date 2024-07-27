@@ -17,6 +17,7 @@ import ComponentPreview from './component-preview';
 import { ComponentPreviewTemp } from './component-preview-temp';
 import { CodeBlockWrapper } from './code-block-wrapper';
 import { Pre } from './pre-component';
+import LinkedinAgent from './DemoComponents/LinkedinAgent';
 
 const components = {
   Accordion,
@@ -27,6 +28,7 @@ const components = {
   ComponentPreview,
   ComponentPreviewTemp,
   CodeBlockWrapper,
+  LinkedinAgent,
   pre: Pre,
 
   h1: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
