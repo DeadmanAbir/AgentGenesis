@@ -161,7 +161,7 @@ const components = {
   Step: ({ className, ...props }: React.ComponentProps<'h3'>) => (
     <h3
       className={cn(
-        'font-heading mt-8 scroll-m-20 text-xl font-semibold tracking-tight ',
+        'font-heading mt-8 scroll-m-20 text-lg font-semibold tracking-tight ',
         className,
       )}
       {...props}
