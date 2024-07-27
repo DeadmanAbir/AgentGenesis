@@ -24,7 +24,7 @@ description: Use different OpenAI's text embedding models to generate embeddings
 <CodeBlockWrapper>
 
 ```tsx showLineNumbers {4-7}
-import { OpenAIEmbeddingClass } from "@/utils/openAiEmbedding.ts"; // Adjust the path as required
+import { OpenAIEmbeddingClass } from "@/utils/openAiEmbedding"; // Adjust the path as required
 
 // Initialize Client
 const model = new OpenAIEmbeddingClass({
@@ -160,7 +160,7 @@ export class OpenAIEmbeddingClass {
 Initialize the OpenAIEmbeddingClass with the required parameters.
 
 ```tsx showLineNumbers 
-import { OpenAIEmbeddingClass } from "@/utils/openAiEmbedding.ts"; // Adjust the path as required
+import { OpenAIEmbeddingClass } from "@/utils/openAiEmbedding"; // Adjust the path as required
 
 const model = new OpenAIEmbeddingClass({
   apiKey: process.env.OPENAI_API_KEY,
