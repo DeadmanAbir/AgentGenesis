@@ -5,9 +5,9 @@ export const Pre = ({ children, ...props }: any) => {
   const textToCopy = extractTextFromChildren(children);
 
   return (
-    <pre {...props} className="relative">
+    <div className="relative">
       <CopyButton text={textToCopy} />
-      {children}
-    </pre>
+      <pre {...props}>{children}</pre>
+    </div>
   );
 };
