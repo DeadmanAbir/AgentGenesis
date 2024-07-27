@@ -10,21 +10,12 @@ const Footer = () => {
           </Link>
           <div>@{new Date().getFullYear()}</div>
         </div>
-        <div className="grid grid-cols-3  gap-10 items-start ">
-          <div className="flex flex-col gap-4">
-            <div>Pricing</div>
+        <div className="grid grid-cols-1  gap-10 items-start ">
+          <div className="flex  gap-4">
+            <div>Terms and Services</div>
+            <div>Privacy Policy</div>
+
             <div>Blog</div>
-            <div>Contact</div>
-          </div>
-          <div className="flex flex-col gap-4">
-            <div>Pricing</div>
-            <div>Blog</div>
-            <div>Contact</div>
-          </div>{' '}
-          <div className="flex flex-col gap-4">
-            <div>Pricing</div>
-            <div>Blog</div>
-            <div>Contact</div>
           </div>
         </div>
       </div>

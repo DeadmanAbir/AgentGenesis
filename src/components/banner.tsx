@@ -1,5 +1,4 @@
-import { Button } from './ui/button';
-
+import Link from 'next/link';
 const Banner = () => {
   return (
     <div className="relative h-[800px] overflow-hidden  flex items-center justify-center ">
@@ -4339,23 +4338,22 @@ const Banner = () => {
         </div>
       </div>
 
-      <div className=" relative items-center justify-center   mb-20 rounded-lg md:p-20 p-5 bg-gradient-to-br from-slate-800  to-zinc-900  max-w-[1440px] w-full mx-4 ">
-        <div className="absolute rounded-md inset-0 w-full h-full opacity-10  [mask-image:radial-gradient(#fff,transparent,75%)]  bg-[url('/noise.webp')]  bg-contain z-40"></div>
+      <div className=" relative items-center justify-center z-40   mb-20 rounded-lg md:p-20 p-5 bg-gradient-to-br from-slate-800  to-zinc-900  max-w-[1440px] w-full mx-4 ">
+        <div className="absolute rounded-md inset-0 w-full h-full opacity-10  [mask-image:radial-gradient(#fff,transparent,75%)]  bg-[url('/noise.webp')]  bg-contain z-0"></div>
 
         <div className="z-40 flex flex-col items-center justify-center gap-3  ">
-          <div className="text-center text-balance mx-auto text-3xl md:text-5xl font-semibold tracking-[-0.015em] text-white ">
-            Ready to signup and join the waitlist?
+          <div className="text-center z-40 text-balance mx-auto text-3xl md:text-5xl font-semibold tracking-[-0.015em] text-white ">
+            Contact
           </div>
-          <span className="mt-4 max-w-[26rem] text-center mx-auto  text-base/6 text-neutral-200">
-            Get instant access to our state of the art project and join the
-            waitlist.
+          <span className="mt-1 text-xl max-w-[26rem] text-center mx-auto z-40  text-neutral-200">
+            Looking for specific use cases and support?
           </span>
-          <Button
-            size="sm"
-            className="bg-neutral-900 relative z-10 hover:bg-black/90 border border-transparent text-white text-sm md:text-sm transition font-medium duration-200 rounded-full px-4 py-2 flex items-center justify-center shadow-[0px_-1px_0px_0px_#FFFFFF40_inset,_0px_1px_0px_0px_#FFFFFF40_inset] "
+          <Link
+            href="mailto:faisalhusain1320@gmail.com"
+            className="bg-neutral-900 relative z-40 hover:bg-black/90 border border-transparent text-white text-sm md:text-sm transition font-medium duration-200 rounded-full px-4 py-2 flex items-center justify-center shadow-[0px_-1px_0px_0px_#FFFFFF40_inset,_0px_1px_0px_0px_#FFFFFF40_inset] "
           >
-            Join Waitlist
-          </Button>
+            Lets Chat
+          </Link>
         </div>
       </div>
     </div>
