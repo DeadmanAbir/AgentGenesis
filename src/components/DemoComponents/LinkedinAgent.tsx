@@ -28,10 +28,10 @@ const LinkedinAgent: React.FC = () => {
       return;
     }
 
-    setInputValue('');
     setLoading(true);
 
     try {
+      console.log(inputValue, type, model, modelKey, proxyUrlKey);
       const response = await fetch('/api/agent', {
         method: 'POST',
         headers: {
@@ -41,25 +41,20 @@ const LinkedinAgent: React.FC = () => {
           url: inputValue,
           type,
           model,
-          modelKey,
+          apiKey: modelKey,
           proxyUrlKey,
         }),
       });
       const data = await response.json();
-      setMdxContent(data.content);
-      setType('');
-      setModel('');
-      setModelKey('');
-      setInputValue('');
-      setProxyUrlKey('');
+      const responseData =
+        data.data?.output?.replace(/```html\n|```/g, '') ??
+        data.data?.content?.replace(/```html\n|```/g, '');
+      setMdxContent(responseData || '');
     } catch (e) {
-      console.log('Error');
-      setType('');
-      setModel('');
-      setModelKey('');
-      setInputValue('');
+      console.error('Error:', e);
     } finally {
       setLoading(false);
+      resetForm();
     }
   };
 
@@ -67,20 +62,29 @@ const LinkedinAgent: React.FC = () => {
     setInputValue(e.target.value);
   };
 
+  const resetForm = () => {
+    setInputValue('');
+    setType('');
+    setModel('');
+    setModelKey('');
+    setProxyUrlKey('');
+  };
+
   return (
     <div className="relative h-[400px] border rounded-md shadow-md">
       <div className="overflow-y-auto h-[340px] p-4">
-        {loading && (
+        {loading ? (
           <div className="text-center flex flex-col gap-2 text-gray-500">
             <Skeleton className="w-full h-[60px] rounded-md" />
             <Skeleton className="w-full h-[60px] rounded-md" />
             <Skeleton className="w-full h-[60px] rounded-md" />
             <Skeleton className="w-full h-[60px] rounded-md" />
           </div>
+        ) : (
+          <div dangerouslySetInnerHTML={{ __html: mdxContent }} />
         )}
-        <div dangerouslySetInnerHTML={{ __html: mdxContent }} />
       </div>
-      <div className="flex items-center absolute bottom-0 w-full p-1 bg-white  dark:bg-black">
+      <div className="flex items-center absolute bottom-0 w-full p-1 bg-white dark:bg-black">
         <Input
           value={inputValue}
           onChange={handleInputChange}
@@ -110,7 +114,7 @@ const LinkedinAgent: React.FC = () => {
             </PopoverTrigger>
             <PopoverContent
               side="top"
-              className="flex flex-col items-center gap-3 "
+              className="flex flex-col items-center gap-3"
             >
               <Select onValueChange={setType}>
                 <SelectTrigger className="w-full">
@@ -127,6 +131,9 @@ const LinkedinAgent: React.FC = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="gpt-4o">gpt-4o</SelectItem>
+                  <SelectItem value="gemini-1.5-flash">
+                    gemini-1.5-flash
+                  </SelectItem>
                 </SelectContent>
               </Select>
               <Input
@@ -135,7 +142,7 @@ const LinkedinAgent: React.FC = () => {
                 onChange={(e) => setModelKey(e.target.value)}
               />
               <Input
-                placeholder="Proxy URL api key"
+                placeholder="Proxy URL API key"
                 value={proxyUrlKey}
                 onChange={(e) => setProxyUrlKey(e.target.value)}
               />

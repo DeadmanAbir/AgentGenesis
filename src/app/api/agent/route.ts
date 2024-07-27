@@ -1,7 +1,110 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { LinkedinTool } from '@/utils/linkedinTool';
+import { ChatOpenAI } from '@/utils/chatOpenAi';
+import { z } from 'zod';
+import { ChatGemini } from '@/utils/chatGemini';
 
-const mdxContent = `
-  <table>
+const requestBodyValidator = z.object({
+  url: z.string().url(),
+  type: z.enum(['profile', 'company']),
+  apiKey: z.string(),
+  proxyUrlKey: z.string(),
+  model: z.enum(['gpt-4o', 'gemini-1.5-flash']),
+});
+
+const validateRequestBody = (body: any) => {
+  return requestBodyValidator.parse(body);
+};
+
+const generateChatResponse = async (
+  data: any,
+  model: string,
+  chatOpenAI: ChatOpenAI,
+  chatGemini: ChatGemini,
+  prompt: string,
+  outputFormat: string,
+) => {
+  const content = JSON.stringify(data);
+
+  if (model === 'gpt-4o') {
+    return chatOpenAI.chat({
+      prompt,
+      context: content,
+      outputFormat,
+    });
+  }
+
+  return chatGemini.chat({
+    prompt,
+    context: content,
+    outputFormat,
+  });
+};
+
+const handleProfile = async (
+  url: string,
+  chatOpenAI: ChatOpenAI,
+  chatGemini: ChatGemini,
+  tool: LinkedinTool,
+  model: string,
+) => {
+  const profileData = await tool.searchProfile(url);
+  return generateChatResponse(
+    profileData,
+    model,
+    chatOpenAI,
+    chatGemini,
+    `Giving you a data of a LinkedIn user profile. Analyze and give me a detailed summary of the profile in an HTML tabular format.`,
+    profileOutputResponse,
+  );
+};
+
+const handleCompany = async (
+  url: string,
+  chatOpenAI: ChatOpenAI,
+  chatGemini: ChatGemini,
+  tool: LinkedinTool,
+  model: string,
+) => {
+  const companyData = await tool.searchCompany(url);
+  return generateChatResponse(
+    companyData,
+    model,
+    chatOpenAI,
+    chatGemini,
+    `Giving you a data of a LinkedIn company profile. Analyze and give me a detailed summary of the company in an HTML tabular format.`,
+    companyOutputResponse,
+  );
+};
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { url, type, apiKey, proxyUrlKey, model } = validateRequestBody(body);
+
+    const tool = new LinkedinTool({ apiKey: proxyUrlKey });
+    const chatOpenAI = new ChatOpenAI({ apiKey, model: 'gpt-4o' });
+    const chatGemini = new ChatGemini({ apiKey, model: 'gemini-1.5-flash' });
+
+    let data;
+    if (type === 'profile') {
+      data = await handleProfile(url, chatOpenAI, chatGemini, tool, model);
+    } else {
+      data = await handleCompany(url, chatOpenAI, chatGemini, tool, model);
+    }
+
+    return NextResponse.json({ success: true, data });
+  } catch (err: any) {
+    console.error('Error in POST:', err);
+    return NextResponse.json({
+      success: false,
+      status: 500,
+      error: err.message,
+    });
+  }
+}
+
+const companyOutputResponse = `<table>
   <thead>
     <tr>
       <th>Field Name</th>
@@ -11,86 +114,119 @@ const mdxContent = `
   <tbody>
     <tr>
       <td>Name</td>
-      <td>Tower Research Capital</td>
+      <td>"name of company + tagline if any"</td>
     </tr>
     <tr>
       <td>Description</td>
-      <td>Founded in 1998 by Mark Gorton, Tower Research Capital is a trading and technology company that has built some of the fastest, most sophisticated electronic trading platforms in the world.</td>
+      <td>"description of company if any"</td>
     </tr>
     <tr>
       <td>Locations</td>
       <td>
-        * NEW YORK, NY<br>
-        * New York, NY<br>
-        * HQ: US, NY, NEW YORK<br>
-        * Founded: 1998
+        * Loc 1<br>
+        * Loc 2<br>
+        ... if any<br>
+        * HQ country + state + city<br>
+        * founded year + date
       </td>
     </tr>
     <tr>
       <td>Head</td>
       <td>
-        * 501-1000 employees<br>
-        * 139,491 followers
+        * company size<br>
+        * company followers
       </td>
     </tr>
     <tr>
       <td>Stats</td>
       <td>
-        * Industry: Financial Services
-        * Website: http://www.tower-research.com/
-        * Crunchbase Profile: https://www.crunchbase.com/organization/tower-research-capital-llc
-        * Phone: 12122196075
+        * company 1<br>
+        * company 2<br>
+        ... if any
       </td>
     </tr>
     <tr>
       <td>Similar Companies</td>
       <td>
-        * Citadel Securities<br>
-        * Two Sigma<br>
-        * Cubist Systematic Strategies<br>
-        * Akuna Capital<br>
-        * Old Mission<br>
-        * Belvedere Trading, LLC<br>
-        * Hudson River Trading<br>
-        * Flow Traders<br>
-        * Maven Securities<br>
-        * DRW<br>
-        * Optiver<br>
-        * G-Research
+        * Acc 1<br>
+        * Acc 2<br>
+        * Acc 3... if any
       </td>
     </tr>
     <tr>
       <td>Accomplishments</td>
       <td>
-        * Built some of the fastest, most sophisticated electronic trading platforms in the world.<br>
-        * Recognized for contributions to building a Machine Learning Lab for Social Good by IIT Bombay.<br>
-        * Participated in J.P. Morgan Corporate Challenge.<br>
-        * Co-hosted an event on AI for finance professionals.<br>
-        * Participated in Cycle for Survival events raising funds for rare cancer research.<br>
-        * Partnered with other firms to host the Women in Quant Finance Conference.
+        * key 1<br>
+        * key 2<br>
+        * key 3... if any
       </td>
     </tr>
     <tr>
       <td>Key Takeaways</td>
       <td>
-        * Tower Research Capital is a leading trading and technology company with a strong focus on innovation and social responsibility.<br>
-        * The company has a global presence with offices in the US, EMEA, and APAC.<br>
-        * Tower Research Capital is actively involved in promoting diversity and inclusion in the finance industry.
+        * Suggestion 1<br>
+        * Suggestion 2<br>
+        * Suggestion 3... if any
       </td>
     </tr>
     <tr>
       <td>Suggestions</td>
       <td>
-        * Explore opportunities to collaborate with Tower Research Capital on projects related to financial technology and social impact.<br>
-        * Follow their LinkedIn page for updates on their latest innovations and initiatives.<br>
-        * Consider attending their events and conferences to learn more about the company and the quant finance industry.
+        * Note 1<br>
+        * Note 2<br>
+        * Note 3... if any
       </td>
     </tr>
   </tbody>
-</table>
-`;
+</table>`;
 
-export async function POST() {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  return NextResponse.json({ content: mdxContent }, { status: 200 });
-}
+const profileOutputResponse = `<table>
+  <thead>
+    <tr>
+      <th>Field Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Name</td>
+      <td>"name of user if any"</td>
+    </tr>
+    <tr>
+      <td>Occupation</td>
+      <td>"occupation if any"</td>
+    </tr>
+    <tr>
+      <td>Location</td>
+      <td>"city + state + full country name if any"</td>
+    </tr>
+    <tr>
+      <td>Summary</td>
+      <td>"summary of headline + occupation + summary if any"</td>
+    </tr>
+    <tr>
+      <td>Experiences</td>
+      <td>* Exp 1<br>* Exp 2<br>... if any</td>
+    </tr>
+    <tr>
+      <td>Education</td>
+      <td>* Edu 1<br>* Edu 2<br>... if any</td>
+    </tr>
+    <tr>
+      <td>Statistics</td>
+      <td>* follower count<br>* connection count<br>... if any</td>
+    </tr>
+    <tr>
+      <td>Accomplishments</td>
+      <td>* Acc 1<br>* Acc 2<br>... if any</td>
+    </tr>
+    <tr>
+      <td>Key Takeaways</td>
+      <td>* Key Takeaway 1<br>* Key Takeaway 2<br>... if any</td>
+    </tr>
+    <tr>
+      <td>Suggestions</td>
+      <td>* Suggestion 1<br>* Suggestion 2<br>... if any</td>
+    </tr>
+  </tbody>
+</table>`;

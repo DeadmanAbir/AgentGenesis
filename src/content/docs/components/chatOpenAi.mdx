@@ -21,7 +21,7 @@ description: Use different OpenAI's text generation models by following these in
 <CodeBlockWrapper>
 
 ```tsx showLineNumbers {4-7}
-import { ChatOpenAI } from "@/utils/chatOpenAi.ts";
+import { ChatOpenAI } from "@/utils/chatOpenAi";
 
 // Initialize Client
 const chatOpenAI = new ChatOpenAI({
@@ -290,7 +290,7 @@ export class ChatOpenAI {
 
 Initialize the ChatOpenAI client.
 ```tsx showLineNumbers 
-import { ChatOpenAI } from "@/utils/chatOpenAi.ts";
+import { ChatOpenAI } from "@/utils/chatOpenAi";
 
 const chatOpenAI = new ChatOpenAI({
   apiKey: process.env.OPENAI_API_KEY,
