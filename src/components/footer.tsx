@@ -20,7 +20,7 @@ const Footer = () => {
     <div className="relative">
       <div className="bg-gradient-to-r absolute inset-0 dark:from-zinc-900 from-zinc-100 dark:via-zinc-700 via-zinc-300 dark:to-zinc-900 to-zinc-100 h-[1.5px] rounded-full "></div>{' '}
       <div className="max-w-[1440px] mx-auto flex md:flex-row flex-col justify-between gap-7  items-start md:p-20 p-10">
-        <div>
+        <div className="flex flex-col gap-1">
           <Link
             href="/"
             className="text-2xl flex items-center space-x-1 font-semibold"
@@ -35,6 +35,33 @@ const Footer = () => {
             </span>
           </Link>
           <div>@{new Date().getFullYear()}</div>
+          <div className="text-sm">
+            Built by{' '}
+            <Link
+              href="https://github.com/DeadmanAbir"
+              target="_blank"
+              className="font-semibold hover:underline"
+            >
+              abir
+            </Link>{' '}
+            and{' '}
+            <Link
+              href="https://github.com/faisal004"
+              target="_blank"
+              className="font-semibold hover:underline"
+            >
+              faisal
+            </Link>
+            .The source code is available on{' '}
+            <Link
+              href={siteConfig.links.github}
+              target="_blank"
+              className="font-semibold hover:underline"
+            >
+              Github
+            </Link>
+            .
+          </div>
         </div>
         <div className="grid grid-cols-1  gap-10 items-start ">
           <div className="flex md:flex-row flex-col  gap-4">
