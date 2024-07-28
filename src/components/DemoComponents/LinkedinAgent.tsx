@@ -4,7 +4,7 @@ import React, { useState, ChangeEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '../ui/input';
 import { Skeleton } from '../ui/skeleton';
-import { Bot, ChevronDown, ChevronUp } from 'lucide-react';
+import { Bot, ChevronDown, ChevronUp, Info } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import {
   Select,
@@ -14,6 +14,12 @@ import {
   SelectValue,
 } from '../ui/select';
 import Image from 'next/image';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../ui/tooltip';
 
 const LinkedinAgent: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -169,7 +175,7 @@ const LinkedinAgent: React.FC = () => {
               </PopoverTrigger>
               <PopoverContent
                 side="top"
-                className="flex flex-col items-center gap-3"
+                className="flex flex-col items-center gap-3 w-[500px]"
               >
                 <Select
                   onValueChange={(value) =>
@@ -199,18 +205,42 @@ const LinkedinAgent: React.FC = () => {
                     </SelectItem>
                   </SelectContent>
                 </Select>
-                <Input
-                  name="modelKey"
-                  placeholder="Enter your model key"
-                  value={formData.modelKey}
-                  onChange={handleInputChange}
-                />
-                <Input
-                  name="proxyUrlKey"
-                  placeholder="Proxy URL API key"
-                  value={formData.proxyUrlKey}
-                  onChange={handleInputChange}
-                />
+                <div className="flex items-center w-full gap-1">
+                  <Input
+                    name="modelKey"
+                    placeholder="Enter your model key"
+                    value={formData.modelKey}
+                    onChange={handleInputChange}
+                  />
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Info />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>We dont save your keys</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+                <div className="flex items-center w-full gap-1">
+                  <Input
+                    name="proxyUrlKey"
+                    placeholder="Proxy URL API key"
+                    value={formData.proxyUrlKey}
+                    onChange={handleInputChange}
+                  />
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Info />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>We dont save your keys</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
               </PopoverContent>
             </Popover>
           </div>
