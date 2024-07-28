@@ -1,11 +1,35 @@
+'use client';
+import { useTheme } from 'next-themes';
 import Image from 'next/image';
+import React from 'react';
 export function ReRankerDemo() {
+  const theme = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
   return (
-    <Image
-      src="https://miro.medium.com/v2/resize:fit:1132/1*u4wm-Jn1ZnGhSxxhBLx_CA.png"
-      width={800}
-      height={500}
-      alt="reranking_flowchart"
-    />
+    <>
+      {theme.theme === 'dark' ? (
+        <Image
+          src="/componentpics/cohere dark.png"
+          width={800}
+          height={500}
+          alt="reranking_flowchart"
+        />
+      ) : (
+        <Image
+          src="/componentpics/cohere light.png"
+          width={800}
+          height={500}
+          alt="reranking_flowchart"
+        />
+      )}
+    </>
   );
 }
