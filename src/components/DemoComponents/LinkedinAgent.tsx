@@ -28,15 +28,15 @@ const LinkedinAgent: React.FC = () => {
     type: '',
     model: '',
     modelKey: '',
-    proxyUrlKey: '',
+    proxyCurlKey: '',
   });
   const [loading, setLoading] = useState<boolean>(false);
   const [mdxContent, setMdxContent] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const handleClick = async () => {
-    const { inputValue, type, model, modelKey, proxyUrlKey } = formData;
+    const { inputValue, type, model, modelKey, proxyCurlKey } = formData;
 
-    if (!inputValue.trim() || !type || !model || !modelKey || !proxyUrlKey) {
+    if (!inputValue.trim() || !type || !model || !modelKey || !proxyCurlKey) {
       return;
     }
 
@@ -54,7 +54,7 @@ const LinkedinAgent: React.FC = () => {
           type,
           model,
           apiKey: modelKey,
-          proxyUrlKey,
+          proxyCurlKey,
         }),
       });
       const data = await response.json();
@@ -85,7 +85,7 @@ const LinkedinAgent: React.FC = () => {
       type: '',
       model: '',
       modelKey: '',
-      proxyUrlKey: '',
+      proxyCurlKey: '',
     });
   };
   const reset = () => {
@@ -94,7 +94,7 @@ const LinkedinAgent: React.FC = () => {
       type: '',
       model: '',
       modelKey: '',
-      proxyUrlKey: '',
+      proxyCurlKey: '',
     });
     setError(null);
     setMdxContent('');
@@ -149,7 +149,7 @@ const LinkedinAgent: React.FC = () => {
             name="inputValue"
             value={formData.inputValue}
             onChange={handleInputChange}
-            placeholder="Enter profile URL or Company URL..."
+            placeholder="Enter LinkedIn URL..."
             className="flex-grow rounded-r-none focus-visible:ring-0"
           />
           <div className="flex items-center">
@@ -162,7 +162,7 @@ const LinkedinAgent: React.FC = () => {
                 !formData.model ||
                 !formData.modelKey ||
                 !formData.inputValue ||
-                !formData.proxyUrlKey
+                !formData.proxyCurlKey
               }
             >
               {loading ? 'Sending...' : 'Send'}
@@ -208,7 +208,7 @@ const LinkedinAgent: React.FC = () => {
                 <div className="flex items-center w-full gap-1">
                   <Input
                     name="modelKey"
-                    placeholder="Enter your model key"
+                    placeholder="Enter your LLM Api key"
                     value={formData.modelKey}
                     onChange={handleInputChange}
                   />
@@ -218,16 +218,16 @@ const LinkedinAgent: React.FC = () => {
                         <Info />
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>We dont save your keys</p>
+                        <p>We don't store your keys anywhere.</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                 </div>
                 <div className="flex items-center w-full gap-1">
                   <Input
-                    name="proxyUrlKey"
-                    placeholder="Proxy URL API key"
-                    value={formData.proxyUrlKey}
+                    name="proxyCurlKey"
+                    placeholder="Enter yourt Proxy Curl API key"
+                    value={formData.proxyCurlKey}
                     onChange={handleInputChange}
                   />
                   <TooltipProvider>
@@ -236,7 +236,7 @@ const LinkedinAgent: React.FC = () => {
                         <Info />
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>We dont save your keys</p>
+                        <p>We don't store your keys anywhere.</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
