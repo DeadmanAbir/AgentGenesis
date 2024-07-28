@@ -32,7 +32,7 @@ const UseCasesTabs = () => {
           {tabData.map(({ value, label }) => (
             <TabsTrigger
               key={value}
-              className={`relative h-10 w-full  rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary dark:data-[state=inactive]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-none`}
+              className={`relative h-10 w-full  rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary dark:data-[state=inactive]:bg-background data-[state=inactive]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-none`}
               value={value}
             >
               {label}
