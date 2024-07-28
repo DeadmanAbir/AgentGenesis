@@ -20,6 +20,7 @@ import { Pre } from './pre-component';
 import { ChatAnthropicDemo } from './DemoComponents/chatAnthropicDemo';
 import { ChatGeminiDemo } from './DemoComponents/chatGeminiDemo';
 import { ChatOpenAIDemo } from './DemoComponents/chatOPenAIDemo';
+import { GeminiEmbeddingDemo } from './DemoComponents/geminiEmbeddingDemo';
 
 const components = {
   Accordion,
@@ -30,6 +31,7 @@ const components = {
   ChatAnthropicDemo,
   ChatGeminiDemo,
   ChatOpenAIDemo,
+  GeminiEmbeddingDemo,
   ComponentPreview,
   ComponentPreviewTemp,
   CodeBlockWrapper,
