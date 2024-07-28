@@ -3,7 +3,7 @@ import Link from 'next/link';
 const Footer = () => {
   return (
     <div className="relative">
-      <div className="bg-gradient-to-r absolute inset-0 from-zinc-900 via-zinc-700 to-zinc-900 h-[1.5px] rounded-full "></div>
+      <div className="bg-gradient-to-r absolute inset-0 dark:from-zinc-900 from-zinc-100 dark:via-zinc-700 via-zinc-300 dark:to-zinc-900 to-zinc-100 h-[1.5px] rounded-full "></div>
       <div className="max-w-[1440px] mx-auto flex md:flex-row flex-col justify-between gap-7  items-start md:p-20 p-10">
         <div className="flex flex-col gap-y-2">
           <Link href="/" className="text-2xl font-semibold">
