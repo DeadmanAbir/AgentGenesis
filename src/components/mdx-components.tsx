@@ -23,6 +23,7 @@ import { GeminiEmbeddingDemo } from './DemoComponents/geminiEmbeddingDemo';
 import { OpenAIEmbeddingDemo } from './DemoComponents/openAIEmbeddingDemo';
 import LinkedinAgent from './DemoComponents/LinkedinAgent';
 import { ChatOpenAIDemo } from './DemoComponents/chatOpenAIDemo';
+import { LinkedInAgentDemo } from './DemoComponents/linkedinAgentDemo';
 
 const components = {
   Accordion,
@@ -35,6 +36,7 @@ const components = {
   ChatOpenAIDemo,
   GeminiEmbeddingDemo,
   OpenAIEmbeddingDemo,
+  LinkedInAgentDemo,
   ComponentPreview,
   ComponentPreviewTemp,
   CodeBlockWrapper,
