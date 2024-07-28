@@ -23,8 +23,10 @@ const tabData = [
 const UseCasesTabs = () => {
   return (
     <div className="py-10 flex flex-col items-center justify-center relative ">
-      <div className="text-7xl font-semibold mb-4 z-30">Use Cases</div>
-      <div className="text-lg mb-6 z-30">
+      <div className="md:text-7xl text-4xl text-center font-semibold mb-4 z-30">
+        Use Cases
+      </div>
+      <div className="text-lg mb-6 z-30 text-center">
         One platform, endless possibilities. See some of the use cases
       </div>
       <Tabs defaultValue="codesnippets" className="w-full z-30">
