@@ -21,6 +21,7 @@ import { ChatAnthropicDemo } from './DemoComponents/chatAnthropicDemo';
 import { ChatGeminiDemo } from './DemoComponents/chatGeminiDemo';
 import { ChatOpenAIDemo } from './DemoComponents/chatOPenAIDemo';
 import { GeminiEmbeddingDemo } from './DemoComponents/geminiEmbeddingDemo';
+import { OpenAIEmbeddingDemo } from './DemoComponents/openAIEmbeddingDemo';
 
 const components = {
   Accordion,
@@ -32,6 +33,7 @@ const components = {
   ChatGeminiDemo,
   ChatOpenAIDemo,
   GeminiEmbeddingDemo,
+  OpenAIEmbeddingDemo,
   ComponentPreview,
   ComponentPreviewTemp,
   CodeBlockWrapper,
