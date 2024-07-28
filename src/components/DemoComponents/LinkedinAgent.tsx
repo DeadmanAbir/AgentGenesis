@@ -116,7 +116,13 @@ const LinkedinAgent: React.FC = () => {
           </>
         )}
       </div>
-      {!error && (
+      {mdxContent && (
+        <div className="flex items-center justify-center mt-2">
+          {' '}
+          <Button onClick={reset}>Retry</Button>
+        </div>
+      )}
+      {!error && !mdxContent && (
         <div className="flex items-center absolute bottom-0 w-full p-1 bg-white dark:bg-black">
           <Input
             name="inputValue"
