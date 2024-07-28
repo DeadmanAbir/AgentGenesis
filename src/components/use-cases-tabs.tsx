@@ -3,26 +3,20 @@ import Image from 'next/image';
 
 const tabData = [
   {
-    value: 'account',
-    label: 'Account',
+    value: 'codesnippets',
+    label: 'Code Snippets',
     content: '/dashboard1.webp',
   },
   {
-    value: 'password',
-    label: 'Password',
+    value: 'chatmodels',
+    label: 'Chat Models',
     content:
       'https://assets.lummi.ai/assets/QmerqxSqpqBcJSs17BVsQbhEARYGbwZL9VGj2x4QDGBJbm?auto=format&w=1500',
   },
   {
-    value: 'account1',
-    label: 'Account1',
+    value: 'aiagents',
+    label: 'AI Agents',
     content: '/dashboard1.webp',
-  },
-  {
-    value: 'password1',
-    label: 'Password1',
-    content:
-      'https://assets.lummi.ai/assets/QmerqxSqpqBcJSs17BVsQbhEARYGbwZL9VGj2x4QDGBJbm?auto=format&w=1500',
   },
 ];
 
@@ -33,7 +27,7 @@ const UseCasesTabs = () => {
       <div className="text-lg mb-6 z-30">
         One platform, endless possibilities. See some of the use cases
       </div>
-      <Tabs defaultValue="account" className="w-full z-30">
+      <Tabs defaultValue="codesnippets" className="w-full z-30">
         <TabsList className="w-full flex border-b p-0 ">
           {tabData.map(({ value, label }) => (
             <TabsTrigger
@@ -46,11 +40,15 @@ const UseCasesTabs = () => {
           ))}
         </TabsList>
         {tabData.map(({ value, content }) => (
-          <TabsContent key={value} value={value} className="">
+          <TabsContent
+            key={value}
+            value={value}
+            className="border-4 rounded-xl"
+          >
             <Image
               src={content}
               alt={value}
-              className="w-full h-auto"
+              className="w-full h-auto rounded-xl shadow-xl shadow-neutral-300 dark:shadow-neutral-700 aspect-video object-cover"
               height={800}
               width={800}
             />
