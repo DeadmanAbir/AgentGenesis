@@ -4345,7 +4345,7 @@ const Banner = () => {
           <div className="text-center z-40 text-balance mx-auto text-3xl md:text-5xl font-semibold tracking-[-0.015em] text-white ">
             Contact
           </div>
-          <span className="mt-1 text-xl max-w-[26rem] text-center mx-auto z-40  text-neutral-200">
+          <span className="mt-1 md:text-xl text-md max-w-[26rem] text-center mx-auto z-40  text-neutral-200">
             Looking for specific use cases and support?
           </span>
           <Link
