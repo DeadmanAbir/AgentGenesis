@@ -12,6 +12,16 @@ import { useTheme } from 'next-themes';
 export function MainNav() {
   const pathname = usePathname();
   const theme = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <div className="mr-4 hidden md:flex  ">
       <Link href="/" className="mr-6 flex items-center space-x-1">
