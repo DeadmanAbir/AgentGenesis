@@ -39,7 +39,7 @@ const TabsTrigger = React.forwardRef<
   >
     {props.children}
     {label && (
-      <span className="ml-2 bg-blue-500 text-white text-xs rounded px-1 py-0.5">
+      <span className="ml-2 bg-[#4ade80] text-black text-xs rounded px-1 py-0.5">
         {label}
       </span>
     )}
