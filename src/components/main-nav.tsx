@@ -34,15 +34,24 @@ export function MainNav() {
           {siteConfig.name}
         </span>
       </Link>
-      <nav className="flex items-center gap-4 text-sm lg:gap-6 group  hover:dark:bg-neutral-700 hover:bg-neutral-100  px-2 py-1 rounded-lg">
+      <nav className="flex items-center  gap-4 text-sm lg:gap-4  ">
         <Link
           href="/docs"
           className={cn(
-            'transition-colors group-hover:text-foreground/80',
-            pathname === '/docs' ? 'text-foreground' : 'text-foreground/60',
+            'transition-colors hover:text-foreground/80 hover:dark:bg-neutral-700 hover:bg-neutral-100  px-2 py-1 rounded-lg',
+            pathname === '/docs' ? 'text-foreground ' : 'text-foreground/60',
           )}
         >
           Docs
+        </Link>
+        <Link
+          href="/blogs"
+          className={cn(
+            'transition-colors hover:text-foreground/80 hover:dark:bg-neutral-700 hover:bg-neutral-100  px-2 py-1 rounded-lg',
+            pathname === '/blogs' ? 'text-foreground ' : 'text-foreground/60',
+          )}
+        >
+          Blogs
         </Link>
       </nav>
     </div>
