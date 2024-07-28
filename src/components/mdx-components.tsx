@@ -19,6 +19,7 @@ import { CodeBlockWrapper } from './code-block-wrapper';
 import { Pre } from './pre-component';
 import { ChatAnthropicDemo } from './DemoComponents/chatAnthropicDemo';
 import { ChatGeminiDemo } from './DemoComponents/chatGeminiDemo';
+import { ChatOpenAIDemo } from './DemoComponents/chatOPenAIDemo';
 
 const components = {
   Accordion,
@@ -28,6 +29,7 @@ const components = {
   ReRankerDemo,
   ChatAnthropicDemo,
   ChatGeminiDemo,
+  ChatOpenAIDemo,
   ComponentPreview,
   ComponentPreviewTemp,
   CodeBlockWrapper,
