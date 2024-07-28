@@ -99,6 +99,7 @@ export const docsConfig: DocsConfig = {
           title: 'LinkedIn Agent',
           href: '/docs/components/linkedinAgent',
           items: [],
+          label: 'New',
         },
       ],
     },
