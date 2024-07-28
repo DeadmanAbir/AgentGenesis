@@ -4,7 +4,7 @@ import React, { useState, ChangeEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '../ui/input';
 import { Skeleton } from '../ui/skeleton';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { Bot, ChevronDown, ChevronUp } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import {
   Select,
@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
+import Image from 'next/image';
 
 const LinkedinAgent: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -95,6 +96,12 @@ const LinkedinAgent: React.FC = () => {
   return (
     <div className="relative h-[400px] border rounded-md shadow-md">
       <div className="overflow-y-auto h-[340px] p-4 z-10">
+        {!loading && !mdxContent && !error && (
+          <div className="flex flex-col-reverse items-center justify-center h-full">
+            <span className="text-xl tracking-wider">LinkedIn Agent</span>
+            <Bot className="h-16 w-16" />
+          </div>
+        )}
         {loading ? (
           <div className="text-center flex flex-col gap-2 text-gray-500">
             <Skeleton className="w-full h-[60px] rounded-md dark:bg-neutral-700 bg-neutral-300" />
@@ -106,10 +113,18 @@ const LinkedinAgent: React.FC = () => {
           <>
             {error && (
               <div className="flex items-center justify-center flex-col h-full">
-                <div className="text-red-500 text-center mb-2 flex items-center justify-center ">
+                <div className=" text-center  flex flex-col gap-2 items-center justify-center ">
+                  <Image
+                    src="/error.svg"
+                    alt="error"
+                    height={200}
+                    width={200}
+                  />
                   {error}
                 </div>
-                <Button onClick={reset}>Reset</Button>
+                <Button className="mt-2" onClick={reset}>
+                  Reset
+                </Button>
               </div>
             )}
             <div dangerouslySetInnerHTML={{ __html: mdxContent }} />
