@@ -24,7 +24,7 @@ export const CopyButton = ({ text }: any) => {
       {isCopied ? (
         <CheckCheck className="h-4 w-4 text-green-500" />
       ) : (
-        <Copy className="h-4 w-4" />
+        <Copy className="h-4 w-4 text-white" />
       )}
     </button>
   );

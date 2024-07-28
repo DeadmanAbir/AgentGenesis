@@ -21,7 +21,7 @@ description: Use different Google's text embedding models to generate embeddings
 <CodeBlockWrapper>
 
 ```tsx showLineNumbers {4-10}
-import { GeminiAIEmbeddingsParams, GeminiEmbeddings } from "@/utils/geminiEmbedding.ts"; // Adjust the path as required
+import { GeminiAIEmbeddingsParams, GeminiEmbeddings } from "@/utils/geminiEmbedding"; // Adjust the path as required
 
 // Initialize Client
 const params: GeminiAIEmbeddingsParams = {
@@ -178,7 +178,7 @@ export class GeminiEmbeddings {
 Initialize the GeminiEmbeddings with the required parameters.
 
 ```tsx showLineNumbers 
-import { GeminiAIEmbeddingsParams, GeminiEmbeddings } from "@/utils/geminiEmbedding.ts"; // Adjust the path as required
+import { GeminiAIEmbeddingsParams, GeminiEmbeddings } from "@/utils/geminiEmbedding"; // Adjust the path as required
 
 const params: GeminiAIEmbeddingsParams = {
   apiKey: process.env.GEMINI_API_KEY as string,

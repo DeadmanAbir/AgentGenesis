@@ -21,7 +21,7 @@ description: Use different google's Gemini's text generation models by following
 <CodeBlockWrapper>
 
 ```tsx showLineNumbers {4-7}
-import { ChatGemini } from "@/utils/chatGemini.ts";
+import { ChatGemini } from "@/utils/chatGemini";
 
 // Initialize the Client
 const chatGemini = new ChatGemini({
@@ -271,7 +271,7 @@ export class ChatGemini {
 
     const client = this.createClient(this.model, undefined, options);
 
-    chatHistory && chatHistory.length > 0;
+    
     const history = this.createChatHistory(chatHistory);
     const chat = client.startChat({
       history,
@@ -350,7 +350,7 @@ export class ChatGemini {
 Initialize the ChatGemini client.
 
 ```tsx showLineNumbers 
-import { ChatGemini } from "@/utils/chatGemini.ts";
+import { ChatGemini } from "@/utils/chatGemini";
 
 const chatGemini = new ChatGemini({
   apiKey: process.env.GEMINI_API_KEY as string,

@@ -21,11 +21,14 @@ const TabsList = React.forwardRef<
   />
 ));
 TabsList.displayName = TabsPrimitive.List.displayName;
-
+interface TabsTriggerProps
+  extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> {
+  label?: string;
+}
 const TabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(({ className, ...props }, ref) => (
+  TabsTriggerProps
+>(({ className, label, ...props }, ref) => (
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
@@ -33,7 +36,14 @@ const TabsTrigger = React.forwardRef<
       className,
     )}
     {...props}
-  />
+  >
+    {props.children}
+    {label && (
+      <span className="ml-2 bg-[#4ade80] text-black text-xs rounded px-1 py-0.5">
+        {label}
+      </span>
+    )}
+  </TabsPrimitive.Trigger>
 ));
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
 

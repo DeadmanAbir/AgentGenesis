@@ -1,0 +1,316 @@
+---
+title: LinkedIn Agent
+description: Use our exclusive linkedin agent to generate summary tables for public profiles.
+---
+
+<Tabs defaultValue="playground">
+
+<TabsList>
+  <TabsTrigger value="preview">Preview</TabsTrigger>
+  <TabsTrigger value="code">Code</TabsTrigger>
+  <TabsTrigger value="playground" label="beta" >Playground</TabsTrigger>
+</TabsList>
+
+<TabsContent value="preview">
+  <ComponentPreviewTemp>
+    <ReRankerDemo />
+  </ComponentPreviewTemp>
+</TabsContent>
+
+<TabsContent value="playground">
+  <ComponentPreviewTemp>
+    <LinkedinAgent />
+  </ComponentPreviewTemp>
+</TabsContent>
+
+<TabsContent value="code">
+
+<CodeBlockWrapper>
+
+```tsx showLineNumbers 
+ const settings = {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ url: profileUrl, type }),
+    };
+    const fetchResponse = await fetch(`/api/linkedinAgent`, settings);
+    const data = await fetchResponse.json();
+    const responseData = data.data.output
+      .replace("```html\n", "")
+      .replace("\n```", "");
+
+    console.log(responseData);
+```
+
+</CodeBlockWrapper>
+
+</TabsContent>
+
+</Tabs>
+
+## Installation
+
+<Steps>
+
+<Step>Install peer dependencies:</Step>
+
+```bash
+npm install openai zod
+```
+<Step>Copy the code of [Linkedin Tool](https://agentgenesis-beta.vercel.app/docs/components/linkedinTool) and paste it in `utils/linkedinTool.ts`</Step>
+<Step>Copy the code of [ChatOpenAI](https://agentgenesis-beta.vercel.app/docs/components/chatOpenAi) and paste it in `utils/chatOpenAi.ts`</Step>
+
+<Step>Add Environment Variables</Step>
+
+```tsx title=".env" showLineNumbers {}
+OPENAI_API_KEY = aSdWytUQZUkBbPpGcXNAG4X0;
+PROXYCURL_API_KEY = _520KzIffvwNHGgBGJYXdZ;
+/* You can get one from - https://platform.openai.com/api-keys */
+/* You can get one from - https://nubela.co/proxycurl/linkedin */
+```
+
+<Step>Now copy the backend code of Agent</Step>
+
+Add the following code to your `/api/linkedinAgent/route.ts` file:
+
+<CodeBlockWrapper>
+```tsx title="route.ts" showLineNumbers {}
+import { NextRequest, NextResponse } from "next/server";
+import { LinkedinTool } from "@/utils/linkedinTool";
+import { ChatOpenAI } from "@/utils/chatOpenAi";
+import { z } from "zod";
+
+const requestBodyValidator = z.object({
+  url: z.string(),
+  type: z.enum(["profile", "company"]),
+});
+
+const validateRequestBody = (body: any) => {
+  return requestBodyValidator.parse(body);
+};
+
+const handleProfile = async (
+  url: string,
+  chatOpenAI: ChatOpenAI,
+  tool: LinkedinTool
+) => {
+  const profileData = await tool.searchProfile(url);
+  const content = JSON.stringify(profileData);
+  const data = await chatOpenAI.chat({
+    prompt: `Giving you a data of a linkedin user profile. Analyse and give me a detailed summary of the profile in a HTML tabular format.`,
+    context: content,
+    outputFormat: profileOutputResponse,
+  });
+  return data;
+};
+
+const handleCompany = async (
+  url: string,
+  chatOpenAI: ChatOpenAI,
+  tool: LinkedinTool
+) => {
+  const companyData = await tool.searchCompany(url);
+  const content = JSON.stringify(companyData);
+  const data = await chatOpenAI.chat({
+    prompt: `Giving you a data of a linkedin company profile. Analyse and give me a detailed summary of the company in a HTML tabular format.`,
+    context: content,
+    outputFormat: companyOutputResponse,
+  });
+  return data;
+};
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { url, type } = validateRequestBody(body);
+
+    const tool = new LinkedinTool({
+      apiKey: process.env.PROXYCURL_API_KEY,
+    });
+
+    const chatOpenAI = new ChatOpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+      model: "gpt-4o",
+    });
+
+    let data;
+    if (type === "profile") {
+      data = await handleProfile(url, chatOpenAI, tool);
+    } else {
+      data = await handleCompany(url, chatOpenAI, tool);
+    }
+
+    return NextResponse.json({ success: true, data: data });
+  } catch (err: any) {
+    console.error("Error in POST: ", err);
+    return NextResponse.json({
+      success: false,
+      status: 500,
+      error: err.message,
+    });
+  }
+}
+
+const companyOutputResponse = `<table>
+  <thead>
+    <tr>
+      <th>Field Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Name</td>
+      <td>"name of company + tagline if any"</td>
+    </tr>
+    <tr>
+      <td>Description</td>
+      <td>"description of company if any"</td>
+    </tr>
+    <tr>
+      <td>Locations</td>
+      <td>
+        * Loc 1<br>
+        * Loc 2<br>
+        ... if any<br>
+        * HQ country + state + city<br>
+        * founded year + date
+      </td>
+    </tr>
+    <tr>
+      <td>Head</td>
+      <td>
+        * company size<br>
+        * company followers
+      </td>
+    </tr>
+    <tr>
+      <td>Stats</td>
+      <td>
+        * company 1<br>
+        * company 2<br>
+        ... if any
+      </td>
+    </tr>
+    <tr>
+      <td>Similar Companies</td>
+      <td>
+        * Acc 1<br>
+        * Acc 2<br>
+        * Acc 3... if any
+      </td>
+    </tr>
+    <tr>
+      <td>Accomplishments</td>
+      <td>
+        * key 1<br>
+        * key 2<br>
+        * key 3... if any
+      </td>
+    </tr>
+    <tr>
+      <td>Key Takeaways</td>
+      <td>
+        * Suggestion 1<br>
+        * Suggestion 2<br>
+        * Suggestion 3... if any
+      </td>
+    </tr>
+    <tr>
+      <td>Suggestions</td>
+      <td>
+        * Note 1<br>
+        * Note 2<br>
+        * Note 3... if any
+      </td>
+    </tr>
+  </tbody>
+</table>`;
+
+const profileOutputResponse = `<table>
+  <thead>
+    <tr>
+      <th>Field Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Name</td>
+      <td>"name of user if any"</td>
+    </tr>
+    <tr>
+      <td>Occupation</td>
+      <td>"occupation if any"</td>
+    </tr>
+    <tr>
+      <td>Location</td>
+      <td>"city + state + full country name if any"</td>
+    </tr>
+    <tr>
+      <td>Summary</td>
+      <td>"summary of headline + occupation + summary if any"</td>
+    </tr>
+    <tr>
+      <td>Experiences</td>
+      <td>* Exp 1<br>* Exp 2<br>... if any</td>
+    </tr>
+    <tr>
+      <td>Education</td>
+      <td>* Edu 1<br>* Edu 2<br>... if any</td>
+    </tr>
+    <tr>
+      <td>Statistics</td>
+      <td>* folower count<br>* connection count<br>... if any</td>
+    </tr>
+    <tr>
+      <td>Accomplishments</td>
+      <td>* Acc 1<br>* Acc 2<br>... if any</td>
+    </tr>
+    <tr>
+      <td>Key Takeaways</td>
+      <td>* Key Takeaway 1<br>* Key Takeaway 2<br>... if any</td>
+    </tr>
+    <tr>
+      <td>Suggestions</td>
+      <td>* Suggestion 1<br>* Suggestion 2<br>... if any</td>
+    </tr>
+  </tbody>
+</table>`;
+
+
+```
+
+</CodeBlockWrapper>
+</Steps>
+
+## Usage
+
+### Initialize FrontEnd
+
+Create a frontend and perform a fetch call to get the data from backend.
+
+```tsx showLineNumbers 
+ const settings = {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ url: profileUrl, type }),
+    };
+    const fetchResponse = await fetch(`/api/linkedinAgent`, settings);
+    const data = await fetchResponse.json();
+    const responseData = data.data.output
+      .replace("```html\n", "")
+      .replace("\n```", "");
+    console.log(responseData);
+
+```
+Now you can customize it to suit your needs and continue building on top of it. 
+In this case, we are receiving the output in HTML table format. 
+You can modify this by changing the **outputFormat** prop of ***ChatOpenAI***.
+
+
+

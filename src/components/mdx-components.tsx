@@ -19,9 +19,9 @@ import { CodeBlockWrapper } from './code-block-wrapper';
 import { Pre } from './pre-component';
 import { ChatAnthropicDemo } from './DemoComponents/chatAnthropicDemo';
 import { ChatGeminiDemo } from './DemoComponents/chatGeminiDemo';
-import { ChatOpenAIDemo } from './DemoComponents/chatOPenAIDemo';
 import { GeminiEmbeddingDemo } from './DemoComponents/geminiEmbeddingDemo';
 import { OpenAIEmbeddingDemo } from './DemoComponents/openAIEmbeddingDemo';
+import LinkedinAgent from './DemoComponents/LinkedinAgent';
 
 const components = {
   Accordion,
@@ -31,12 +31,12 @@ const components = {
   ReRankerDemo,
   ChatAnthropicDemo,
   ChatGeminiDemo,
-  ChatOpenAIDemo,
   GeminiEmbeddingDemo,
   OpenAIEmbeddingDemo,
   ComponentPreview,
   ComponentPreviewTemp,
   CodeBlockWrapper,
+  LinkedinAgent,
   pre: Pre,
 
   h1: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
@@ -169,7 +169,7 @@ const components = {
   Step: ({ className, ...props }: React.ComponentProps<'h3'>) => (
     <h3
       className={cn(
-        'font-heading mt-8 scroll-m-20 text-xl font-semibold tracking-tight ',
+        'font-heading mt-8 scroll-m-20 text-lg font-semibold tracking-tight ',
         className,
       )}
       {...props}
