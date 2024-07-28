@@ -11,7 +11,6 @@ import {
   PageHeaderDescription,
   PageHeaderHeading,
 } from '@/components/page-header';
-import TestimonialSection from '@/components/testimonial-section';
 import { buttonVariants } from '@/components/ui/button';
 import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
@@ -63,7 +62,6 @@ const IndexPage = () => {
         <ImageDisplay />
         <BentoGrid />
         <GridSection />
-        <TestimonialSection />
       </div>
       <Banner />
       <Footer />
