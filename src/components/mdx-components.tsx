@@ -17,7 +17,8 @@ import ComponentPreview from './component-preview';
 import { ComponentPreviewTemp } from './component-preview-temp';
 import { CodeBlockWrapper } from './code-block-wrapper';
 import { Pre } from './pre-component';
-import LinkedinAgent from './DemoComponents/LinkedinAgent';
+import { ChatAnthropicDemo } from './DemoComponents/chatAnthropicDemo';
+import { ChatGeminiDemo } from './DemoComponents/chatGeminiDemo';
 
 const components = {
   Accordion,
@@ -25,6 +26,8 @@ const components = {
   AccordionItem,
   AccordionTrigger,
   ReRankerDemo,
+  ChatAnthropicDemo,
+  ChatGeminiDemo,
   ComponentPreview,
   ComponentPreviewTemp,
   CodeBlockWrapper,
