@@ -3,11 +3,11 @@ import { CopyButton } from './copy-button';
 
 export const Pre = ({ children, ...props }: any) => {
   const textToCopy = extractTextFromChildren(children);
-  console.log(textToCopy);
+
   return (
-    <pre {...props} className="relative">
+    <div className="relative">
       <CopyButton text={textToCopy} />
-      {children}
-    </pre>
+      <pre {...props}>{children}</pre>
+    </div>
   );
 };
