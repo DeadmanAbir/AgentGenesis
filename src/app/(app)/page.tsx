@@ -11,7 +11,6 @@ import {
   PageHeaderDescription,
   PageHeaderHeading,
 } from '@/components/page-header';
-import TestimonialSection from '@/components/testimonial-section';
 import { buttonVariants } from '@/components/ui/button';
 import UseCasesTabs from '@/components/use-cases-tabs';
 import { siteConfig } from '@/config/site';
@@ -65,7 +64,6 @@ const IndexPage = () => {
         <BentoGrid />
         <UseCasesTabs />
         <GridSection />
-        <TestimonialSection />
       </div>
       <Banner />
       <Footer />
