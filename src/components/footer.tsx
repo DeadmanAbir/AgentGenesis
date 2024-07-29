@@ -23,12 +23,12 @@ const Footer = () => {
         <div className="flex flex-col gap-1">
           <Link
             href="/"
-            className="text-2xl flex items-center space-x-1 font-semibold"
+            className="text-3xl flex items-center space-x-1 font-semibold"
           >
             {theme.theme === 'dark' ? (
-              <Image src="/logo-white.png" alt="Logo" height={25} width={25} />
+              <Image src="/logo-white.png" alt="Logo" height={40} width={40} />
             ) : (
-              <Image src="/logo-black.png" alt="Logo" height={25} width={25} />
+              <Image src="/logo-black.png" alt="Logo" height={40} width={40} />
             )}
             <span className=" font-bold sm:inline-block">
               {siteConfig.name}
