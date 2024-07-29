@@ -53,7 +53,7 @@ const UseCasesTabs = () => {
             <Image
               src={content}
               alt={value}
-              className="w-full h-auto rounded-xl border-4 p-5  shadow-xl shadow-neutral-300 dark:shadow-neutral-700 bg-center "
+              className="w-full h-auto rounded-2xl border-4 p-2   shadow-xl shadow-neutral-300 dark:shadow-neutral-700 bg-center "
               height={800}
               width={800}
             />
