@@ -5,18 +5,17 @@ const tabData = [
   {
     value: 'codesnippets',
     label: 'Code Snippets',
-    content: '/dashboard1.webp',
+    content: '/snippet.png',
   },
   {
     value: 'chatmodels',
     label: 'Chat Models',
-    content:
-      'https://assets.lummi.ai/assets/QmerqxSqpqBcJSs17BVsQbhEARYGbwZL9VGj2x4QDGBJbm?auto=format&w=1500',
+    content: '/chatModels.png',
   },
   {
     value: 'aiagents',
     label: 'AI Agents',
-    content: '/dashboard1.webp',
+    content: '/componentpics/linkedin agent dark.png',
   },
 ];
 
