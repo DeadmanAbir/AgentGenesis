@@ -6,16 +6,19 @@ const tabData = [
     value: 'codesnippets',
     label: 'Code Snippets',
     content: '/snippet.png',
+    text: 'Explore various code snippets for different use cases.',
   },
   {
     value: 'chatmodels',
     label: 'Chat Models',
     content: '/chatModels.png',
+    text: 'Learn about different chat models and their applications.',
   },
   {
     value: 'aiagents',
     label: 'AI Agents',
     content: '/componentpics/linkedin agent dark.png',
+    text: 'Discover AI agents and how they can assist in various tasks.',
   },
 ];
 
@@ -33,23 +36,24 @@ const UseCasesTabs = () => {
           {tabData.map(({ value, label }) => (
             <TabsTrigger
               key={value}
-              className={`relative h-10 w-full  rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary dark:data-[state=inactive]:bg-background data-[state=inactive]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-none`}
+              className={`relative h-10 w-full rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-semibold text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary dark:data-[state=inactive]:bg-background data-[state=inactive]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-none`}
               value={value}
             >
               {label}
             </TabsTrigger>
           ))}
         </TabsList>
-        {tabData.map(({ value, content }) => (
+        {tabData.map(({ value, content, text }) => (
           <TabsContent
             key={value}
             value={value}
-            className="border-4 rounded-xl"
+            className="rounded-xl p-4 mt-5"
           >
+            <p className="md:text-lg text-sm mb-4 w-full text-center">{text}</p>
             <Image
               src={content}
               alt={value}
-              className="w-full h-auto rounded-xl shadow-xl shadow-neutral-300 dark:shadow-neutral-700 bg-center "
+              className="w-full h-auto rounded-xl border-4  shadow-xl shadow-neutral-300 dark:shadow-neutral-700 bg-center "
               height={800}
               width={800}
             />
