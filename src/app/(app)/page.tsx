@@ -1,6 +1,6 @@
 import Banner from '@/components/banner';
 import { Beam, Beam2 } from '@/components/beam';
-import BentoGrid from '@/components/bento';
+import Features from '@/components/features';
 import Footer from '@/components/footer';
 import GridSection from '@/components/grid-section';
 import { Icons } from '@/components/icons';
@@ -12,7 +12,6 @@ import {
   PageHeaderHeading,
 } from '@/components/page-header';
 import { buttonVariants } from '@/components/ui/button';
-import UseCasesTabs from '@/components/use-cases-tabs';
 import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
 import { Star } from 'lucide-react';
@@ -62,8 +61,7 @@ const IndexPage = () => {
       </PageHeader>
       <div className="container relative">
         <ImageDisplay />
-        <BentoGrid />
-        <UseCasesTabs />
+        <Features />
         <GridSection />
       </div>
       <Banner />
