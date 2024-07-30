@@ -54,7 +54,7 @@ const LinkedinAgent: React.FC = () => {
           type,
           model,
           apiKey: modelKey,
-          proxyCurlKey,
+          proxyUrlKey: proxyCurlKey,
         }),
       });
       const data = await response.json();

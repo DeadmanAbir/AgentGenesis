@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Features = () => {
   return (
@@ -15,17 +16,19 @@ const Features = () => {
             LinkedIn Agent
           </div>
           <div className="tracking-wide leading-7 w-full text-center md:text-left ">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam
-            atque nesciunt dignissimos ducimus magni. A debitis magni ratione
-            explicabo recusandae.
+            Explore our LinkedIn Agent, a powerful tool that efficiently
+            summarizes data from public LinkedIn profiles.
           </div>
-          <button className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-md border border-neutral-200 bg-transparent px-6 font-medium text-neutral-600 dark:text-neutral-100 transition-all duration-100 [box-shadow:5px_5px_rgb(82_82_82)] hover:translate-x-[3px] hover:translate-y-[3px] hover:[box-shadow:0px_0px_rgb(82_82_82)] w-full md:w-[20%]">
-            Hover me
-          </button>
+          <Link
+            href="/docs/components/linkedinAgent"
+            className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-md border border-neutral-200 bg-transparent px-6 font-medium text-neutral-600 dark:text-neutral-100 transition-all duration-100 [box-shadow:5px_5px_rgb(82_82_82)] hover:translate-x-[3px] hover:translate-y-[3px] hover:[box-shadow:0px_0px_rgb(82_82_82)] w-full md:w-[20%]"
+          >
+            Check Out
+          </Link>
         </div>
         <div className="flex items-center justify-center w-full  rounded-xl">
           <Image
-            src="/snippet.png"
+            src="/agent.png"
             alt="Features2"
             className="w-full h-auto rounded-2xl border-4 p   shadow-xl shadow-neutral-300 dark:shadow-neutral-700 bg-center "
             height={800}
@@ -36,20 +39,23 @@ const Features = () => {
       <div className="flex md:flex-row-reverse flex-col  w-full gap-4 mt-3">
         <div className="  flex flex-col md:items-start  items-center justify-center p-3 gap-3 w-full">
           <div className="text-3xl tracking-wider font-semibold ">
-            LinkedIn Agent
+            LinkedIn Tool
           </div>
           <div className="tracking-wide leading-7 w-full text-center md:text-left ">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam
-            atque nesciunt dignissimos ducimus magni. A debitis magni ratione
-            explicabo recusandae.
+            Our LinkedIn Tool is a powerful solution that efficiently provides
+            data from public LinkedIn profiles when you provide a link. Enhance
+            your productivity and gain valuable insights with ease.
           </div>
-          <button className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-md border border-neutral-200 bg-transparent px-6 font-medium text-neutral-600 dark:text-neutral-100 transition-all duration-100 [box-shadow:5px_5px_rgb(82_82_82)] hover:translate-x-[3px] hover:translate-y-[3px] hover:[box-shadow:0px_0px_rgb(82_82_82)] w-full md:w-[20%]">
-            Hover me
-          </button>
+          <Link
+            href="/docs/components/linkedinTool"
+            className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-md border border-neutral-200 bg-transparent px-6 font-medium text-neutral-600 dark:text-neutral-100 transition-all duration-100 [box-shadow:5px_5px_rgb(82_82_82)] hover:translate-x-[3px] hover:translate-y-[3px] hover:[box-shadow:0px_0px_rgb(82_82_82)] w-full md:w-[20%]"
+          >
+            Check Out
+          </Link>
         </div>
         <div className="flex items-center justify-center w-full  rounded-xl">
           <Image
-            src="/snippet.png"
+            src="/tool.png"
             alt="Features2"
             className="w-full h-auto rounded-2xl border-4 p   shadow-xl shadow-neutral-300 dark:shadow-neutral-700 bg-center "
             height={800}
@@ -60,20 +66,22 @@ const Features = () => {
       <div className="flex md:flex-row flex-col  w-full gap-4 mt-3">
         <div className="  flex flex-col md:items-start  items-center justify-center p-3 gap-3 w-full">
           <div className="text-3xl tracking-wider font-semibold ">
-            LinkedIn Agent
+            Chat Models
           </div>
           <div className="tracking-wide leading-7 w-full text-center md:text-left ">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam
-            atque nesciunt dignissimos ducimus magni. A debitis magni ratione
-            explicabo recusandae.
+            Our Chat Models allows you to generate responses to text inputs from
+            differnt LLMs. OpenAI, Gemini and Anthrotopic are supported for now.
           </div>
-          <button className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-md border border-neutral-200 bg-transparent px-6 font-medium text-neutral-600 dark:text-neutral-100 transition-all duration-100 [box-shadow:5px_5px_rgb(82_82_82)] hover:translate-x-[3px] hover:translate-y-[3px] hover:[box-shadow:0px_0px_rgb(82_82_82)] w-full md:w-[20%]">
-            Hover me
-          </button>
+          <Link
+            href="/docs/components/chatOpenAi"
+            className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-md border border-neutral-200 bg-transparent px-6 font-medium text-neutral-600 dark:text-neutral-100 transition-all duration-100 [box-shadow:5px_5px_rgb(82_82_82)] hover:translate-x-[3px] hover:translate-y-[3px] hover:[box-shadow:0px_0px_rgb(82_82_82)] w-full md:w-[20%]"
+          >
+            Check Out
+          </Link>
         </div>
         <div className="flex items-center justify-center w-full  rounded-xl">
           <Image
-            src="/snippet.png"
+            src="/models.png"
             alt="Features2"
             className="w-full h-auto rounded-2xl border-4 p   shadow-xl shadow-neutral-300 dark:shadow-neutral-700 bg-center "
             height={800}
