@@ -54,7 +54,7 @@ const LinkedinAgent: React.FC = () => {
           type,
           model,
           apiKey: modelKey,
-          proxyCurlKey,
+          proxyUrlKey: proxyCurlKey,
         }),
       });
       const data = await response.json();
@@ -175,7 +175,7 @@ const LinkedinAgent: React.FC = () => {
               </PopoverTrigger>
               <PopoverContent
                 side="top"
-                className="flex flex-col items-center gap-3 w-[500px]"
+                className="flex flex-col items-center gap-3 md:w-[500px] w-[300px]"
               >
                 <Select
                   onValueChange={(value) =>
