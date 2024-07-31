@@ -1,6 +1,6 @@
 import Banner from '@/components/banner';
-import { Beam } from '@/components/beam';
-import BentoGrid from '@/components/bento';
+import { Beam, Beam2 } from '@/components/beam';
+import Features from '@/components/features';
 import Footer from '@/components/footer';
 import GridSection from '@/components/grid-section';
 import { Icons } from '@/components/icons';
@@ -11,7 +11,6 @@ import {
   PageHeaderDescription,
   PageHeaderHeading,
 } from '@/components/page-header';
-import TestimonialSection from '@/components/testimonial-section';
 import { buttonVariants } from '@/components/ui/button';
 import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
@@ -23,6 +22,7 @@ const IndexPage = () => {
     <>
       <PageHeader className=" relative z-30  ">
         <Beam />
+        <Beam2 />
         <div className="absolute inset-0 -z-10 h-full w-full  dark:bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[radial-gradient(#000000_1px,transparent_1px)] [background-size:30px_30px]  [mask-image:radial-gradient(ellipse_40%_40%_at_50%_50%,#000_20%,transparent_120%)]"></div>
         <div className="py-1 text-sm px-5 bg-neutral-700 rounded-full text-white flex items-center gap-2 group  hover:shadow-yellow-500 dark:hover:shadow-yellow-500 dark:shadow-slate-500 shadow-slate-300 cursor-pointer shadow-[0_5px_50px_rgba(8,_112,_184,_0.7)]">
           {' '}
@@ -61,9 +61,8 @@ const IndexPage = () => {
       </PageHeader>
       <div className="container relative">
         <ImageDisplay />
-        <BentoGrid />
+        <Features />
         <GridSection />
-        <TestimonialSection />
       </div>
       <Banner />
       <Footer />

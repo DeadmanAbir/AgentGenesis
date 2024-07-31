@@ -10,6 +10,10 @@ export const docsConfig: DocsConfig = {
       title: 'Docs',
       href: '/docs',
     },
+    {
+      title: 'Blogs',
+      href: '/blogs',
+    },
   ],
   sidebarNav: [
     {
@@ -89,6 +93,17 @@ export const docsConfig: DocsConfig = {
           title: 'GeminiEmbeddings',
           href: '/docs/components/geminiEmbedding',
           items: [],
+        },
+      ],
+    },
+    {
+      title: 'Agents',
+      items: [
+        {
+          title: 'LinkedIn Agent',
+          href: '/docs/components/linkedinAgent',
+          items: [],
+          label: 'New',
         },
       ],
     },
