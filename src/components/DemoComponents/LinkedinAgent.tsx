@@ -239,7 +239,7 @@ const LinkedinAgent: React.FC = () => {
                   <Input
                     name="proxyCurlKey"
                     type={showProxyKey ? 'text' : 'password'}
-                    placeholder="Enter yourt Proxy Curl API key"
+                    placeholder="Enter your Proxy Curl API key"
                     value={formData.proxyCurlKey}
                     onChange={handleInputChange}
                   />
