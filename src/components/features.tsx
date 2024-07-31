@@ -30,7 +30,7 @@ const Features = () => {
           <Image
             src="/agent.png"
             alt="Features2"
-            className="w-full h-auto rounded-2xl border-4 p  aspect-square object-fill  shadow-xl shadow-neutral-300 dark:shadow-neutral-700 bg-center "
+            className="w-full h-auto rounded-2xl border-4 p aspect-video object-cover   shadow-xl shadow-neutral-700 bg-center "
             height={800}
             width={800}
           />
@@ -57,7 +57,7 @@ const Features = () => {
           <Image
             src="/tool.png"
             alt="Features2"
-            className="w-full h-auto rounded-2xl border-4 p aspect-square object-fill   shadow-xl shadow-neutral-300 dark:shadow-neutral-700 bg-center "
+            className="w-full h-auto rounded-2xl border-4 p aspect-video object-cover    shadow-xl shadow-neutral-700 bg-center "
             height={800}
             width={800}
           />
@@ -83,7 +83,7 @@ const Features = () => {
           <Image
             src="/models.png"
             alt="Features2"
-            className="w-full h-auto rounded-2xl border-4 p   aspect-square object-fill  shadow-xl shadow-neutral-300 dark:shadow-neutral-700 bg-center "
+            className="w-full h-auto rounded-2xl border-4 p   aspect-video object-cover   shadow-xl shadow-neutral-700 bg-center "
             height={800}
             width={800}
           />
