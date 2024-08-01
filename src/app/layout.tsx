@@ -12,13 +12,41 @@ export const metadata: Metadata = {
     icon: [
       {
         media: '(prefers-color-scheme: light)',
-        url: '/logo-white.png',
-        href: '/logo-white.png',
+        url: '/logo-black.png',
+        href: '/logo-black.png',
       },
       {
         media: '(prefers-color-scheme: dark)',
         url: '/logo-white.png',
         href: '/logo-white.png',
+      },
+    ],
+  },
+  openGraph: {
+    title: 'AgentGenesis',
+    description:
+      'Copy paste the most trending AI agents and use them in your project without having to write everything from scratch.',
+    url: 'https://agentgenesis-beta.vercel.app/',
+    images: [
+      {
+        url: 'https://agentgenesis-beta.vercel.app/api/og?title=Welcome%20To%20AgentGenisis',
+        width: 1200,
+        height: 639,
+        alt: 'AgentGenesis',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'AgentGenesis',
+    description:
+      'Copy paste the most trending AI agents and use them in your project without having to write everything from scratch.',
+    images: [
+      {
+        url: 'https://agentgenesis-beta.vercel.app/api/og?title=Welcome%20To%20AgentGenisis',
+        width: 1200,
+        height: 639,
+        alt: 'Agentgenisis',
       },
     ],
   },
