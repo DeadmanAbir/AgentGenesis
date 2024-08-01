@@ -16,25 +16,80 @@ export async function GET(req: NextRequest) {
           alignItems: 'flex-start',
           justifyContent: 'center',
           backgroundImage:
-            'url("https://www.faisalhusa.in/blog/hydrationError/image.png")',
+            'url("https://agentgenesis-beta.vercel.app/og-bg.png")',
         }}
       >
-        <div
-          style={{
-            marginLeft: 205,
-            marginRight: 205,
-            marginBottom: 205,
-            display: 'flex',
-            fontSize: 105,
-            letterSpacing: '-0.025em',
-            fontStyle: 'normal',
-            color: 'white',
-            lineHeight: '110px',
-            whiteSpace: 'pre-wrap',
-          }}
-        >
-          {postTitle}
-        </div>
+        <h1 tw="absolute inset-0 flex justify-center items-center mb-57 flex-row">
+          <img
+            tw="h-10 w-10"
+            alt="Alt"
+            // @ts-ignore
+            src="https://agentgenesis-beta.vercel.app/logo-white.png"
+          />
+          <span
+            tw="ml-3"
+            style={{
+              background:
+                // "linear-gradient(180deg,rgba(240,238,249,.8) 0%,#E2E8FF 100%)",
+                'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(156, 163, 175, 1) 100%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+              fontSize: 35,
+              letterSpacing: '-1.5px',
+            }}
+          >
+            AgentGenisis
+          </span>
+        </h1>
+
+        {postTitle && (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '100vh',
+              width: '100vw',
+            }}
+          >
+            <p
+              style={{
+                whiteSpace: 'pre-wrap',
+                alignContent: 'center',
+                justifyContent: 'center',
+                background:
+                  'linear-gradient(180deg, rgba(105, 105, 105, 1) 0%, rgba(211, 211, 211, 1) 100%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                textAlign: 'center',
+                fontSize: 100,
+                letterSpacing: '-10px',
+                color: 'transparent',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              {postTitle}
+            </p>
+          </div>
+        )}
+
+        <h1 tw="absolute inset-0 flex justify-center items-center mt-57 flex-col">
+          <span
+            style={{
+              background:
+                'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(156, 163, 175, 1) 100%)',
+              // "linear-gradient(180deg,rgba(240,238,249,.8) 0%,#E2E8FF 100%)",
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+              fontSize: 25,
+              letterSpacing: '-1.5px',
+            }}
+          >
+            Copy paste AI snippets.
+          </span>
+        </h1>
       </div>
     ),
     {
