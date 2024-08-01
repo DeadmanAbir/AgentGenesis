@@ -10,7 +10,7 @@ const Features = () => {
       <div className="text-lg mb-6 z-30 text-center">
         One platform, endless possibilities. See some of features.
       </div>
-      <div className="flex md:flex-row flex-col  w-full gap-4 mt-3">
+      <div className="flex md:flex-row flex-col  w-full gap-4 my-7">
         <div className="  flex flex-col md:items-start  items-center justify-center p-3 gap-3 w-full">
           <div className="text-3xl tracking-wider font-semibold ">
             LinkedIn Agent
@@ -36,7 +36,7 @@ const Features = () => {
           />
         </div>
       </div>
-      <div className="flex md:flex-row-reverse flex-col  w-full gap-4 mt-3">
+      <div className="flex md:flex-row-reverse flex-col  w-full gap-4 my-7">
         <div className="  flex flex-col md:items-start  items-center justify-center p-3 gap-3 w-full">
           <div className="text-3xl tracking-wider font-semibold ">
             LinkedIn Tool
@@ -63,7 +63,7 @@ const Features = () => {
           />
         </div>
       </div>{' '}
-      <div className="flex md:flex-row flex-col  w-full gap-4 mt-3">
+      <div className="flex md:flex-row flex-col  w-full gap-4 my-7">
         <div className="  flex flex-col md:items-start  items-center justify-center p-3 gap-3 w-full">
           <div className="text-3xl tracking-wider font-semibold ">
             Chat Models
