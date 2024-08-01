@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
 
@@ -21,7 +20,7 @@ export async function GET(req: NextRequest) {
         }}
       >
         <h1 tw="absolute inset-0 flex justify-center items-center mb-57 flex-row">
-          <Image
+          <img
             tw="h-10 w-10"
             alt="Alt"
             // @ts-ignore
