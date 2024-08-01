@@ -17,7 +17,17 @@ import ComponentPreview from './component-preview';
 import { ComponentPreviewTemp } from './component-preview-temp';
 import { CodeBlockWrapper } from './code-block-wrapper';
 import { Pre } from './pre-component';
+import { ChatAnthropicDemo } from './DemoComponents/chatAnthropicDemo';
+import { ChatGeminiDemo } from './DemoComponents/chatGeminiDemo';
+import { GeminiEmbeddingDemo } from './DemoComponents/geminiEmbeddingDemo';
+import { OpenAIEmbeddingDemo } from './DemoComponents/openAIEmbeddingDemo';
 import LinkedinAgent from './DemoComponents/LinkedinAgent';
+import { ChatOpenAIDemo } from './DemoComponents/chatOpenAIDemo';
+import { LinkedInAgentDemo } from './DemoComponents/linkedinAgentDemo';
+import { WikipediaToolDemo } from './DemoComponents/wikipediaToolDemo';
+import { CalculatorToolDemo } from './DemoComponents/calculatorToolDemo';
+import { SearchApiToolDemo } from './DemoComponents/searchApiToolDemo';
+import { LinkedinToolDemo } from './DemoComponents/linkedinToolDemo';
 
 const components = {
   Accordion,
@@ -25,10 +35,20 @@ const components = {
   AccordionItem,
   AccordionTrigger,
   ReRankerDemo,
+  ChatAnthropicDemo,
+  ChatGeminiDemo,
+  ChatOpenAIDemo,
+  GeminiEmbeddingDemo,
+  OpenAIEmbeddingDemo,
+  LinkedInAgentDemo,
   ComponentPreview,
   ComponentPreviewTemp,
   CodeBlockWrapper,
   LinkedinAgent,
+  WikipediaToolDemo,
+  CalculatorToolDemo,
+  SearchApiToolDemo,
+  LinkedinToolDemo,
   pre: Pre,
 
   h1: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (

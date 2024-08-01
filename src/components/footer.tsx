@@ -18,39 +18,59 @@ const Footer = () => {
   }
   return (
     <div className="relative">
-      <div className="bg-gradient-to-r absolute inset-0 from-zinc-900 via-zinc-700 to-zinc-900 h-[1.5px] rounded-full "></div>
+      <div className="bg-gradient-to-r absolute inset-0 dark:from-zinc-900 from-zinc-100 dark:via-zinc-700 via-zinc-300 dark:to-zinc-900 to-zinc-100 h-[1.5px] rounded-full "></div>{' '}
       <div className="max-w-[1440px] mx-auto flex md:flex-row flex-col justify-between gap-7  items-start md:p-20 p-10">
-        <div>
+        <div className="flex flex-col gap-1">
           <Link
             href="/"
-            className="text-2xl flex items-center space-x-1 font-semibold"
+            className="text-3xl flex items-center space-x-1 font-semibold"
           >
             {theme.theme === 'dark' ? (
-              <Image src="/logo-white.png" alt="Logo" height={25} width={25} />
+              <Image src="/logo-white.png" alt="Logo" height={40} width={40} />
             ) : (
-              <Image src="/logo-black.png" alt="Logo" height={25} width={25} />
+              <Image src="/logo-black.png" alt="Logo" height={40} width={40} />
             )}
-            <span className="hidden font-bold sm:inline-block">
+            <span className=" font-bold sm:inline-block">
               {siteConfig.name}
             </span>
           </Link>
           <div>@{new Date().getFullYear()}</div>
-        </div>
-        <div className="grid grid-cols-3  gap-10 items-start ">
-          <div className="flex flex-col gap-4">
-            <div>Pricing</div>
-            <div>Blog</div>
-            <div>Contact</div>
+          <div className="text-sm">
+            Built by{' '}
+            <Link
+              href="https://github.com/DeadmanAbir"
+              target="_blank"
+              className="font-semibold hover:underline"
+            >
+              abir
+            </Link>{' '}
+            and{' '}
+            <Link
+              href="https://github.com/faisal004"
+              target="_blank"
+              className="font-semibold hover:underline"
+            >
+              faisal
+            </Link>
+            .The source code is available on{' '}
+            <Link
+              href={siteConfig.links.github}
+              target="_blank"
+              className="font-semibold hover:underline"
+            >
+              Github
+            </Link>
+            .
           </div>
-          <div className="flex flex-col gap-4">
-            <div>Pricing</div>
-            <div>Blog</div>
-            <div>Contact</div>
-          </div>{' '}
-          <div className="flex flex-col gap-4">
-            <div>Pricing</div>
-            <div>Blog</div>
-            <div>Contact</div>
+        </div>
+        <div className="grid grid-cols-1  gap-10 items-start ">
+          <div className="flex md:flex-row flex-col  gap-4">
+            <Link className="hover:underline" href="/docs">
+              Docs
+            </Link>
+            <Link className="hover:underline" href="/blogs">
+              Blog
+            </Link>
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@ import React, { useState, ChangeEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '../ui/input';
 import { Skeleton } from '../ui/skeleton';
-import { Bot, ChevronDown, ChevronUp, Info } from 'lucide-react';
+import { Bot, ChevronDown, ChevronUp, Eye, EyeOff, Info } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import {
   Select,
@@ -33,6 +33,9 @@ const LinkedinAgent: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [mdxContent, setMdxContent] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
+  const [showModelKey, setShowModelKey] = useState<boolean>(false);
+  const [showProxyKey, setShowProxyKey] = useState<boolean>(false);
+
   const handleClick = async () => {
     const { inputValue, type, model, modelKey, proxyCurlKey } = formData;
 
@@ -54,7 +57,7 @@ const LinkedinAgent: React.FC = () => {
           type,
           model,
           apiKey: modelKey,
-          proxyCurlKey,
+          proxyUrlKey: proxyCurlKey,
         }),
       });
       const data = await response.json();
@@ -175,7 +178,7 @@ const LinkedinAgent: React.FC = () => {
               </PopoverTrigger>
               <PopoverContent
                 side="top"
-                className="flex flex-col items-center gap-3 w-[500px]"
+                className="flex flex-col items-center gap-3 md:w-[500px] w-[300px]"
               >
                 <Select
                   onValueChange={(value) =>
@@ -205,13 +208,22 @@ const LinkedinAgent: React.FC = () => {
                     </SelectItem>
                   </SelectContent>
                 </Select>
-                <div className="flex items-center w-full gap-1">
+                <div className="flex items-center w-full gap-1 relative">
                   <Input
                     name="modelKey"
+                    type={showModelKey ? 'text' : 'password'}
                     placeholder="Enter your LLM Api key"
                     value={formData.modelKey}
                     onChange={handleInputChange}
                   />
+                  <div className="absolute right-7">
+                    <Button
+                      className="rounded-l-none"
+                      onClick={() => setShowModelKey(!showModelKey)}
+                    >
+                      {showModelKey ? <EyeOff /> : <Eye />}
+                    </Button>
+                  </div>
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger>
@@ -223,13 +235,22 @@ const LinkedinAgent: React.FC = () => {
                     </Tooltip>
                   </TooltipProvider>
                 </div>
-                <div className="flex items-center w-full gap-1">
+                <div className="flex items-center w-full gap-1 relative">
                   <Input
                     name="proxyCurlKey"
-                    placeholder="Enter yourt Proxy Curl API key"
+                    type={showProxyKey ? 'text' : 'password'}
+                    placeholder="Enter your Proxy Curl API key"
                     value={formData.proxyCurlKey}
                     onChange={handleInputChange}
                   />
+                  <div className="absolute right-7">
+                    <Button
+                      className="rounded-l-none"
+                      onClick={() => setShowProxyKey(!showProxyKey)}
+                    >
+                      {showProxyKey ? <EyeOff /> : <Eye />}
+                    </Button>
+                  </div>
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger>

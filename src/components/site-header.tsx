@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-
+import { useRouter } from 'next/navigation';
 import { siteConfig } from '@/config/site';
 import { ModeToggle } from './mode-toggle';
 import { MainNav } from './main-nav';
@@ -12,6 +12,7 @@ import { usePathname } from 'next/navigation';
 import { Github } from 'lucide-react';
 import { CommandMenu } from './command-menu';
 const SiteHeader = () => {
+  const router = useRouter();
   const scrolled = useScrollTop();
   const pathname = usePathname();
   return (
@@ -33,7 +34,12 @@ const SiteHeader = () => {
             <div className="hidden items-center  md:flex">
               <div className="relative group inline-block overflow-hidden rounded-full p-[1px] h-8  ">
                 <div className="absolute inset-[-1000%] animate-[spin_5s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-                <div className="inline-flex gap-1 h-full w-full cursor-pointer items-center justify-center rounded-full bg-gray-950 px-3 py-1 text-sm font-medium text-gray-50 backdrop-blur-3xl">
+                <div
+                  onClick={() =>
+                    router.push('https://github.com/DeadmanAbir/AgentGenesis')
+                  }
+                  className="inline-flex gap-1 h-full w-full cursor-pointer items-center justify-center rounded-full bg-gray-950 px-3 py-1 text-sm font-medium text-gray-50 backdrop-blur-3xl"
+                >
                   <Github className="h-4 w-4 group-hover:scale-125 duration-200 transition-all" />
                   Star us on Github
                 </div>
