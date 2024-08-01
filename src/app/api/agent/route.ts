@@ -4,6 +4,8 @@ import { ChatOpenAI } from '@/utils/chatOpenAi';
 import { z } from 'zod';
 import { ChatGemini } from '@/utils/chatGemini';
 
+export const maxDuration = 300;
+
 const requestBodyValidator = z.object({
   url: z.string().url(),
   type: z.enum(['profile', 'company']),
