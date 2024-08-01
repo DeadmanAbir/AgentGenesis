@@ -107,7 +107,7 @@ If you found the app helpful, consider connecting with us.
 ---
 
 <h3 align="center">
-A ⭐️ to <b>ReactPlay</b> is to make us more 💪 stronger and motivated.
+A ⭐️ to <b>Agentgenesis</b> is to make us more 💪 stronger and motivated.
 </h3>
 
 ## Contributors ✨
