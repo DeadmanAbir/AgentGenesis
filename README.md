@@ -122,7 +122,6 @@ Thanks goes to these wonderful people :
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/DeadmanAbir"><img src="https://avatars.githubusercontent.com/u/102755654?v=4" width="100px;" alt="Abir Dutta"/><br /><sub><b>Abir Dutta</b></sub></a><br /><a href="https://github.com/DeadmanAbir/AgentGenesis/commits?author=deadmanabir" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/faisal004"><img src="https://avatars.githubusercontent.com/u/88244542?v=4" width="100px;" alt="Faisal"/><br /><sub><b>Faisal</b></sub></a><br /><a href="https://github.com/DeadmanAbir/AgentGenesis/commits?author=faisal004" title="Code">💻</a></td>
-
     </tr>
   </tbody>
 </table>
