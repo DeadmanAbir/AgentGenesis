@@ -10,6 +10,8 @@ import { ScrollArea } from '@/components/scroll-area';
 import { DashboardTableOfContents } from '@/components/toc';
 import { Contribute } from '@/components/contribute';
 import { DocPager } from '@/components/pager';
+import { Metadata } from 'next';
+import { siteConfig } from '@/config/site';
 interface AgentsPageProps {
   params: {
     slug: string[];
@@ -24,6 +26,48 @@ async function getDocFromParams({ params }: AgentsPageProps) {
   }
 
   return doc;
+}
+export async function generateMetadata({
+  params,
+}: AgentsPageProps): Promise<Metadata> {
+  const doc = await getDocFromParams({ params });
+
+  if (!doc) {
+    return {};
+  }
+  const { title } = doc;
+  const ogImage = `https://agentgenesis-beta.vercel.app/api/og?title=${doc.title}`;
+  return {
+    title: `${doc.title} | Agentgenisis`,
+    description: doc.description,
+    openGraph: {
+      title: doc.title,
+      description: doc.description,
+      type: 'article',
+      url: `https://agentgenesis-beta.vercel.app/${doc.slug}`,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: siteConfig.name,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: doc.title,
+      description: doc.description,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+  };
 }
 
 export async function generateStaticParams(): Promise<
