@@ -4,7 +4,7 @@ import Features from '@/components/features';
 import Footer from '@/components/footer';
 import GridSection from '@/components/grid-section';
 import { Icons } from '@/components/icons';
-import ImageDisplay from '@/components/image-display';
+// import ImageDisplay from '@/components/image-display';
 import {
   PageActions,
   PageHeader,
@@ -60,7 +60,7 @@ const IndexPage = () => {
         </PageActions>
       </PageHeader>
       <div className="container relative">
-        <ImageDisplay />
+        {/* <ImageDisplay /> */}
         <Features />
         <GridSection />
       </div>
