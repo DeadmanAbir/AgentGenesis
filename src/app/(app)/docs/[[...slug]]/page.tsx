@@ -38,7 +38,7 @@ export async function generateMetadata({
   const { title } = doc;
   const ogImage = `https://agentgenesis-beta.vercel.app/api/og?title=${doc.title}`;
   return {
-    title: `${doc.title} | Agentgenisis`,
+    title: `${doc.title} | AgentGenesis`,
     description: doc.description,
     openGraph: {
       title: doc.title,

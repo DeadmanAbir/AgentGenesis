@@ -103,7 +103,7 @@ const LinkedinAgent: React.FC = () => {
     setMdxContent('');
   };
   return (
-    <div className="relative h-[400px] border rounded-md shadow-md">
+    <div className="relative h-[400px] border rounded-md shadow-md dark:bg-black bg-gray-100">
       <div className="overflow-y-auto h-[340px] p-4 z-10">
         {!loading && !mdxContent && !error && (
           <div className="flex flex-col-reverse items-center justify-center h-full">

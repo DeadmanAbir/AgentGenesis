@@ -18,16 +18,22 @@ export function OpenAIEmbeddingDemo() {
       {theme.theme === 'dark' ? (
         <Image
           src="/componentpics/openAiEmbeddings dark.png"
+          loader={() => {
+            return '/componentpics/openAiEmbeddings dark.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="openai_embeddings_flowchart"
         />
       ) : (
         <Image
           src="/componentpics/openAiEmbeddings light.png"
+          loader={() => {
+            return '/componentpics/openAiEmbeddings light.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="openai_embeddings_flowchart"
         />
       )}
     </>

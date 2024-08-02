@@ -18,16 +18,22 @@ export function CalculatorToolDemo() {
       {theme.theme === 'dark' ? (
         <Image
           src="/componentpics/calculator Tool dark.png"
+          loader={() => {
+            return '/componentpics/calculator Tool dark.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="calculator_tool_flowchart"
         />
       ) : (
         <Image
           src="/componentpics/calculator Tool light.png"
+          loader={() => {
+            return '/componentpics/calculator Tool light.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="calculator_tool_flowchart"
         />
       )}
     </>

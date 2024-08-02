@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
         }}
       >
         <h1 tw="absolute inset-0 flex justify-center items-center mb-57 flex-row">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             tw="h-10 w-10"
             alt="Alt"
@@ -39,7 +40,7 @@ export async function GET(req: NextRequest) {
               letterSpacing: '-1.5px',
             }}
           >
-            AgentGenisis
+            AgentGenesis
           </span>
         </h1>
 
@@ -87,7 +88,7 @@ export async function GET(req: NextRequest) {
               letterSpacing: '-1.5px',
             }}
           >
-            Copy paste AI snippets.
+            Open source AI code snippets.
           </span>
         </h1>
       </div>

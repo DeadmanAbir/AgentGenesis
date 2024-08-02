@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     url: 'https://agentgenesis-beta.vercel.app/',
     images: [
       {
-        url: 'https://agentgenesis-beta.vercel.app/api/og?title=Welcome%20To%20AgentGenisis',
+        url: 'https://agentgenesis-beta.vercel.app/api/og?title=Welcome%20To%20AgentGenesis',
         width: 1200,
         height: 639,
         alt: 'AgentGenesis',
@@ -43,10 +43,10 @@ export const metadata: Metadata = {
       'Copy paste the most trending AI agents and use them in your project without having to write everything from scratch.',
     images: [
       {
-        url: 'https://agentgenesis-beta.vercel.app/api/og?title=Welcome%20To%20AgentGenisis',
+        url: 'https://agentgenesis-beta.vercel.app/api/og?title=Welcome%20To%20AgentGenesis',
         width: 1200,
         height: 639,
-        alt: 'Agentgenisis',
+        alt: 'AgentGenesis',
       },
     ],
   },

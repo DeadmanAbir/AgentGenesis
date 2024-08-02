@@ -18,16 +18,22 @@ export function LinkedinToolDemo() {
       {theme.theme === 'dark' ? (
         <Image
           src="/componentpics/linkedin tool dark.png"
+          loader={() => {
+            return '/componentpics/linkedin tool dark.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="linkedin_tool_flowchart"
         />
       ) : (
         <Image
           src="/componentpics/linkedin tool light.png"
+          loader={() => {
+            return '/componentpics/linkedin tool light.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="linkedin_tool_flowchart"
         />
       )}
     </>

@@ -18,16 +18,22 @@ export function SearchApiToolDemo() {
       {theme.theme === 'dark' ? (
         <Image
           src="/componentpics/searchApi Tool dark.png"
+          loader={() => {
+            return '/componentpics/searchApi Tool dark.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="searchApi_flowchart"
         />
       ) : (
         <Image
           src="/componentpics/searchApi Tool light.png"
+          loader={() => {
+            return '/componentpics/searchApi Tool light.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="searchApi_flowchart"
         />
       )}
     </>

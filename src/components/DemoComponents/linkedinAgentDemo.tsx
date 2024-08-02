@@ -18,16 +18,22 @@ export function LinkedInAgentDemo() {
       {theme.theme === 'dark' ? (
         <Image
           src="/componentpics/linkedin agent dark.png"
+          loader={() => {
+            return '/componentpics/linkedin agent dark.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="linkedin_agent_flowchart"
         />
       ) : (
         <Image
           src="/componentpics/linkedin agent light.png"
+          loader={() => {
+            return '/componentpics/linkedin agent light.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="linkedin_agent_flowchart"
         />
       )}
     </>

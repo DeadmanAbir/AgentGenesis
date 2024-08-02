@@ -18,6 +18,9 @@ export function ReRankerDemo() {
       {theme.theme === 'dark' ? (
         <Image
           src="/componentpics/cohere dark.png"
+          loader={() => {
+            return '/componentpics/cohere dark.png';
+          }}
           width={800}
           height={500}
           alt="reranking_flowchart"
@@ -25,6 +28,9 @@ export function ReRankerDemo() {
       ) : (
         <Image
           src="/componentpics/cohere light.png"
+          loader={() => {
+            return '/componentpics/cohere light.png';
+          }}
           width={800}
           height={500}
           alt="reranking_flowchart"

@@ -18,16 +18,22 @@ export function ChatAnthropicDemo() {
       {theme.theme === 'dark' ? (
         <Image
           src="/componentpics/chatAnthrotopic dark.png"
+          loader={() => {
+            return '/componentpics/chatAnthrotopic dark.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="chat_anthropic_flowchart"
         />
       ) : (
         <Image
           src="/componentpics/chatAnthrotopic light.png"
+          loader={() => {
+            return '/componentpics/chatAnthrotopic light.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="chat_anthropic_flowchart"
         />
       )}
     </>

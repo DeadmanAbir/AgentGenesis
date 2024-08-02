@@ -18,16 +18,22 @@ export function WikipediaToolDemo() {
       {theme.theme === 'dark' ? (
         <Image
           src="/componentpics/wikipediaTool dark.png"
+          loader={() => {
+            return '/componentpics/wikipediaTool dark.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="wikipedia_tool_flowchart"
         />
       ) : (
         <Image
           src="/componentpics/wikipediaTool light.png"
+          loader={() => {
+            return '/componentpics/wikipediaTool light.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="wikipedia_tool_flowchart"
         />
       )}
     </>

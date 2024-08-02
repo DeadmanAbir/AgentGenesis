@@ -18,16 +18,22 @@ export function ChatOpenAIDemo() {
       {theme.theme === 'dark' ? (
         <Image
           src="/componentpics/chatOpenAI dark.png"
+          loader={() => {
+            return '/componentpics/chatOpenAI dark.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="chat_openai_flowchart"
         />
       ) : (
         <Image
           src="/componentpics/chatOpenAI light.png"
+          loader={() => {
+            return '/componentpics/chatOpenAI light.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="chat_openai_flowchart"
         />
       )}
     </>

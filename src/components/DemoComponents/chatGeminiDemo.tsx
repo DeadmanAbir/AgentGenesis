@@ -18,16 +18,22 @@ export function ChatGeminiDemo() {
       {theme.theme === 'dark' ? (
         <Image
           src="/componentpics/chatGemini dark.png"
+          loader={() => {
+            return '/componentpics/chatGemini dark.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="chat_gemini_flowchart"
         />
       ) : (
         <Image
           src="/componentpics/chatGemini light.png"
+          loader={() => {
+            return '/componentpics/chatGemini light.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="chat_gemini_flowchart"
         />
       )}
     </>

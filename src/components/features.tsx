@@ -43,8 +43,7 @@ const Features = () => {
           </div>
           <div className="tracking-wide leading-7 w-full text-center md:text-left ">
             Our LinkedIn Tool is a powerful solution that efficiently provides
-            data from public LinkedIn profiles when you provide a link. Enhance
-            your productivity and gain valuable insights with ease.
+            data from public LinkedIn profiles when you provide a link.
           </div>
           <Link
             href="/docs/components/linkedinTool"

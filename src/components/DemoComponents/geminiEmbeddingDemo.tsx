@@ -18,16 +18,22 @@ export function GeminiEmbeddingDemo() {
       {theme.theme === 'dark' ? (
         <Image
           src="/componentpics/geminiAi dark.png"
+          loader={() => {
+            return '/componentpics/geminiAi dark.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="geminiai_embeddings_flowchart"
         />
       ) : (
         <Image
           src="/componentpics/geminiAi light.png"
+          loader={() => {
+            return '/componentpics/geminiAi light.png';
+          }}
           width={800}
           height={500}
-          alt="reranking_flowchart"
+          alt="geminiai_embeddings_flowchart"
         />
       )}
     </>
