@@ -3,6 +3,7 @@ import './globals.css';
 import React from 'react';
 import { ThemeProvider } from '@/components/theme-provider';
 import { GeistSans } from 'geist/font/sans';
+import { siteUrl } from '@/utils/utils';
 
 export const metadata: Metadata = {
   title: 'AgentGenesis',
@@ -26,10 +27,10 @@ export const metadata: Metadata = {
     title: 'AgentGenesis',
     description:
       'Copy paste the most trending AI agents and use them in your project without having to write everything from scratch.',
-    url: 'https://agentgenesis-beta.vercel.app/',
+    url: siteUrl,
     images: [
       {
-        url: 'https://agentgenesis-beta.vercel.app/api/og?title=Welcome%20To%20AgentGenesis',
+        url: `${siteUrl}api/og?title=Welcome%20To%20AgentGenesis`,
         width: 1200,
         height: 639,
         alt: 'AgentGenesis',
@@ -43,7 +44,7 @@ export const metadata: Metadata = {
       'Copy paste the most trending AI agents and use them in your project without having to write everything from scratch.',
     images: [
       {
-        url: 'https://agentgenesis-beta.vercel.app/api/og?title=Welcome%20To%20AgentGenesis',
+        url: `${siteUrl}api/og?title=Welcome%20To%20AgentGenesis`,
         width: 1200,
         height: 639,
         alt: 'AgentGenesis',

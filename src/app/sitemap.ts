@@ -9,7 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${url}${document.slug}`,
     lastModified: currentDate,
   }));
-
+  pages.push({ url: `${url}/blogs`, lastModified: currentDate });
   pages.unshift({ url, lastModified: currentDate });
 
   return pages;

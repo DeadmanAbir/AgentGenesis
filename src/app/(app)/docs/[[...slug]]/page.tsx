@@ -12,6 +12,7 @@ import { Contribute } from '@/components/contribute';
 import { DocPager } from '@/components/pager';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
+import { siteUrl } from '@/utils/utils';
 interface AgentsPageProps {
   params: {
     slug: string[];
@@ -31,12 +32,11 @@ export async function generateMetadata({
   params,
 }: AgentsPageProps): Promise<Metadata> {
   const doc = await getDocFromParams({ params });
-
   if (!doc) {
     return {};
   }
   const { title } = doc;
-  const ogImage = `https://agentgenesis-beta.vercel.app/api/og?title=${doc.title}`;
+  const ogImage = `${siteUrl}api/og?title=${doc.title}`;
   return {
     title: `${doc.title} | AgentGenesis`,
     description: doc.description,
@@ -44,7 +44,7 @@ export async function generateMetadata({
       title: doc.title,
       description: doc.description,
       type: 'article',
-      url: `https://agentgenesis-beta.vercel.app/${doc.slug}`,
+      url: `${siteUrl}${doc.slug}`,
       images: [
         {
           url: ogImage,

@@ -1,3 +1,4 @@
+import { siteUrl } from '@/utils/utils';
 import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
 
@@ -15,8 +16,7 @@ export async function GET(req: NextRequest) {
           flexDirection: 'column',
           alignItems: 'flex-start',
           justifyContent: 'center',
-          backgroundImage:
-            'url("https://agentgenesis-beta.vercel.app/og-bg.png")',
+          backgroundImage: `url("${siteUrl}og-bg.png")`,
         }}
       >
         <h1 tw="absolute inset-0 flex justify-center items-center mb-57 flex-row">
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
             tw="h-10 w-10"
             alt="Alt"
             // @ts-ignore
-            src="https://agentgenesis-beta.vercel.app/logo-white.png"
+            src={`${siteUrl}logo-white.png`}
           />
           <span
             tw="ml-3"
