@@ -20,7 +20,7 @@
 ## 👋 Introducing Agentgenesis
 
 <p align="center">
-  <img src="src/images/og-image.png" alt="name"/>
+  <img src="public/Agentgenesis.png" alt="name"/>
 </p>
 
 `Agentgenesis` is an `open-source` web app that provides source for customizable `Gen AI` code snippets that you can easily copy and paste into your applications.
@@ -122,6 +122,7 @@ Thanks goes to these wonderful people :
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/DeadmanAbir"><img src="https://avatars.githubusercontent.com/u/102755654?v=4" width="100px;" alt="Abir Dutta"/><br /><sub><b>Abir Dutta</b></sub></a><br /><a href="https://github.com/DeadmanAbir/AgentGenesis/commits?author=deadmanabir" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/faisal004"><img src="https://avatars.githubusercontent.com/u/88244542?v=4" width="100px;" alt="Faisal"/><br /><sub><b>Faisal</b></sub></a><br /><a href="https://github.com/DeadmanAbir/AgentGenesis/commits?author=faisal004" title="Code">💻</a></td>
+       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Kirtikagoyal"><img src="https://avatars.githubusercontent.com/u/86429933?v=4" width="100px;" alt="Kirtika"/><br /><sub><b>Kirtika</b></sub></a><br /><a href="#" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
