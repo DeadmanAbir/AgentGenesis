@@ -23,7 +23,7 @@ const VideoPlayer = () => {
       )}
       <div className="rounded-2xl p-1 bg-black aspect-video w-full max-w-screen-2xl h-full">
         <ReactPlayer
-          url="https://youtu.be/et54as89ZdY?si=epfd_w96HcAjcyNJ"
+          url="https://youtu.be/DzFtMr146aU"
           width="100%"
           height="100%"
           style={{ borderRadius: '10rem' }}
