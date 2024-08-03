@@ -4,7 +4,8 @@ import React from 'react';
 import { ThemeProvider } from '@/components/theme-provider';
 import { GeistSans } from 'geist/font/sans';
 import { siteUrl } from '@/utils/utils';
-
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 export const metadata: Metadata = {
   title: 'AgentGenesis',
   description:
@@ -61,6 +62,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={GeistSans.className}>
+        <Analytics />
+        <SpeedInsights />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
