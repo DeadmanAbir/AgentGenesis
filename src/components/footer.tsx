@@ -44,13 +44,21 @@ const Footer = () => {
             >
               abir
             </Link>{' '}
-            and{' '}
+            ,{' '}
             <Link
               href="https://github.com/faisal004"
               target="_blank"
               className="font-semibold hover:underline"
             >
               faisal
+            </Link>{' '}
+            and{' '}
+            <Link
+              href="https://github.com/Kirtikagoyal"
+              target="_blank"
+              className="font-semibold hover:underline"
+            >
+              kirtika
             </Link>
             .The source code is available on{' '}
             <Link
