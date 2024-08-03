@@ -20,7 +20,7 @@
 ## 👋 Introducing Agentgenesis
 
 <p align="center">
-  <img src="src/images/og-image.png" alt="name"/>
+  <img src="public/Agentgenesis.png" alt="name"/>
 </p>
 
 `Agentgenesis` is an `open-source` web app that provides source for customizable `Gen AI` code snippets that you can easily copy and paste into your applications.
