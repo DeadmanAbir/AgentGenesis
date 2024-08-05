@@ -1,0 +1,8 @@
+services:
+  app:
+    build: .
+    container_name: app
+    environment:
+      NEXT_PUBLIC_SITE_URL: https://www.agentgenesis.dev/
+    ports:
+      - '3000:3000'
