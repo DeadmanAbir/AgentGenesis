@@ -43,7 +43,7 @@ Please support the work by giving the repository a ⭐, contributing to it. You 
 
 Here is a quick overview of the `agentgenesis` repo setup:
 
-###3 🍴 Fork and Clone the Repo
+### 🍴 Fork and Clone the Repo
 
 First, you need to fork the `agentgenesis` repo. You can do this by clicking the `Fork` button on the top right corner of the repo.
 
