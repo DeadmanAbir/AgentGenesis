@@ -50,8 +50,16 @@ First, you need to fork the `agentgenesis` repo. You can do this by clicking the
 Once forked, you can clone the repo by clicking the `Clone or Download` button on the top right corner of the forked repo.
 
 Please change the directory after cloning the repository using the `cd <folder-name>` command.
+### With Docker
 
-### ⬇️ Install Dependencies
+#### 🚀 Start the app inside a docker container
+Need to have docker on your system and to start the app in container using docker you just need to simple run below command.
+```bash
+docker compose up
+```
+### Without Docker
+
+#### ⬇️ Install Dependencies
 
 Next, install the dependencies by running the following command in the `agentgenesis` repo. we recommend using `npm`.
 
@@ -59,7 +67,7 @@ Next, install the dependencies by running the following command in the `agentgen
 npm install
 ```
 
-### 🦄 Start the Development Mode
+#### 🦄 Start the Development Mode
 
 Use the following command to start the app in the development mode:
 
