@@ -34,7 +34,7 @@ Here is the link to the app. We hope you enjoy it.
 > [Demo Link](https://www.agentgenesis.dev/)
 
 
-Please support the work by giving the repository a ⭐, contributing to it. You can also follow our devs on Twitter [Abir](https://x.com/ItsDutta99) **&** [Faisal](https://x.com/Faisalh004).
+Please support the work by giving the repository a ⭐, contributing to it. You can also follow our core members on Twitter [Abir](https://x.com/ItsDutta99) **&** [Faisal](https://x.com/Faisalh004) **&** [Kirtika](https://x.com/kirtikastwt).
 
 ## 🏗️ How to Set up `Agentgenesis` for Development?
 
