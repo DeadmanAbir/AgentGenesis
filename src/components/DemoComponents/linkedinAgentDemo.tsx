@@ -1,41 +1,40 @@
 'use client';
-import { useTheme } from 'next-themes';
-import Image from 'next/image';
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
+import ReactPlayer from 'react-player';
 export function LinkedInAgentDemo() {
-  const theme = useTheme();
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setMounted(true);
+  const [isMounted, setIsMounted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    setIsMounted(true);
   }, []);
-
-  if (!mounted) {
+  const handleReady = () => {
+    setIsLoading(false);
+  };
+  if (!isMounted) {
     return null;
   }
   return (
     <>
-      {theme.theme === 'dark' ? (
-        <Image
-          src="/componentpics/linkedin agent dark.png"
-          loader={() => {
-            return '/componentpics/linkedin agent dark.png';
-          }}
-          width={800}
-          height={500}
-          alt="linkedin_agent_flowchart"
-        />
-      ) : (
-        <Image
-          src="/componentpics/linkedin agent light.png"
-          loader={() => {
-            return '/componentpics/linkedin agent light.png';
-          }}
-          width={800}
-          height={500}
-          alt="linkedin_agent_flowchart"
-        />
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-2xl z-10">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-gray-500" />
+        </div>
       )}
+      <div className="rounded-md p-1 bg-black aspect-video w-full max-w-screen-2xl h-full relative">
+        <div className="absolute inset-x-0 bottom-0 md:dark:h-20 md:h-8 h-0  w-full bg-gradient-to-b from-transparent via-white to-white dark:via-black/50 dark:to-black pointer-events-none"></div>
+
+        <ReactPlayer
+          url="https://youtu.be/MbdRmzH_nqM?si=_V0HMEREXeIXVOVJ"
+          width="100%"
+          height="100%"
+          style={{ borderRadius: '1rem' }}
+          controls={false}
+          muted={true}
+          playing={true}
+          onReady={handleReady}
+        />
+      </div>
     </>
   );
 }
