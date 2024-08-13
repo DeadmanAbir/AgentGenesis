@@ -37,6 +37,17 @@ export const docsConfig: DocsConfig = {
       ],
     },
     {
+      title: 'Document Loaders',
+      items: [
+        {
+          title: 'Unstructured Loader',
+          href: '/docs/components/unstructuredLoader',
+          items: [],
+          label: 'New',
+        },
+      ],
+    },
+    {
       title: 'Tools',
       items: [
         {

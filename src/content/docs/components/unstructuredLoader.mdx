@@ -1,0 +1,267 @@
+---
+title: Unstructured Loader
+description: With the Unstructured Loader, you can load various types of files and extract their content using the Unstructured API.
+---
+
+<Tabs defaultValue="preview">
+
+<TabsList>
+  <TabsTrigger value="preview">Preview</TabsTrigger>
+  <TabsTrigger value="code">Code</TabsTrigger>
+</TabsList>
+
+<TabsContent value="preview">
+  <ComponentPreviewTemp>
+    <UnstructuredLoaderDemo />
+  </ComponentPreviewTemp>
+</TabsContent>
+
+<TabsContent value="code">
+
+<CodeBlockWrapper>
+
+```tsx showLineNumbers 
+import { UnstructuredLoader } from "@utils/unstructuredLoader";
+
+const loader = new UnstructuredLoader({
+  apiKey: process.env.UNSTRUCTURED_API_KEY,
+});
+
+// Load Files from Local Directory
+
+const elementsFromDirectory = await loader.loadUnstructuredDirectoryData({
+  filePath: "./sample.png",
+  fileName: "Sample_File",
+  returnText: true,
+});
+
+// Load Files Directly from FormData
+// Assuming the received file is in FormData, convert it into Uint8Array
+
+const data = await request.formData();
+const file: File | null = data.get("file") as File;
+
+const arrayBuffer = await file.arrayBuffer();
+const uint8Array = new Uint8Array(arrayBuffer);
+
+const elementsFromFile = await loader.loadUnstructuredFileData({
+  fileContent: uint8Array,
+  fileName: "Sample_File",
+  returnText: true,
+});
+```
+</CodeBlockWrapper>
+
+</TabsContent>
+
+</Tabs>
+
+## Installation
+
+<Steps>
+
+<Step>Install peer dependencies:</Step>
+
+```bash
+npm install unstructured-client --include=dev
+```
+
+<Step>Add Environment Variables</Step>
+
+```tsx title=".env" showLineNumbers {}
+UNSTRUCTURED_API_KEY = 'YOUR_SAMPLE_API_KEY';
+/* You can get one from - https://unstructured.io/api-key-hosted */
+```
+
+<Step>Copy the code</Step>
+
+Add the following code to your `utils/unstructuredLoader.ts` file:
+
+<CodeBlockWrapper>
+```tsx title="unstructuredLoader.ts" showLineNumbers {}
+import { UnstructuredClient } from "unstructured-client";
+import { PartitionResponse } from "unstructured-client/sdk/models/operations";
+import {
+  PartitionParameters,
+  Strategy,
+} from "unstructured-client/sdk/models/shared";
+import * as fs from "fs";
+
+interface UnstructuredLoaderProps {
+  apiKey: string;
+  baseUrl?: string;
+}
+
+interface LoadUnstructuredDirectoryDataParams {
+  filePath: string;
+  fileName: string;
+  options?: Omit<PartitionParameters, "files">;
+  returnText?: boolean;
+}
+
+interface LoadUnstructuredFileDataParams {
+  fileContent: Uint8Array;
+  fileName: string;
+  returnText?: boolean;
+  options?: Omit<PartitionParameters, "files">;
+}
+
+export class UnstructuredLoader {
+  private client: UnstructuredClient;
+
+  constructor(props: UnstructuredLoaderProps) {
+    const { apiKey, baseUrl } = props;
+
+    if (!apiKey || apiKey.trim().length === 0) {
+      throw new Error("No API key provided for Unstructured!");
+    }
+
+    this.client = new UnstructuredClient({
+      ...(baseUrl && baseUrl.trim().length !== 0 ? { serverURL: baseUrl } : {}),
+      security: {
+        apiKeyAuth: apiKey,
+      },
+    });
+  }
+
+  async loadUnstructuredDirectoryData(
+    params: LoadUnstructuredDirectoryDataParams
+  ) {
+    const { filePath } = params;
+    const fileContent = fs.readFileSync(filePath);
+    return this.processFileData({ ...params, fileContent });
+  }
+
+  async loadUnstructuredFileData(params: LoadUnstructuredFileDataParams) {
+    return this.processFileData(params);
+  }
+
+  private async processFileData({
+    fileContent,
+    fileName,
+    options,
+    returnText,
+  }: LoadUnstructuredFileDataParams) {
+    try {
+      const res: PartitionResponse = await this.client.general.partition({
+        partitionParameters: {
+          files: {
+            content: fileContent,
+            fileName,
+          },
+          strategy: options?.strategy ?? Strategy.Auto,
+          ...options,
+        },
+      });
+
+      if (res.statusCode !== 200) {
+        throw new Error(`Unexpected status code: ${res.statusCode}`);
+      }
+
+      if (!res.elements || res.elements.length === 0) {
+        throw new Error("No elements returned in the response");
+      }
+
+      return returnText ? this.extractText(res.elements) : res.elements;
+    } catch (error: any) {
+      throw new Error(`Error processing file data: ${error.message}`);
+    }
+  }
+
+  private extractText(elements: Array<{ [k: string]: any }>): string {
+    return elements
+      .map((el) => el.text)
+      .filter(Boolean)
+      .join("\n");
+  }
+}
+
+
+```
+
+</CodeBlockWrapper>
+</Steps>
+
+## Usage
+
+
+### Initialize client
+
+Initialize the UnstructuredLoader client.
+
+```tsx showLineNumbers 
+import { UnstructuredLoader } from "@utils/unstructuredLoader";
+
+const loader = new UnstructuredLoader({
+  apiKey: process.env.UNSTRUCTURED_API_KEY,
+});
+
+```
+### Load files from local directory
+
+Provide the local file path to initiate it's content extraction.
+
+```tsx showLineNumbers 
+const elementsFromDirectory = await loader.loadUnstructuredDirectoryData({
+  filePath: "./sample.png",
+  fileName: "Sample_File",
+  returnText: true,
+});
+```
+
+### Load files directly
+
+Files can also be loaded directly, in this example assuming they are received as FormData.
+
+```tsx showLineNumbers 
+const data = await request.formData();
+const file: File | null = data.get("file") as File;
+
+const arrayBuffer = await file.arrayBuffer();
+const uint8Array = new Uint8Array(arrayBuffer);
+
+const elementsFromFile = await loader.loadUnstructuredFileData({
+  fileContent: uint8Array,
+  fileName: "Sample_File",
+  returnText: true,
+});
+```
+
+
+## Props
+
+### UnstructuredLoader
+
+| Prop    | Type     | Description                               | Default |
+| ------- | -------- | ----------------------------------------- | ------- |
+| apiKey  | `string` | The API key for Unstructured.io           | ""      |
+| baseUrl | `string?`| Server URL in case of self-hosting               | ""      |
+
+### loadUnstructuredDirectoryData
+
+| Prop       | Type      | Description                                                       |
+| ---------- | --------- | ----------------------------------------------------------------- |
+| filePath   | `string`  | The local file path of the file.                                  |
+| fileName   | `string`  | Name of the file.                                                 |
+| returnText | `boolean?`| If true, the data returned will be a single string.               |
+| options    | `optional`| Additional options as specified in the Unstructured documentation.|
+
+### loadUnstructuredFileData
+
+| Prop        | Type         | Description                                                       |
+| ----------- | ------------ | ----------------------------------------------------------------- |
+| fileContent | `Uint8Array` | Uint8Array content of the file.                                   |
+| fileName    | `string`     | Name of the file.                                                 |
+| returnText  | `boolean?`   | If true, the data returned will be a single string.               |
+| options     | `optional`   | Additional options as specified in the Unstructured documentation.|
+
+
+
+
+
+
+
+## Credits
+
+This component is built on top of [Unstructured Typescript SDK](https://github.com/Unstructured-IO/unstructured-js-client)
+
