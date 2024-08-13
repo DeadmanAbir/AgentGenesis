@@ -28,6 +28,7 @@ import { WikipediaToolDemo } from './DemoComponents/wikipediaToolDemo';
 import { CalculatorToolDemo } from './DemoComponents/calculatorToolDemo';
 import { SearchApiToolDemo } from './DemoComponents/searchApiToolDemo';
 import { LinkedinToolDemo } from './DemoComponents/linkedinToolDemo';
+import { UnstructuredLoaderDemo } from './DemoComponents/unstructuredLoaderDemo';
 
 const components = {
   Accordion,
@@ -49,6 +50,7 @@ const components = {
   CalculatorToolDemo,
   SearchApiToolDemo,
   LinkedinToolDemo,
+  UnstructuredLoaderDemo,
   pre: Pre,
 
   h1: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
