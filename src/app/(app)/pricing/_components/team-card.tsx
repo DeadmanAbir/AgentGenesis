@@ -45,7 +45,7 @@ const TeamCard = () => {
           <div className="text-3xl text-white tracking-tighter">
             Want a website that converts? Get in touch!
           </div>
-          <p className="text-sm text-white mt-2">
+          <p className="text-sm text-white mt-2 tracking-normal">
             Experience the magic of a stunning website designed and developed
             just for you! ✨
           </p>
