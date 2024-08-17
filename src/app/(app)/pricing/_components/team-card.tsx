@@ -2,7 +2,6 @@
 import { Card } from '@/components/ui/card';
 import { siteConfig } from '@/config/site';
 import Image from 'next/image';
-import Link from 'next/link';
 import React from 'react';
 
 const TeamCard = () => {
@@ -11,8 +10,8 @@ const TeamCard = () => {
 
   const images = [
     'https://github.com/faisal004.png',
-    'https://github.com/faisal004.png',
-    'https://github.com/faisal004.png',
+    'https://github.com/shad.png',
+    'https://github.com/shadcn.png',
   ];
 
   React.useEffect(() => {
@@ -32,19 +31,21 @@ const TeamCard = () => {
   }
 
   return (
-    <Card className="mt-5 p-5 w-full grid md:grid-cols-2 grid-cols-1 gap-4 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-neutral-800 to-black">
+    <Card className="mt-5 py-10 px-5 w-full grid md:grid-cols-2 grid-cols-1 gap-4 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-neutral-800 to-black">
       <div className="left w-full flex flex-col justify-between gap-2 md:pr-10 md:pl-5">
         <div className="flex flex-col gap-2">
-          <Link href="/" className="mr-6 flex items-center space-x-1">
-            <Image src="/logo-white.png" alt="Logo" height={20} width={20} />
-            <span className="hidden font-bold sm:inline-block text-base text-white">
+          <div className="mr-6 flex items-center space-x-1">
+            <Image src="/logo-white.png" alt="Logo" height={40} width={40} />
+            <span className=" font-bold sm:inline-block md:text-4xl text-3xl text-white">
               {siteConfig.name}
             </span>
-          </Link>
-          <div className="text-2xl text-white">
+          </div>
+        </div>
+        <div>
+          <div className="text-3xl text-white tracking-tighter">
             Want a website that converts? Get in touch!
           </div>
-          <p className="text-sm text-white">
+          <p className="text-sm text-white mt-2">
             Experience the magic of a stunning website designed and developed
             just for you! ✨
           </p>
@@ -64,11 +65,11 @@ const TeamCard = () => {
             height={300}
             width={400}
             className={`object-cover rounded-lg transition duration-500 ${
-              activeIndex === 0 ? 'grayscale-0' : 'grayscale'
+              activeIndex === 0 ? 'grayscale-0 scale-105' : 'grayscale '
             }`}
           />
         </div>
-        <div className="bg-zinc-900 rounded-lg border-2"></div>
+        <div className="bg-zinc-950 rounded-lg border-2"></div>
         <div className="bg-zinc-900 rounded-xl border-2 p-1">
           <Image
             src={images[1]}
@@ -76,11 +77,11 @@ const TeamCard = () => {
             height={300}
             width={400}
             className={`object-cover rounded-lg transition duration-500 ${
-              activeIndex === 1 ? 'grayscale-0' : 'grayscale'
+              activeIndex === 1 ? 'grayscale-0 scale-105' : 'grayscale'
             }`}
           />
         </div>
-        <div className="bg-zinc-900 rounded-lg border-2"></div>
+        <div className="bg-zinc-950 rounded-lg border-2"></div>
         <div className="bg-zinc-900 rounded-xl border-2 p-1">
           <Image
             src={images[2]}
@@ -88,7 +89,7 @@ const TeamCard = () => {
             height={300}
             width={400}
             className={`object-cover rounded-lg transition duration-500 ${
-              activeIndex === 2 ? 'grayscale-0' : 'grayscale'
+              activeIndex === 2 ? 'grayscale-0 scale-105' : 'grayscale'
             }`}
           />
         </div>
