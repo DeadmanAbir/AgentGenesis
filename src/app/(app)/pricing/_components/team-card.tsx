@@ -1,4 +1,10 @@
 'use client';
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalTrigger,
+} from '@/components/animate-modal';
 import { Card } from '@/components/ui/card';
 import { siteConfig } from '@/config/site';
 import Image from 'next/image';
@@ -56,43 +62,121 @@ const TeamCard = () => {
           </span>
         </button>
       </div>
+
       <div className="grid grid-cols-3 w-full gap-4 md:px-20">
         <div className="bg-zinc-900 rounded-xl border-2 p-1"></div>
-        <div className="bg-zinc-900 rounded-xl border-2 p-1">
-          <Image
-            src={images[0]}
-            alt="team-image-0"
-            height={300}
-            width={400}
-            className={`object-cover rounded-lg transition duration-500 ${
-              activeIndex === 0 ? 'grayscale-0 scale-105' : 'grayscale '
-            }`}
-          />
-        </div>
+        <Modal>
+          <ModalTrigger className="bg-zinc-900 rounded-xl border-2 p-1 relative group">
+            <div className="absolute bottom-0 w-full tr bg-neutral-700/30 z-20 group-hover:flex hidden transition-all duration-500 items-center justify-center">
+              Click
+            </div>
+            <Image
+              src={images[0]}
+              alt="team-image-0"
+              height={300}
+              width={400}
+              className={`object-cover rounded-lg transition duration-500 ${
+                activeIndex === 0 ? 'grayscale-0 scale-105' : 'grayscale '
+              }`}
+            />
+          </ModalTrigger>
+          <ModalBody>
+            <ModalContent className="">
+              <div className="gap-2 grid grid-cols-2">
+                <div className="w-full">
+                  <Image
+                    src={images[0]}
+                    alt="team-image-0"
+                    height={400}
+                    width={400}
+                    className={`object-cover rounded-lg transition duration-500 h-80 w-80 `}
+                  />
+                </div>
+
+                <div>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Quaerat ullam eius nostrum. Pariatur dicta ipsam nihil
+                </div>
+              </div>
+            </ModalContent>
+          </ModalBody>
+        </Modal>
+
         <div className="bg-zinc-950 rounded-lg border-2"></div>
-        <div className="bg-zinc-900 rounded-xl border-2 p-1">
-          <Image
-            src={images[1]}
-            alt="team-image-1"
-            height={300}
-            width={400}
-            className={`object-cover rounded-lg transition duration-500 ${
-              activeIndex === 1 ? 'grayscale-0 scale-105' : 'grayscale'
-            }`}
-          />
-        </div>
+        <Modal>
+          <ModalTrigger className="bg-zinc-900 rounded-xl border-2 p-1 group relative">
+            <div className="absolute bottom-0 w-full tr bg-neutral-700/30 z-20 group-hover:flex hidden transition-all duration-500 items-center justify-center">
+              Click
+            </div>
+            <Image
+              src={images[1]}
+              alt="team-image-1"
+              height={300}
+              width={400}
+              className={`object-cover rounded-lg transition duration-500 ${
+                activeIndex === 1 ? 'grayscale-0 scale-105' : 'grayscale'
+              }`}
+            />
+          </ModalTrigger>
+          <ModalBody>
+            <ModalContent className="">
+              <div className="gap-2 grid grid-cols-2">
+                <div className="w-full">
+                  <Image
+                    src={images[1]}
+                    alt="team-image-0"
+                    height={400}
+                    width={400}
+                    className={`object-cover rounded-lg transition duration-500 h-80 w-80 `}
+                  />
+                </div>
+
+                <div>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Quaerat ullam eius nostrum. Pariatur dicta ipsam nihil
+                </div>
+              </div>
+            </ModalContent>
+          </ModalBody>
+        </Modal>
+
         <div className="bg-zinc-950 rounded-lg border-2"></div>
-        <div className="bg-zinc-900 rounded-xl border-2 p-1">
-          <Image
-            src={images[2]}
-            alt="team-image-2"
-            height={300}
-            width={400}
-            className={`object-cover rounded-lg transition duration-500 ${
-              activeIndex === 2 ? 'grayscale-0 scale-105' : 'grayscale'
-            }`}
-          />
-        </div>
+        <Modal>
+          <ModalTrigger className="bg-zinc-900 rounded-xl border-2 p-1 group relative">
+            <div className="absolute bottom-0 w-full tr bg-neutral-700/30 z-20 group-hover:flex hidden transition-all duration-500 items-center justify-center">
+              Click
+            </div>
+            <Image
+              src={images[2]}
+              alt="team-image-2"
+              height={300}
+              width={400}
+              className={`object-cover rounded-lg transition duration-500 ${
+                activeIndex === 2 ? 'grayscale-0 scale-105' : 'grayscale'
+              }`}
+            />
+          </ModalTrigger>
+          <ModalBody>
+            <ModalContent className="">
+              <div className="gap-2 grid grid-cols-2">
+                <div className="w-full">
+                  <Image
+                    src={images[2]}
+                    alt="team-image-0"
+                    height={400}
+                    width={400}
+                    className={`object-cover rounded-lg transition duration-500 h-80 w-80 `}
+                  />
+                </div>
+
+                <div>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Quaerat ullam eius nostrum. Pariatur dicta ipsam nihil
+                </div>
+              </div>
+            </ModalContent>
+          </ModalBody>
+        </Modal>
       </div>
     </Card>
   );
