@@ -45,6 +45,15 @@ export function MainNav() {
           Docs
         </Link>
         <Link
+          href="/pricing"
+          className={cn(
+            'transition-colors hover:text-foreground/80 hover:dark:bg-neutral-700 hover:bg-neutral-100  px-2 py-1 rounded-lg',
+            pathname === '/pricing' ? 'text-foreground ' : 'text-foreground/60',
+          )}
+        >
+          Pricing
+        </Link>
+        <Link
           href="/blogs"
           className={cn(
             'transition-colors hover:text-foreground/80 hover:dark:bg-neutral-700 hover:bg-neutral-100  px-2 py-1 rounded-lg',

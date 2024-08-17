@@ -11,6 +11,10 @@ export const docsConfig: DocsConfig = {
       href: '/docs',
     },
     {
+      title: 'Pricing',
+      href: '/pricing',
+    },
+    {
       title: 'Blogs',
       href: '/blogs',
     },
