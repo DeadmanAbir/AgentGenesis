@@ -61,7 +61,7 @@ const Pricing = () => {
         </div>
         <Faq />
       </div>
-      <div className="w-full mb-40 ">
+      <div className="w-full  ">
         <div className="text-4xl font-semibold text-center text-transparent bg-clip-text bg-gradient-to-b from-black dark:from-white to-gray-600 dark:to-gray-400">
           Meet the team
         </div>
