@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: currentDate,
   }));
   pages.push({ url: `${url}/blogs`, lastModified: currentDate });
+  pages.push({ url: `${url}/pricing`, lastModified: currentDate });
   pages.unshift({ url, lastModified: currentDate });
 
   return pages;
