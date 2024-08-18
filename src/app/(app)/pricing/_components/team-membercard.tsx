@@ -21,7 +21,7 @@ const Teammembercard = ({
   };
 }) => {
   return (
-    <div className="gap-2 grid md:grid-cols-2 grid-cols-1">
+    <div className="gap-5 grid md:grid-cols-2 grid-cols-1">
       <div className="w-full relative flex items-center justify-center">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-green-400 to-transparent opacity-50 animate-scan h-10"></div>
 
