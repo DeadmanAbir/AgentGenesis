@@ -9,6 +9,7 @@ import { Card } from '@/components/ui/card';
 import { siteConfig } from '@/config/site';
 import Image from 'next/image';
 import React from 'react';
+import Teammembercard from './team-membercard';
 
 const TeamCard = () => {
   const [mounted, setMounted] = React.useState(false);
@@ -65,9 +66,10 @@ const TeamCard = () => {
 
       <div className="grid grid-cols-3 w-full gap-4 md:px-20">
         <div className="bg-zinc-900 rounded-xl border-2 p-1"></div>
+
         <Modal>
           <ModalTrigger className="bg-zinc-900 rounded-xl border-2 p-1 relative group">
-            <div className="absolute bottom-0 w-full tr bg-neutral-700/30 z-20 group-hover:flex hidden transition-all duration-500 items-center justify-center">
+            <div className="absolute inset-0 h-full font-semibold text-3xl text-white bottom-0 w-full tr bg-neutral-700/30 z-20 group-hover:flex hidden transition-all duration-500 items-center justify-center">
               Click
             </div>
             <Image
@@ -82,22 +84,18 @@ const TeamCard = () => {
           </ModalTrigger>
           <ModalBody>
             <ModalContent className="">
-              <div className="gap-2 grid grid-cols-2">
-                <div className="w-full">
-                  <Image
-                    src={images[0]}
-                    alt="team-image-0"
-                    height={400}
-                    width={400}
-                    className={`object-cover rounded-lg transition duration-500 h-80 w-80 `}
-                  />
-                </div>
-
-                <div>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Quaerat ullam eius nostrum. Pariatur dicta ipsam nihil
-                </div>
-              </div>
+              <Teammembercard
+                imageSrc={images[0]}
+                name="Faisal Husain"
+                role="Software Developer"
+                description="Hi, I am working as a Software Developer."
+                socials={{
+                  github: 'https://github.com/faisal004',
+                  linkedin: 'https://www.linkedin.com/in/faisal004/',
+                  twitter: 'https://x.com/faisalh004',
+                  website: 'https://www.faisalhusa.in/',
+                }}
+              />
             </ModalContent>
           </ModalBody>
         </Modal>
@@ -105,7 +103,7 @@ const TeamCard = () => {
         <div className="bg-zinc-950 rounded-lg border-2"></div>
         <Modal>
           <ModalTrigger className="bg-zinc-900 rounded-xl border-2 p-1 group relative">
-            <div className="absolute bottom-0 w-full tr bg-neutral-700/30 z-20 group-hover:flex hidden transition-all duration-500 items-center justify-center">
+            <div className="absolute inset-0 h-full font-semibold text-3xl text-white bottom-0 w-full tr bg-neutral-700/30 z-20 group-hover:flex hidden transition-all duration-500 items-center justify-center">
               Click
             </div>
             <Image
@@ -120,22 +118,18 @@ const TeamCard = () => {
           </ModalTrigger>
           <ModalBody>
             <ModalContent className="">
-              <div className="gap-2 grid grid-cols-2">
-                <div className="w-full">
-                  <Image
-                    src={images[1]}
-                    alt="team-image-0"
-                    height={400}
-                    width={400}
-                    className={`object-cover rounded-lg transition duration-500 h-80 w-80 `}
-                  />
-                </div>
-
-                <div>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Quaerat ullam eius nostrum. Pariatur dicta ipsam nihil
-                </div>
-              </div>
+              <Teammembercard
+                imageSrc={images[0]}
+                name="Faisal Husain"
+                role="Software Developer"
+                description="Hi, I am working as a Software Developer."
+                socials={{
+                  github: 'https://github.com/faisal004',
+                  linkedin: 'https://www.linkedin.com/in/faisal004/',
+                  twitter: 'https://x.com/faisalh004',
+                  website: 'https://www.faisalhusa.in/',
+                }}
+              />
             </ModalContent>
           </ModalBody>
         </Modal>
@@ -143,7 +137,7 @@ const TeamCard = () => {
         <div className="bg-zinc-950 rounded-lg border-2"></div>
         <Modal>
           <ModalTrigger className="bg-zinc-900 rounded-xl border-2 p-1 group relative">
-            <div className="absolute bottom-0 w-full tr bg-neutral-700/30 z-20 group-hover:flex hidden transition-all duration-500 items-center justify-center">
+            <div className="absolute inset-0 h-full font-semibold text-3xl text-white bottom-0 w-full tr bg-neutral-700/30 z-20 group-hover:flex hidden transition-all duration-500 items-center justify-center">
               Click
             </div>
             <Image
@@ -158,22 +152,18 @@ const TeamCard = () => {
           </ModalTrigger>
           <ModalBody>
             <ModalContent className="">
-              <div className="gap-2 grid grid-cols-2">
-                <div className="w-full">
-                  <Image
-                    src={images[2]}
-                    alt="team-image-0"
-                    height={400}
-                    width={400}
-                    className={`object-cover rounded-lg transition duration-500 h-80 w-80 `}
-                  />
-                </div>
-
-                <div>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Quaerat ullam eius nostrum. Pariatur dicta ipsam nihil
-                </div>
-              </div>
+              <Teammembercard
+                imageSrc={images[0]}
+                name="Faisal Husain"
+                role="Software Developer"
+                description="Hi, I am working as a Software Developer."
+                socials={{
+                  github: 'https://github.com/faisal004',
+                  linkedin: 'https://www.linkedin.com/in/faisal004/',
+                  twitter: 'https://x.com/faisalh004',
+                  website: 'https://www.faisalhusa.in/',
+                }}
+              />
             </ModalContent>
           </ModalBody>
         </Modal>

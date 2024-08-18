@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -13,7 +12,10 @@ import React, {
 
 interface ModalContextType {
   open: boolean;
-  setOpen: (open: boolean) => void;
+  setOpen: (
+    // eslint-disable-next-line  @typescript-eslint/no-unused-vars, no-unused-vars
+    open: boolean,
+  ) => void;
 }
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);

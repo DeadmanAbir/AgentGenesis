@@ -5,10 +5,10 @@ import TeamCard from './_components/team-card';
 const Pricing = () => {
   return (
     <div className="container my-40  flex flex-col items-center gap-2 justify-center  ">
-      <div className="text-4xl font-semibold text-center text-transparent bg-clip-text bg-gradient-to-b from-black dark:from-white to-gray-600 dark:to-gray-400">
+      <div className="md:text-6xl text-4xl pt-8 font-semibold text-center text-transparent bg-clip-text bg-gradient-to-b from-black dark:from-white to-gray-600 dark:to-gray-400">
         The right price for you, with maximum value
       </div>
-      <p className="text-center tracking-wide">
+      <p className="text-center tracking-wide pb-8">
         Simple pricing that makes sense for your business. No hidden fees.
       </p>
       <div className="grid md:grid-cols-3 grid-cols-1 w-full mt-5 gap-5 ">
@@ -56,13 +56,13 @@ const Pricing = () => {
         />
       </div>
       <div className="w-full my-40  ">
-        <div className="text-4xl font-semibold text-center text-transparent bg-clip-text bg-gradient-to-b from-black dark:from-white to-gray-600 dark:to-gray-400">
+        <div className="md:text-6xl text-4xl py-8 font-semibold text-center text-transparent bg-clip-text bg-gradient-to-b from-black dark:from-white to-gray-600 dark:to-gray-400">
           Frequently asked questions{' '}
         </div>
         <Faq />
       </div>
       <div className="w-full  ">
-        <div className="text-4xl font-semibold text-center text-transparent bg-clip-text bg-gradient-to-b from-black dark:from-white to-gray-600 dark:to-gray-400">
+        <div className="md:text-6xl text-4xl py-10 font-semibold text-center text-transparent bg-clip-text bg-gradient-to-b from-black dark:from-white to-gray-600 dark:to-gray-400">
           Meet the team
         </div>
         <TeamCard />
