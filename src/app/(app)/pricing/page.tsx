@@ -42,7 +42,7 @@ const Pricing = () => {
               'Scalable solutions',
               'Tailored to your specific needs',
             ]}
-            buttonText="Conract Us"
+            buttonText="Contact Us"
           />
 
           <PricingCard
