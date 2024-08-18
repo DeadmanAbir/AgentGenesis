@@ -43,7 +43,7 @@ const TeamCard = () => {
   };
   return (
     <Card className="mt-5 py-10 px-5 w-full grid md:grid-cols-2 grid-cols-1 gap-4 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-neutral-800 to-black">
-      <div className="left w-full flex flex-col justify-between gap-2 md:pr-10 md:pl-5">
+      <div className="left w-full flex flex-col justify-between gap-5 md:pr-10 md:pl-5">
         <div className="flex flex-col gap-2">
           <div className="mr-6 flex items-center space-x-1">
             <Image src="/logo-white.png" alt="Logo" height={40} width={40} />
