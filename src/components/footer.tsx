@@ -1,5 +1,6 @@
 'use client';
 
+import { docsConfig } from '@/config/doc';
 import { siteConfig } from '@/config/site';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
@@ -68,17 +69,20 @@ const Footer = () => {
             >
               Github
             </Link>
-            .
           </div>
         </div>
         <div className="grid grid-cols-1  gap-10 items-start ">
           <div className="flex md:flex-row flex-col  gap-4">
-            <Link className="hover:underline" href="/docs">
-              Docs
-            </Link>
-            <Link className="hover:underline" href="/blogs">
-              Blog
-            </Link>
+            {docsConfig.mainNav.map((item: any) => (
+              <Link className="hover:underline" href={item.href}>
+                {item.title}
+                {item.label && (
+                  <span className="ml-2 rounded-md bg-[#FFBD7A] px-1.5 py-0.5 text-xs leading-none text-[#000000] no-underline group-hover:no-underline">
+                    {item.label}
+                  </span>
+                )}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
