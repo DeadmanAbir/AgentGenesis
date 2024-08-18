@@ -1,21 +1,23 @@
 export const faq = [
   {
-    question: 'What is your return policy?',
+    question: 'What is the estimated timeline for project delivery?',
     answer:
-      'You can return any item within 30 days of purchase for a full refund, provided it is in original condition.',
+      'The timeline varies depending on the project size, scalability requirements, and complexity. We assess each project individually to provide a more accurate estimate.',
   },
   {
-    question: 'Do you offer technical support?',
+    question: 'Do you provide technical support?',
     answer:
-      'Yes, we offer 24/7 technical support through our online chat and email support services.',
+      'Yes, we offer technical support via online chat and email throughout the project development phase.',
   },
   {
-    question: 'How can I track my order?',
+    question:
+      'I have a unique idea and need additional features with Generative AI. Can you help?',
     answer:
-      'Once your order is shipped, we will send you a tracking number via email. You can use it to track your order on our website.',
+      'Absolutely! We can develop full-stack applications using the latest technologies, incorporating tailored AI solutions to meet your specific needs.',
   },
   {
     question: 'What payment methods do you accept?',
-    answer: 'We accept all major credit cards, PayPal, and Apple Pay.',
+    answer:
+      'We accept all major online payment methods, including UPI, Net Banking, and credit/debit cards.',
   },
 ];

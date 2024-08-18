@@ -68,7 +68,6 @@ const Footer = () => {
             >
               Github
             </Link>
-            .
           </div>
         </div>
         <div className="grid grid-cols-1  gap-10 items-start ">
@@ -78,6 +77,9 @@ const Footer = () => {
             </Link>
             <Link className="hover:underline" href="/blogs">
               Blog
+            </Link>
+            <Link className="hover:underline" href="/pricing">
+              Pricing
             </Link>
           </div>
         </div>

@@ -16,9 +16,9 @@ const TeamCard = () => {
   const [activeIndex, setActiveIndex] = React.useState(0);
 
   const images = [
-    'https://github.com/faisal004.png',
-    'https://github.com/shad.png',
-    'https://github.com/shadcn.png',
+    '/faisal004.jpg',
+    'https://github.com/Kirtikagoyal.png',
+    '/abir.jpg',
   ];
 
   React.useEffect(() => {
@@ -36,7 +36,11 @@ const TeamCard = () => {
   if (!mounted) {
     return null;
   }
-
+  const handleBookCall = () => {
+    const email = 'agentgenesisdev@gmail.com';
+    const mailtoUrl = `mailto:${email}`;
+    window.location.href = mailtoUrl;
+  };
   return (
     <Card className="mt-5 py-10 px-5 w-full grid md:grid-cols-2 grid-cols-1 gap-4 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-neutral-800 to-black">
       <div className="left w-full flex flex-col justify-between gap-2 md:pr-10 md:pl-5">
@@ -50,14 +54,17 @@ const TeamCard = () => {
         </div>
         <div>
           <div className="text-3xl text-white tracking-tighter">
-            Want a website that converts? Get in touch!
+            Want to build cutting edge AI applications? Get in touch!
           </div>
           <p className="text-sm text-white mt-2 tracking-normal">
-            Experience the magic of a stunning website designed and developed
-            just for you! ✨
+            Enjoy the benefits of personalized Tools, Models and Agents, crafted
+            just for you.✨
           </p>
         </div>
-        <button className="group h-10 w-32 select-none rounded-full bg-gradient-to-b from-zinc-800 via-zinc-700 to-zinc-600 px-3 text-sm leading-8 text-zinc-50 shadow-[0_-1px_0_1px_rgba(0,0,0,0.8)_inset,0_0_0_1px_rgb(9_9_11)_inset,0_0.5px_0_1.5px_#71717a_inset] hover:bg-gradient-to-b hover:from-zinc-900 hover:via-zinc-900 hover:to-zinc-700 active:shadow-[0_3px_0_0_rgba(0,0,0)_inset]">
+        <button
+          onClick={handleBookCall}
+          className="group h-10 w-32 select-none rounded-full bg-gradient-to-b from-zinc-800 via-zinc-700 to-zinc-600 px-3 text-sm leading-8 text-zinc-50 shadow-[0_-1px_0_1px_rgba(0,0,0,0.8)_inset,0_0_0_1px_rgb(9_9_11)_inset,0_0.5px_0_1.5px_#71717a_inset] hover:bg-gradient-to-b hover:from-zinc-900 hover:via-zinc-900 hover:to-zinc-700 active:shadow-[0_3px_0_0_rgba(0,0,0)_inset]"
+        >
           <span className="block group-active:[transform:translate3d(0,1px,0)]">
             Book a Call
           </span>
@@ -74,7 +81,7 @@ const TeamCard = () => {
             </div>
             <Image
               src={images[0]}
-              alt="team-image-0"
+              alt="faisal004"
               height={300}
               width={400}
               className={`object-cover rounded-lg transition duration-500 ${
@@ -87,8 +94,8 @@ const TeamCard = () => {
               <Teammembercard
                 imageSrc={images[0]}
                 name="Faisal Husain"
-                role="Software Developer"
-                description="Hi, I am working as a Software Developer."
+                role="Frontend Developer"
+                description="I specialize in creating visually captivating and user-centric frontends using the latest technologies like Next.js and React."
                 socials={{
                   github: 'https://github.com/faisal004',
                   linkedin: 'https://www.linkedin.com/in/faisal004/',
@@ -108,7 +115,7 @@ const TeamCard = () => {
             </div>
             <Image
               src={images[1]}
-              alt="team-image-1"
+              alt="kirtika"
               height={300}
               width={400}
               className={`object-cover rounded-lg transition duration-500 ${
@@ -119,15 +126,14 @@ const TeamCard = () => {
           <ModalBody>
             <ModalContent className="">
               <Teammembercard
-                imageSrc={images[0]}
-                name="Faisal Husain"
-                role="Software Developer"
-                description="Hi, I am working as a Software Developer."
+                imageSrc={images[1]}
+                name="Kirtika Goyal"
+                role="Marketing Specialist"
+                description="Dedicated to propelling SaaS startups forward through strategic marketing and investor engagement."
                 socials={{
-                  github: 'https://github.com/faisal004',
-                  linkedin: 'https://www.linkedin.com/in/faisal004/',
-                  twitter: 'https://x.com/faisalh004',
-                  website: 'https://www.faisalhusa.in/',
+                  github: 'https://github.com/Kirtikagoyal',
+                  linkedin: 'https://www.linkedin.com/in/kirtika-goyal/',
+                  twitter: 'https://x.com/kirtikastwt',
                 }}
               />
             </ModalContent>
@@ -142,7 +148,7 @@ const TeamCard = () => {
             </div>
             <Image
               src={images[2]}
-              alt="team-image-2"
+              alt="abir"
               height={300}
               width={400}
               className={`object-cover rounded-lg transition duration-500 ${
@@ -153,15 +159,15 @@ const TeamCard = () => {
           <ModalBody>
             <ModalContent className="">
               <Teammembercard
-                imageSrc={images[0]}
-                name="Faisal Husain"
-                role="Software Developer"
-                description="Hi, I am working as a Software Developer."
+                imageSrc={images[2]}
+                name="Abir Dutta"
+                role="Full Stack Gen AI Developer"
+                description="Proficient in building full-stack AI solutions with expertise in GEN AI, Next.js, TypeScript, and Node.js."
                 socials={{
-                  github: 'https://github.com/faisal004',
-                  linkedin: 'https://www.linkedin.com/in/faisal004/',
-                  twitter: 'https://x.com/faisalh004',
-                  website: 'https://www.faisalhusa.in/',
+                  github: 'https://github.com/DeadmanAbir',
+                  linkedin: 'https://www.linkedin.com/in/abir-dutta-408759223/',
+                  twitter: 'https://x.com/ItsDutta99',
+                  website: 'https://abir-dutta-portfolio.vercel.app/',
                 }}
               />
             </ModalContent>

@@ -13,6 +13,7 @@ export const docsConfig: DocsConfig = {
     {
       title: 'Pricing',
       href: '/pricing',
+      label: 'New',
     },
     {
       title: 'Blogs',
