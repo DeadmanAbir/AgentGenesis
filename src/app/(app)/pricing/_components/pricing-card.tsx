@@ -18,7 +18,7 @@ const PricingCard = ({
     window.location.href = mailtoUrl;
   };
   return (
-    <Card className="p-8 flex flex-col h-[600px] rounded-xl items-start justify-between shadow-[0_10px_20px_rgba(240,_46,_170,_0.7)] shadow-teal-900">
+    <Card className="p-8 flex flex-col h-[610px] rounded-xl items-start justify-between shadow-[0_10px_20px_rgba(240,_46,_170,_0.7)] shadow-teal-900">
       <div className="flex flex-col gap-4">
         <div className="dark:text-teal-400 text-teal-500">{title}</div>
         <div className="flex flex-col gap-1">
