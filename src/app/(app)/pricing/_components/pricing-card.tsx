@@ -28,7 +28,7 @@ const PricingCard = ({
         <div className="text-base dark:text-gray-200 text-gray-700">
           {details}
         </div>
-        <ul className="flex flex-col gap-4">
+        <ul className="flex flex-col gap-4 pb-4">
           {features.map((feature: any, index: any) => (
             <li key={index} className="flex items-center gap-1">
               <svg
