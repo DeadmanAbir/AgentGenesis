@@ -1,6 +1,7 @@
 import { Github, Globe, Linkedin, Twitter } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { TextEncrypted } from './text-encrypted';
 
 const Teammembercard = ({
   imageSrc,
@@ -34,16 +35,20 @@ const Teammembercard = ({
         />
       </div>
 
-      <div className="animate-text-animate-2 flex flex-col gap-3 justify-between items-center md:items-start">
+      <div className=" flex flex-col gap-3 justify-between items-center md:items-start">
         <div className="flex flex-col gap-2 items-center md:items-start">
-          <div className="text-4xl font-bold">{name}</div>
-          <div className="text-xl text-gray-500">{role}</div>
+          <div className="text-4xl font-bold">
+            <TextEncrypted text={name} />
+          </div>
+          <div className="text-xl text-gray-500">
+            <TextEncrypted text={role} interval={120} />
+          </div>
           <div className="text-lg text-gray-500 text-center md:text-left">
-            {description}
+            <TextEncrypted text={description} interval={20} />
           </div>
         </div>
 
-        <div className="flex gap-4 mt-4">
+        <div className="flex gap-4 mt-4 animate-text-animate-2">
           {socials.github && (
             <Link
               href={socials.github}
