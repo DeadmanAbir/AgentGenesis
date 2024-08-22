@@ -1,7 +1,8 @@
 import Link from 'next/link';
 const Banner = () => {
   return (
-    <div className="relative h-[800px] overflow-hidden  flex items-center justify-center ">
+    // changed h-[800px] to md:h-[800px]
+    <div className="relative md:h-[800px] overflow-hidden  flex items-center justify-center ">
       <div className="absolute inset-0 h-full w-full pointer-events-none z-0 hidden md:block">
         <div className="absolute inset-0 h-full w-full bg-white dark:bg-black pointer-events-none [mask-image:radial-gradient(ellipse_at_center,transparent,white)]"></div>
         <div className="flex">
@@ -4337,7 +4338,6 @@ const Banner = () => {
           </div>
         </div>
       </div>
-
       <div className=" relative items-center justify-center z-40   mb-20 rounded-lg md:p-20 p-5 bg-gradient-to-br from-slate-800  to-zinc-900  max-w-[1440px] w-full mx-4 ">
         <div className="absolute rounded-md inset-0 w-full h-full opacity-10  [mask-image:radial-gradient(#fff,transparent,75%)]  bg-[url('/noise.webp')]  bg-contain z-0"></div>
 
