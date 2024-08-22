@@ -2,7 +2,7 @@ import Link from 'next/link';
 const Banner = () => {
   return (
     // changed h-[800px] to md:h-[800px]
-    <div className="relative md:h-[800px] overflow-hidden  flex items-center justify-center ">
+    <div className="relative h-[400px] md:h-[800px] overflow-hidden  flex items-center justify-center ">
       <div className="absolute inset-0 h-full w-full pointer-events-none z-0 hidden md:block">
         <div className="absolute inset-0 h-full w-full bg-white dark:bg-black pointer-events-none [mask-image:radial-gradient(ellipse_at_center,transparent,white)]"></div>
         <div className="flex">
