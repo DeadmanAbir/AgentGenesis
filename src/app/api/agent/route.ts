@@ -80,9 +80,13 @@ const handleCompany = async (
 };
 
 export async function POST(request: NextRequest) {
+  let url = '';
+
   try {
     const body = await request.json();
-    const { url, type, apiKey, proxyUrlKey, model } = validateRequestBody(body);
+    ({ url } = validateRequestBody(body));
+
+    const { type, apiKey, proxyUrlKey, model } = validateRequestBody(body);
 
     const tool = new LinkedinTool({ apiKey: proxyUrlKey });
     const chatOpenAI = new ChatOpenAI({ apiKey, model: 'gpt-4o' });
@@ -97,11 +101,11 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, data });
   } catch (err: any) {
-    console.error('Error in POST:', err);
+    console.error(`Error in POST with URL ${url}:`, err);
     return NextResponse.json({
       success: false,
       status: 500,
-      error: err.message,
+      error: `Error processing URL ${url}: ${err.message}`,
     });
   }
 }
