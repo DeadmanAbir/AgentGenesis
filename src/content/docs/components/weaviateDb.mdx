@@ -1,0 +1,601 @@
+---
+title: Weaviate DB
+description: Leverage Weaviate's vector database to unlock the full potential of semantic search and build powerful Retrieval-Augmented Generations (RAGs).
+---
+
+<Tabs defaultValue="preview">
+
+<TabsList>
+  <TabsTrigger value="preview">Preview</TabsTrigger>
+  <TabsTrigger value="code">Code</TabsTrigger>
+</TabsList>
+
+<TabsContent value="preview">
+  <ComponentPreviewTemp>
+    <WeaviateDbDemo />
+  </ComponentPreviewTemp>
+</TabsContent>
+
+<TabsContent value="code">
+
+<CodeBlockWrapper>
+
+```tsx showLineNumbers 
+import { WeaviateDb, WeaviateConnectionConfig } from "@/utils/weaviateDb";
+import { OpenAIEmbeddingClass } from "@/utils/openAiEmbedding";
+ 
+// Connecting to Weaviate Cloud
+
+const weaviateConfig: WeaviateConnectionConfig = {
+  type: "Cloud",
+  instanceUrl: process.env.WEAVIATE_INSTANCE_URL,
+  apiKey: process.env.WEAVIATE_INSTANCE_API_KEY,
+};
+ 
+const weaviateClient = await WeaviateDb.create(weaviateConfig);
+ 
+const embeddingModel = new OpenAIEmbeddingClass({
+  apiKey: process.env.OPENAI_API_KEY,
+  modelName: "text-embedding-3-large",
+});
+ 
+// Deleting a collection
+const deletedCollection = await weaviateClient.deleteCollection("Collection_Name");
+
+// Getting details of a collection
+const collectionDetails = await weaviateClient.getCollection("Collection_Name", {
+  returnMetadata: "all",
+  includeVector: true,
+  // many more params
+});
+
+// Check any collection
+const collectionExists = await weaviateClient.checkCollectionExists("Collection_Name");
+
+// Updating a collection
+const updatedCollection = await weaviateClient.updateCollection("Update", "Collection_Name", {
+  id: "ed89d9e7-4c9d-4a6a-8d20-095cb0026f54",
+  properties: {
+    points: 100,
+  },
+});
+
+const replacedCollection = await weaviateClient.updateCollection("Replace", "Collection_Name", {
+  id: "ed89d9e7-4c9d-4a6a-8d20-095cb0026f54",
+  properties: {
+    answer: "Replaced",
+    // The other properties will be deleted
+  },
+});
+
+// Creating collections and adding documents
+const documentsData = await embeddingModel.embedDocuments([
+  "The powerhouse of the cell is the mitochondria",
+  "Buildings are made out of brick",
+  "Mitochondria are made out of lipids",
+  "The 2024 Olympics are in Paris",
+]);
+ 
+const createdCollection = await weaviateClient.addDocuments(
+  { name: "Collection_Name" },
+  [
+    "The powerhouse of the cell is the mitochondria",
+    "Buildings are made out of brick",
+    "Mitochondria are made out of lipids",
+    "The 2024 Olympics are in Paris",
+  ],
+  documentsData
+);
+ 
+// Retrieval
+const queryVector = await embeddingModel.embedText("Olympics");
+const vectorSearchResults = await weaviateClient.fromCollection(
+  "VectorSearch",
+  queryVector,
+  "Collection_Name",
+  { returnMetadata: "all", includeVector: false, limit: 2 }
+);
+```
+</CodeBlockWrapper>
+
+</TabsContent>
+
+</Tabs>
+
+## Installation
+
+<Steps>
+
+<Step>Install peer dependencies:</Step>
+
+```bash
+npm install weaviate-client
+```
+
+<Step>Add Environment Variables</Step>
+
+```tsx title=".env" showLineNumbers {}
+WEAVIATE_INSTANCE_API_KEY='YOUR_SAMPLE_KEY'
+WEAVIATE_INSTANCE_URL='YOUR_SAMPLE_KEY'
+/* You can get one from - https://console.weaviate.cloud */
+```
+
+<Step>Copy the code</Step>
+
+Add the following code to your `utils/weaviateDb.ts` file:
+
+<CodeBlockWrapper>
+```tsx title="weaviateDb.ts" showLineNumbers {}
+import weaviate, {
+  BaseHybridOptions,
+  BaseNearOptions,
+  BaseNearTextOptions,
+  Collection,
+  CollectionConfigCreate,
+  ConnectToCustomOptions,
+  FetchObjectsOptions,
+  generateUuid5,
+  ReplaceObject,
+  UpdateObject,
+  WeaviateClient,
+  WeaviateReturn,
+} from "weaviate-client";
+
+export interface WeaviateConnectionConfig {
+  type: "Cloud" | "Local" | "Custom";
+  WEAVIATE_INSTANCE_URL?: string;
+  WEAVIATE_INSTANCE_API_KEY?: string;
+  customConfig?: ConnectToCustomOptions;
+}
+
+export class WeaviateDb {
+  private client: WeaviateClient | null = null;
+  private readonly config: WeaviateConnectionConfig;
+
+  private constructor(config: WeaviateConnectionConfig) {
+    this.config = config;
+  }
+
+  static async create(config: WeaviateConnectionConfig): Promise<WeaviateDb> {
+    const instance = new WeaviateDb(config);
+    await instance.initializeClient();
+    return instance;
+  }
+
+  private async initializeClient(): Promise<void> {
+    try {
+      switch (this.config.type) {
+        case "Cloud":
+          if (
+            !this.config.WEAVIATE_INSTANCE_URL ||
+            !this.config.WEAVIATE_INSTANCE_API_KEY
+          ) {
+            throw new Error(
+              "Instance URL and API Key are required for Cloud connection."
+            );
+          }
+          this.client = await weaviate.connectToWeaviateCloud(
+            this.config.WEAVIATE_INSTANCE_URL,
+            {
+              authCredentials: new weaviate.ApiKey(
+                this.config.WEAVIATE_INSTANCE_API_KEY
+              ),
+              headers: this.config.customConfig?.headers,
+              timeout: this.config.customConfig?.timeout,
+              skipInitChecks: this.config.customConfig?.skipInitChecks,
+            }
+          );
+          break;
+        case "Local":
+          this.client = await weaviate.connectToLocal({
+            host: this.config.customConfig?.httpHost,
+            port: this.config.customConfig?.httpPort,
+            grpcPort: this.config.customConfig?.grpcPort,
+            authCredentials: new weaviate.ApiKey(
+              this.config.WEAVIATE_INSTANCE_API_KEY || ""
+            ),
+            headers: this.config.customConfig?.headers,
+            timeout: this.config.customConfig?.timeout,
+            skipInitChecks: this.config.customConfig?.skipInitChecks,
+          });
+          break;
+        case "Custom":
+          if (!this.config.customConfig) {
+            throw new Error(
+              "Custom configuration is required for Custom connection."
+            );
+          }
+          this.client = await weaviate.connectToCustom({
+            ...this.config.customConfig,
+            authCredentials: new weaviate.ApiKey(
+              this.config.WEAVIATE_INSTANCE_API_KEY || ""
+            ),
+          });
+          break;
+        default:
+          throw new Error("Unsupported connection type.");
+      }
+    } catch (error) {
+      console.error("Failed to initialize Weaviate client:", error);
+      throw error;
+    }
+  }
+
+  private getClientOrThrow(): WeaviateClient {
+    if (!this.client) {
+      throw new Error("Client not initialized.");
+    }
+    return this.client;
+  }
+
+  async getCollection(
+    collectionName: string,
+    opts?: FetchObjectsOptions<undefined>
+  ): Promise<WeaviateReturn<undefined>> {
+    const client = this.getClientOrThrow();
+    return client.collections
+      .get(collectionName)
+      .query.fetchObjects({ ...opts });
+  }
+
+  async checkCollectionExists(collectionName: string): Promise<boolean> {
+    const client = this.getClientOrThrow();
+    return client.collections.exists(collectionName);
+  }
+
+  async deleteCollection(collectionName: string): Promise<void> {
+    const exists = await this.checkCollectionExists(collectionName);
+    if (exists) {
+      const client = this.getClientOrThrow();
+      await client.collections.delete(collectionName);
+    }
+  }
+
+  async createCollection(
+    props: CollectionConfigCreate<undefined, string>
+  ): Promise<Collection<undefined, string>> {
+    const client = this.getClientOrThrow();
+    return client.collections.create({ ...props });
+  }
+
+  async addDocuments(
+    options: CollectionConfigCreate<undefined, string>,
+    documents: string[],
+    vectors?: number[][],
+    ids?: string[]
+  ): Promise<string[]> {
+    const client = this.getClientOrThrow();
+
+    if (!options.vectorizers && !vectors) {
+      throw new Error(
+        "Vectors are required when vectorizers are not provided."
+      );
+    }
+
+    await this.createCollection({ ...options });
+
+    const documentIds =
+      ids ?? documents.map((content) => generateUuid5(options.name, content));
+
+    const batchSize = 100;
+    const dataBatch = documents.map((document, index) => ({
+      id: documentIds[index],
+      vectors: options.vectorizers ? undefined : vectors![index],
+      properties: { text: document },
+    }));
+
+    const collection = client.collections.get(options.name);
+    for (let i = 0; i < dataBatch.length; i += batchSize) {
+      await collection.data.insertMany(dataBatch.slice(i, i + batchSize));
+    }
+
+    return documentIds;
+  }
+
+  async fromCollection(
+    type: "VectorSearch",
+    content: number[],
+    collectionName: string,
+    opts?: BaseNearOptions<undefined>
+  ): Promise<WeaviateReturn<undefined>>;
+
+  async fromCollection(
+    type: "TextSearch",
+    content: string[] | string,
+    collectionName: string,
+    opts?: BaseNearTextOptions<undefined>
+  ): Promise<WeaviateReturn<undefined>>;
+
+  async fromCollection(
+    type: "HybridSearch",
+    content: string,
+    collectionName: string,
+    opts?: BaseHybridOptions<undefined>
+  ): Promise<WeaviateReturn<undefined>>;
+
+  async fromCollection(
+    type: "ImageSearch",
+    content: string | Buffer,
+    collectionName: string,
+    opts?: BaseNearOptions<undefined>
+  ): Promise<WeaviateReturn<undefined>>;
+
+  async fromCollection(
+    type: "ObjectSearch",
+    content: string,
+    collectionName: string,
+    opts?: BaseNearOptions<undefined>
+  ): Promise<WeaviateReturn<undefined>>;
+
+  async fromCollection(
+    type:
+      | "VectorSearch"
+      | "TextSearch"
+      | "HybridSearch"
+      | "ImageSearch"
+      | "ObjectSearch",
+    content: number[] | string[] | string | Buffer,
+    collectionName: string,
+    opts?:
+      | BaseNearOptions<undefined>
+      | BaseNearTextOptions<undefined>
+      | BaseHybridOptions<undefined>
+  ): Promise<WeaviateReturn<undefined>> {
+    const client = this.getClientOrThrow();
+    const myCollection = client.collections.get(collectionName);
+
+    switch (type) {
+      case "VectorSearch":
+        return myCollection.query.nearVector(
+          content as number[],
+          opts as BaseNearOptions<undefined>
+        );
+      case "TextSearch":
+        return myCollection.query.nearText(
+          content as string | string[],
+          opts as BaseNearTextOptions<undefined>
+        );
+      case "HybridSearch":
+        return myCollection.query.hybrid(
+          content as string,
+          opts as BaseHybridOptions<undefined>
+        );
+      case "ImageSearch":
+        return myCollection.query.nearImage(
+          content as string | Buffer,
+          opts as BaseNearOptions<undefined>
+        );
+      case "ObjectSearch":
+        return myCollection.query.nearObject(
+          content as string,
+          opts as BaseNearOptions<undefined>
+        );
+      default:
+        throw new Error("Invalid search type.");
+    }
+  }
+
+  async updateCollection(
+    type: "Update",
+    collectionName: string,
+    objs: UpdateObject<undefined>
+  ): Promise<void>;
+
+  async updateCollection(
+    type: "Replace",
+    collectionName: string,
+    objs: ReplaceObject<undefined>
+  ): Promise<void>;
+
+  async updateCollection(
+    type: "Update" | "Replace",
+    collectionName: string,
+    objs: UpdateObject<undefined> | ReplaceObject<undefined>
+  ): Promise<void> {
+    const client = this.getClientOrThrow();
+    const myCollection = client.collections.get(collectionName);
+
+    if (type === "Update") {
+      await myCollection.data.update(objs as UpdateObject<undefined>);
+    } else {
+      await myCollection.data.replace(objs as ReplaceObject<undefined>);
+    }
+  }
+}
+
+```
+
+</CodeBlockWrapper>
+</Steps>
+
+## Usage
+
+
+### Initialize client
+
+Initialize the WeaviateDB client, and for vector embeddings, we're using [OpenAIEmbeddings](https://agentgenesis.dev/docs/components/openAiEmbedding) with [Weaviate Cloud](https://console.weaviate.cloud).
+
+There are also two other connection options: `Local` and `Custom`. Be sure to adjust the `type` accordingly.
+```tsx showLineNumbers 
+import { WeaviateDb, WeaviateConnectionConfig } from "@/utils/weaviateDb";
+import { OpenAIEmbeddingClass } from "@/utils/openAiEmbedding";
+
+const weaviateConfig: WeaviateConnectionConfig = {
+  type: "Cloud",
+  instanceUrl: process.env.WEAVIATE_INSTANCE_URL,
+  apiKey: process.env.WEAVIATE_INSTANCE_API_KEY,
+};
+
+const weaviateClient = await WeaviateDb.create(weaviateConfig);
+
+const embeddingModel = new OpenAIEmbeddingClass({
+  apiKey: process.env.OPENAI_API_KEY,
+  modelName: "text-embedding-3-large",
+});
+
+```
+### Deleting a collection
+
+```tsx showLineNumbers 
+const deletedCollection = await weaviateClient.deleteCollection("Collection_Name");
+```
+
+### Get details of a collection
+
+Retrieving the details of a collection and its associated objects.
+
+```tsx showLineNumbers 
+const collectionDetails = await weaviateClient.getCollection("Collection_Name", {
+  returnMetadata: "all",
+  includeVector: true,
+  // many more params
+});
+```
+### Checking the existence of any collection
+
+```tsx showLineNumbers 
+const collectionExists = await weaviateClient.checkCollectionExists("Collection_Name");
+```
+
+### Updating a collection
+
+There are two methods to modify a collection:
+
+1) Update
+2) Replace
+
+First, we'll walk through how to update a collection. For more details, refer to the [Weaviate Docs](https://weaviate.io/developers/weaviate/manage-data/update).
+
+```tsx showLineNumbers 
+const updatedCollection = await weaviateClient.updateCollection("Update", "Collection_Name", {
+  id: "ed89d9e7-4c9d-4a6a-8d20-095cb0026f54",
+  properties: {
+    points: 100,
+  },
+});
+```
+When replacing the content of a collection, you can replace the entire object by providing the collection name, ID, and the new object.
+
+```tsx showLineNumbers 
+const replacedCollection = await weaviateClient.updateCollection("Replace", "Collection_Name", {
+  id: "ed89d9e7-4c9d-4a6a-8d20-095cb0026f54",
+  properties: {
+    answer: "Replaced",
+    // The other properties will be deleted
+  },
+});
+```
+
+### Creating a collection
+There are two ways to create a collection:
+
+1) By providing vectors for the content
+2) By using vectorizers
+First, we'll demonstrate how to use OpenAIEmbeddings to vectorize the content and add it to a new collection.
+
+```tsx showLineNumbers 
+const documentsData = await embeddingModel.embedDocuments([
+  "The powerhouse of the cell is the mitochondria",
+  "Buildings are made out of brick",
+  "Mitochondria are made out of lipids",
+  "The 2024 Olympics are in Paris",
+]);
+
+const createdCollection = await weaviateClient.addDocuments(
+  { name: "Collection_Name" },
+  [
+    "The powerhouse of the cell is the mitochondria",
+    "Buildings are made out of brick",
+    "Mitochondria are made out of lipids",
+    "The 2024 Olympics are in Paris",
+  ],
+  documentsData
+);
+
+```
+If you prefer not to provide vectors manually, you can use Weaviate's built-in [vectorizers](https://weaviate.io/developers/weaviate/modules/retriever-vectorizer-modules).
+
+```tsx showLineNumbers 
+const createdCollectionWithVectorizer = await weaviateClient.addDocuments(
+  {
+    name: "Collection_Name",
+    vectorizers: vectorizer.text2VecOpenAI(),
+  },
+  [
+    "The powerhouse of the cell is the mitochondria",
+    "Buildings are made out of brick",
+    "Mitochondria are made out of lipids",
+    "The 2024 Olympics are in Paris",
+  ]
+);
+
+```
+### Content Retrieval
+
+We have several options for retrieving relevant documents from a collection, including `Vector Search`, `Hybrid Search`, `Text Search`, `Image Search`, and `Object Search`.
+
+To perform a Vector Search, you'll need to manually provide the query's vectors. For example, we use OpenAIEmbeddings to vectorize the query.
+
+```tsx showLineNumbers 
+const queryVector = await embeddingModel.embedText("Olympics");
+const vectorSearchResults = await weaviateClient.fromCollection(
+  "VectorSearch",
+  queryVector,
+  "Collection_Name",
+  { returnMetadata: "all", includeVector: false, limit: 2 }
+);
+```
+
+For Text Search or Hybrid Search, ensure that your collection has vectorizers configured.
+
+```tsx showLineNumbers 
+// Hybrid search
+const hybridSearchResults = await weaviateClient.fromCollection(
+  "HybridSearch",
+  "Olympics",
+  "Collection_Name",
+  { returnMetadata: "all", includeVector: false, limit: 2 }
+);
+
+// Text search
+const textSearchResults = await weaviateClient.fromCollection(
+  "TextSearch",
+  "Olympics",
+  "Collection_Name"
+);
+```
+
+
+## Props
+
+### addDocuments
+
+| Prop      | Type                      | Description                                                               |
+| --------- | ------------------------- | ------------------------------------------------------------------------- |
+| options   | `CollectionConfigCreate`   | Includes the name and description of the collection and many more.                      |
+| documents | `string[]`                | Content to be added.                                                      |
+| vectors   | `number[][]?`             | Vectors of the documents, if a vectorizer is not configured.              |
+| ids       | `string[]?`               | Optional IDs to map the provided documents into the collection.           |
+
+
+### fromCollection
+
+
+| Prop            | Type                                                           | Description                                           |
+| --------------- | -------------------------------------------------------------- | ----------------------------------------------------- |
+| type            | `VectorSearch \| TextSearch \| HybridSearch \| ImageSearch \| ObjectSearch` | Specifies the type of search.                         |
+| content         | `number[] \| string[] \| string \| Buffer`                     | The query content to be searched.                     |
+| collectionName  | `string`                                                       | The name of the collection on which to perform the operation. |
+| BaseNearOptions | `optional`                                                     | Additional advanced configurations.                   |
+
+
+
+
+
+
+
+
+## Credits
+
+This component is built on top of [Weaviate TS Client](https://weaviate.io/developers/weaviate/client-libraries/typescript/typescript-v3)
+

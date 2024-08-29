@@ -42,6 +42,17 @@ export const docsConfig: DocsConfig = {
       ],
     },
     {
+      title: 'Vector Databases',
+      items: [
+        {
+          title: 'Weaviate DB',
+          href: '/docs/components/weaviateDb',
+          items: [],
+          label: 'New',
+        },
+      ],
+    },
+    {
       title: 'Document Loaders',
       items: [
         {
