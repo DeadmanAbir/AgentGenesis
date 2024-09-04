@@ -41,6 +41,24 @@ console.log(searchResult);
 </Tabs>
 
 ## Installation
+<Tabs defaultValue="CLI">
+
+<TabsList>
+  <TabsTrigger value="CLI">CLI</TabsTrigger>
+  <TabsTrigger value="Manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="CLI">
+```tsx
+npx agentgenesis add searchapitool
+```
+```tsx title=".env" showLineNumbers {}
+SEARCHAPI_API = "YOUR_SAMPLE_API_KEY";
+/* You can get one from - https://www.searchapi.io */
+```
+</TabsContent>
+
+<TabsContent value="Manual">
 
 <Steps>
 
@@ -160,6 +178,11 @@ export class SearchApiTool {
 
 </CodeBlockWrapper>
 </Steps>
+
+
+</TabsContent>
+
+</Tabs>
 
 ## Usage
 
