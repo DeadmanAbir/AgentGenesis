@@ -64,8 +64,8 @@ export class WikipediaCustomTool {
 
       if (results.length === 0) {
         return 'No good Wikipedia Search Result was found';
-      } 
-        return results;
+      }
+      return results;
     } catch (error) {
       console.error('Error during Wikipedia search:', error);
       return 'Error during Wikipedia search';

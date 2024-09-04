@@ -6,8 +6,10 @@ import figlet from "figlet";
 import inquirer from "inquirer";
 import fs from "fs";
 import path from "path";
+import ora from "ora";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -52,27 +54,33 @@ program
     const componentFilePath = path.join(agentGenesisPath, `${component}.ts`);
     const templateFilePath = path.join(__dirname, "components", `${component}.ts`);
 
-    if (!fs.existsSync(templateFilePath)) {
-      console.log(chalk.red(`Template for '${component}' not found.`));
-      return;
-    }
+    const spinner = ora(`Adding ${component} to your project...`).start();
 
-    if (!fs.existsSync(utilsPath)) {
-      fs.mkdirSync(utilsPath);
-      console.log(chalk.green(`Created 'utils' folder at ${utilsPath}.`));
-    }
-    if (!fs.existsSync(agentGenesisPath)) {
-      fs.mkdirSync(agentGenesisPath);
-      console.log(chalk.green(`Created 'agentgenesis' folder at ${agentGenesisPath}.`));
-    }
+    try {
+      if (!fs.existsSync(templateFilePath)) {
+        spinner.fail(`Template for '${component}' not found.`);
+        return;
+      }
 
-    const templateContent = fs.readFileSync(templateFilePath, "utf-8");
+      if (!fs.existsSync(utilsPath)) {
+        fs.mkdirSync(utilsPath);
+        spinner.succeed(`Created 'utils' folder at ${utilsPath}.`);
+      }
+      if (!fs.existsSync(agentGenesisPath)) {
+        fs.mkdirSync(agentGenesisPath);
+        spinner.succeed(`Created 'agentgenesis' folder at ${agentGenesisPath}.`);
+      }
 
-    if (!fs.existsSync(componentFilePath)) {
-      fs.writeFileSync(componentFilePath, templateContent);
-      console.log(chalk.green(`Created '${component}.ts' at ${componentFilePath}.`));
-    } else {
-      console.log(chalk.yellow(`'${component}.ts' already exists at ${componentFilePath}.`));
+      const templateContent = fs.readFileSync(templateFilePath, "utf-8");
+
+      if (!fs.existsSync(componentFilePath)) {
+        fs.writeFileSync(componentFilePath, templateContent);
+        spinner.succeed(`Created '${component}.ts' at ${componentFilePath}.`);
+      } else {
+        spinner.warn(`'${component}.ts' already exists at ${componentFilePath}.`);
+      }
+    } catch (error) {
+      spinner.fail(`Failed to add ${component}: ${error.message}`);
     }
   });
 
