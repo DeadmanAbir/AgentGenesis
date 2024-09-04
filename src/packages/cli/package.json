@@ -16,7 +16,7 @@
     "ora": "^8.1.0"
   },
   "bin": {
-    "agentgenesis-cli": "./index.js"
+    "agentgenesis": "./index.js"
   },
   "type": "module"
 }
