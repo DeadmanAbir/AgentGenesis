@@ -59,10 +59,10 @@ export class CohereReranking {
         content: documents[result.index],
         score: { relevanceScore: result.relevanceScore },
       }));
-    } 
-      return results.map((result) => ({
-        index: result.index,
-        relevanceScore: result.relevanceScore,
-      }));
+    }
+    return results.map((result) => ({
+      index: result.index,
+      relevanceScore: result.relevanceScore,
+    }));
   }
 }

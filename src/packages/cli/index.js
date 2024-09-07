@@ -333,6 +333,48 @@ program
         }
       }
     }
+    if (component === 'unstructuredLoader') {
+      let geminiaiInstalled = false;
+      try {
+        require.resolve(path.join(rootPath, 'node_modules', 'unstructured-client'));
+        geminiaiInstalled = true;
+      } catch (err) {
+        geminiaiInstalled = false;
+      }
+
+      if (!geminiaiInstalled) {
+        const { installgeminiai } = await inquirer.prompt([
+          {
+            type: 'confirm',
+            name: 'installgeminiai',
+            message:
+                "'unstructured' requires 'unstructured-client'. Would you like to install it now?",
+            default: true,
+          },
+        ]);
+
+        if (installgeminiai) {
+          const spinner = ora('Installing unstructured-client...').start();
+          try {
+            execSync(`npm install unstructured-client --include=dev`, {
+              stdio: 'inherit',
+              cwd: rootPath,
+            });
+            spinner.succeed('Successfully installed unstructured-client.');
+          } catch (error) {
+            spinner.fail(`Failed to install unstructured-client.: ${error.message}`);
+            return;
+          }
+        } else {
+          console.log(
+            chalk.red(
+              "'unstructured' cannot be added without 'unstructured-client.'. Please install it and try again.",
+            ),
+          );
+          return;
+        }
+      }
+    }
     const utilsPath = path.join(rootPath, 'utils');
     const agentGenesisPath = path.join(utilsPath, 'agentgenesis');
     const componentFilePath = path.join(agentGenesisPath, `${component}.ts`);

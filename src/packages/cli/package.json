@@ -16,7 +16,8 @@
     "expr-eval": "^2.0.2",
     "figlet": "^1.7.0",
     "inquirer": "^10.2.0",
-    "ora": "^8.1.0"
+    "ora": "^8.1.0",
+    "unstructured-client": "^0.16.0"
   },
   "bin": {
     "agentgenesis": "./index.js"
