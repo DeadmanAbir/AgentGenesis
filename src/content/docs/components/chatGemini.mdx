@@ -106,6 +106,25 @@ for await (const chunk of responseTextWithStream.stream) {
 </Tabs>
 
 ## Installation
+<Tabs defaultValue="CLI">
+
+<TabsList>
+  <TabsTrigger value="CLI">CLI</TabsTrigger>
+  <TabsTrigger value="Manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="CLI">
+```bash
+ npx agentgenesis add chatGemini
+```
+```tsx title=".env" showLineNumbers {}
+GEMINI_API_KEY = "YOUR_SAMPLE_API_KEY";
+/* You can get one from - https://aistudio.google.com/app/apikey */
+```
+
+</TabsContent>
+
+<TabsContent value="Manual">
 
 <Steps>
 
@@ -342,6 +361,13 @@ export class ChatGemini {
 
 </CodeBlockWrapper>
 </Steps>
+
+
+
+</TabsContent>
+
+</Tabs>
+
 
 ## Usage
 

@@ -123,7 +123,48 @@ program
         }
       }
     }
+    if (component === 'chatGemini') {
+      let geminiaiInstalled = false;
+      try {
+        require.resolve(path.join(rootPath, 'node_modules', '@google/generative-ai'));
+        geminiaiInstalled = true;
+      } catch (err) {
+        geminiaiInstalled = false;
+      }
 
+      if (!geminiaiInstalled) {
+        const { installgeminiai } = await inquirer.prompt([
+          {
+            type: 'confirm',
+            name: 'installgeminiai',
+            message:
+              "'chatgeminiai' requires '@google/generative-ai'. Would you like to install it now?",
+            default: true,
+          },
+        ]);
+
+        if (installgeminiai) {
+          const spinner = ora('Installing @google/generative-ai...').start();
+          try {
+            execSync(`npm install @google/generative-ai`, {
+              stdio: 'inherit',
+              cwd: rootPath,
+            });
+            spinner.succeed('Successfully installed geminiai.');
+          } catch (error) {
+            spinner.fail(`Failed to install geminiai: ${error.message}`);
+            return;
+          }
+        } else {
+          console.log(
+            chalk.red(
+              "'Chatgeminiai' cannot be added without 'geminiai'. Please install it and try again.",
+            ),
+          );
+          return;
+        }
+      }
+    }
     const utilsPath = path.join(rootPath, 'utils');
     const agentGenesisPath = path.join(utilsPath, 'agentgenesis');
     const componentFilePath = path.join(agentGenesisPath, `${component}.ts`);
