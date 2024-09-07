@@ -291,6 +291,48 @@ program
         }
       }
     }
+    if (component === 'reranker') {
+      let geminiaiInstalled = false;
+      try {
+        require.resolve(path.join(rootPath, 'node_modules', 'cohere-ai'));
+        geminiaiInstalled = true;
+      } catch (err) {
+        geminiaiInstalled = false;
+      }
+
+      if (!geminiaiInstalled) {
+        const { installgeminiai } = await inquirer.prompt([
+          {
+            type: 'confirm',
+            name: 'installgeminiai',
+            message:
+              "'reranker' requires 'reranker'. Would you like to install it now?",
+            default: true,
+          },
+        ]);
+
+        if (installgeminiai) {
+          const spinner = ora('Installing reranker...').start();
+          try {
+            execSync(`npm i -s cohere-ai`, {
+              stdio: 'inherit',
+              cwd: rootPath,
+            });
+            spinner.succeed('Successfully installed reranker.');
+          } catch (error) {
+            spinner.fail(`Failed to install reranker: ${error.message}`);
+            return;
+          }
+        } else {
+          console.log(
+            chalk.red(
+              "'reranker' cannot be added without 'cohere'. Please install it and try again.",
+            ),
+          );
+          return;
+        }
+      }
+    }
     const utilsPath = path.join(rootPath, 'utils');
     const agentGenesisPath = path.join(utilsPath, 'agentgenesis');
     const componentFilePath = path.join(agentGenesisPath, `${component}.ts`);

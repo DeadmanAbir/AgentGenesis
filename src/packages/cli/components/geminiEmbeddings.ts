@@ -78,8 +78,8 @@ export class GeminiEmbeddings {
     const embeddings = responses.flatMap((res, idx) => {
       if (res.status === 'fulfilled') {
         return res.value.embeddings.map((e) => e.values || []);
-      } 
-        return Array(batchEmbedChunks[idx].length).fill([]);
+      }
+      return Array(batchEmbedChunks[idx].length).fill([]);
     });
 
     return embeddings;
