@@ -1,0 +1,26 @@
+{
+  "name": "cli",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.27.2",
+    "chalk": "^5.3.0",
+    "cohere-ai": "^7.13.0",
+    "commander": "^12.1.0",
+    "expr-eval": "^2.0.2",
+    "figlet": "^1.7.0",
+    "inquirer": "^10.2.0",
+    "ora": "^8.1.0",
+    "unstructured-client": "^0.16.0"
+  },
+  "bin": {
+    "agentgenesis": "./index.js"
+  },
+  "type": "module"
+}
