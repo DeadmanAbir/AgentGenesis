@@ -9,6 +9,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.27.2",
     "chalk": "^5.3.0",
     "commander": "^12.1.0",
     "expr-eval": "^2.0.2",

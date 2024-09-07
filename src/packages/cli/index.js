@@ -123,6 +123,48 @@ program
         }
       }
     }
+    if (component === 'chatAnthropic') {
+      let openaiInstalled = false;
+      try {
+        require.resolve(path.join(rootPath, 'node_modules', '@anthropic-ai/sdk'));
+        openaiInstalled = true;
+      } catch (err) {
+        openaiInstalled = false;
+      }
+
+      if (!openaiInstalled) {
+        const { installopenai } = await inquirer.prompt([
+          {
+            type: 'confirm',
+            name: 'installopenai',
+            message:
+              "'chatAnthropic' requires '@anthropic-ai/sdk'. Would you like to install it now?",
+            default: true,
+          },
+        ]);
+
+        if (installopenai) {
+          const spinner = ora('Installing @anthropic-ai/sdk...').start();
+          try {
+            execSync(`npm install @anthropic-ai/sdk`, {
+              stdio: 'inherit',
+              cwd: rootPath,
+            });
+            spinner.succeed('Successfully installed @anthropic-ai/sdk.');
+          } catch (error) {
+            spinner.fail(`Failed to install @anthropic-ai/sdk: ${error.message}`);
+            return;
+          }
+        } else {
+          console.log(
+            chalk.red(
+              "'Chatanthropic' cannot be added without '@anthropic-ai/sdk'. Please install it and try again.",
+            ),
+          );
+          return;
+        }
+      }
+    }
     if (component === 'chatGemini') {
       let geminiaiInstalled = false;
       try {
