@@ -81,6 +81,48 @@ program
         }
       }
     }
+    if (component === 'chatOpenAI') {
+      let openaiInstalled = false;
+      try {
+        require.resolve(path.join(rootPath, 'node_modules', 'openai'));
+        openaiInstalled = true;
+      } catch (err) {
+        openaiInstalled = false;
+      }
+
+      if (!openaiInstalled) {
+        const { installopenai } = await inquirer.prompt([
+          {
+            type: 'confirm',
+            name: 'installopenai',
+            message:
+              "'chatOpenAI' requires 'openai'. Would you like to install it now?",
+            default: true,
+          },
+        ]);
+
+        if (installopenai) {
+          const spinner = ora('Installing openai...').start();
+          try {
+            execSync(`npm install openai`, {
+              stdio: 'inherit',
+              cwd: rootPath,
+            });
+            spinner.succeed('Successfully installed openai.');
+          } catch (error) {
+            spinner.fail(`Failed to install openai: ${error.message}`);
+            return;
+          }
+        } else {
+          console.log(
+            chalk.red(
+              "'ChatOpenAi' cannot be added without 'openai'. Please install it and try again.",
+            ),
+          );
+          return;
+        }
+      }
+    }
 
     const utilsPath = path.join(rootPath, 'utils');
     const agentGenesisPath = path.join(utilsPath, 'agentgenesis');
