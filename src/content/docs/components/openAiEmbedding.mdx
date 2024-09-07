@@ -49,6 +49,25 @@ const documentsData = await model.embedDocuments([
 </Tabs>
 
 ## Installation
+<Tabs defaultValue="CLI">
+
+<TabsList>
+  <TabsTrigger value="CLI">CLI</TabsTrigger>
+  <TabsTrigger value="Manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="CLI">
+```bash
+ npx agentgenesis add openAIEmbeddings
+```
+```tsx title=".env" showLineNumbers {}
+OPENAI_API_KEY = "YOUR_SAMPLE_API_KEY";
+/* You can get one from - https://platform.openai.com/api-keys */
+```
+
+</TabsContent>
+
+<TabsContent value="Manual">
 
 <Steps>
 
@@ -152,6 +171,14 @@ export class OpenAIEmbeddingClass {
 
 </CodeBlockWrapper>
 </Steps>
+
+
+
+
+</TabsContent>
+
+</Tabs>
+
 
 ## Usage
 
