@@ -11,6 +11,11 @@ export const docsConfig: DocsConfig = {
       href: '/docs',
     },
     {
+      title: 'Pricing',
+      href: '/pricing',
+      label: 'New',
+    },
+    {
       title: 'Blogs',
       href: '/blogs',
     },
@@ -33,6 +38,17 @@ export const docsConfig: DocsConfig = {
           title: 'Cohere Reranker',
           href: '/docs/components/cohereReranker',
           items: [],
+        },
+      ],
+    },
+    {
+      title: 'Vector Databases',
+      items: [
+        {
+          title: 'Weaviate DB',
+          href: '/docs/components/weaviateDb',
+          items: [],
+          label: 'New',
         },
       ],
     },

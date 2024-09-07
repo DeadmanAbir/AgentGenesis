@@ -75,6 +75,12 @@ const config = {
           from: { transform: 'translateX(0)' },
           to: { transform: 'translateX(calc(-100% - var(--gap)))' },
         },
+        scan: {
+          '0%': { transform: 'translateY(-100%)', opacity: '1' },
+          '50%': { transform: 'translateY(800%)', opacity: '1' },
+          '75%': { opacity: '1' },
+          '100%': { transform: 'translateY(-100%)', opacity: '0' },
+        },
         'marquee-vertical': {
           from: { transform: 'translateY(0)' },
           to: { transform: 'translateY(calc(-100% - var(--gap)))' },
@@ -95,6 +101,8 @@ const config = {
         marquee: 'marquee var(--duration) linear infinite',
         'marquee-vertical': 'marquee-vertical var(--duration) linear infinite',
         'background-shine': 'background-shine 2s linear infinite',
+        scan: 'scan 4s ease-in-out forwards',
+        'text-animate-2': 'textAnimate 5s ease-in-out ',
       },
     },
   },
