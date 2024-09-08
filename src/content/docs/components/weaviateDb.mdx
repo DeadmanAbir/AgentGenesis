@@ -103,7 +103,26 @@ const vectorSearchResults = await weaviateClient.fromCollection(
 </Tabs>
 
 ## Installation
+<Tabs defaultValue="CLI">
 
+<TabsList>
+  <TabsTrigger value="CLI">CLI</TabsTrigger>
+  <TabsTrigger value="Manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="CLI">
+```bash
+ npx agentgenesis add weaviateDb
+```
+```tsx title=".env" showLineNumbers {}
+WEAVIATE_INSTANCE_API_KEY='YOUR_SAMPLE_KEY'
+WEAVIATE_INSTANCE_URL='YOUR_SAMPLE_KEY'
+/* You can get one from - https://console.weaviate.cloud */
+```
+
+</TabsContent>
+
+<TabsContent value="Manual">
 <Steps>
 
 <Step>Install peer dependencies:</Step>
@@ -139,10 +158,10 @@ import weaviate, {
   UpdateObject,
   WeaviateClient,
   WeaviateReturn,
-} from "weaviate-client";
+} from 'weaviate-client';
 
 export interface WeaviateConnectionConfig {
-  type: "Cloud" | "Local" | "Custom";
+  type: 'Cloud' | 'Local' | 'Custom';
   WEAVIATE_INSTANCE_URL?: string;
   WEAVIATE_INSTANCE_API_KEY?: string;
   customConfig?: ConnectToCustomOptions;
@@ -165,72 +184,72 @@ export class WeaviateDb {
   private async initializeClient(): Promise<void> {
     try {
       switch (this.config.type) {
-        case "Cloud":
+        case 'Cloud':
           if (
             !this.config.WEAVIATE_INSTANCE_URL ||
             !this.config.WEAVIATE_INSTANCE_API_KEY
           ) {
             throw new Error(
-              "Instance URL and API Key are required for Cloud connection."
+              'Instance URL and API Key are required for Cloud connection.',
             );
           }
           this.client = await weaviate.connectToWeaviateCloud(
             this.config.WEAVIATE_INSTANCE_URL,
             {
               authCredentials: new weaviate.ApiKey(
-                this.config.WEAVIATE_INSTANCE_API_KEY
+                this.config.WEAVIATE_INSTANCE_API_KEY,
               ),
               headers: this.config.customConfig?.headers,
               timeout: this.config.customConfig?.timeout,
               skipInitChecks: this.config.customConfig?.skipInitChecks,
-            }
+            },
           );
           break;
-        case "Local":
+        case 'Local':
           this.client = await weaviate.connectToLocal({
             host: this.config.customConfig?.httpHost,
             port: this.config.customConfig?.httpPort,
             grpcPort: this.config.customConfig?.grpcPort,
             authCredentials: new weaviate.ApiKey(
-              this.config.WEAVIATE_INSTANCE_API_KEY || ""
+              this.config.WEAVIATE_INSTANCE_API_KEY || '',
             ),
             headers: this.config.customConfig?.headers,
             timeout: this.config.customConfig?.timeout,
             skipInitChecks: this.config.customConfig?.skipInitChecks,
           });
           break;
-        case "Custom":
+        case 'Custom':
           if (!this.config.customConfig) {
             throw new Error(
-              "Custom configuration is required for Custom connection."
+              'Custom configuration is required for Custom connection.',
             );
           }
           this.client = await weaviate.connectToCustom({
             ...this.config.customConfig,
             authCredentials: new weaviate.ApiKey(
-              this.config.WEAVIATE_INSTANCE_API_KEY || ""
+              this.config.WEAVIATE_INSTANCE_API_KEY || '',
             ),
           });
           break;
         default:
-          throw new Error("Unsupported connection type.");
+          throw new Error('Unsupported connection type.');
       }
     } catch (error) {
-      console.error("Failed to initialize Weaviate client:", error);
+      console.error('Failed to initialize Weaviate client:', error);
       throw error;
     }
   }
 
   private getClientOrThrow(): WeaviateClient {
     if (!this.client) {
-      throw new Error("Client not initialized.");
+      throw new Error('Client not initialized.');
     }
     return this.client;
   }
 
   async getCollection(
     collectionName: string,
-    opts?: FetchObjectsOptions<undefined>
+    opts?: FetchObjectsOptions<undefined>,
   ): Promise<WeaviateReturn<undefined>> {
     const client = this.getClientOrThrow();
     return client.collections
@@ -252,7 +271,7 @@ export class WeaviateDb {
   }
 
   async createCollection(
-    props: CollectionConfigCreate<undefined, string>
+    props: CollectionConfigCreate<undefined, string>,
   ): Promise<Collection<undefined, string>> {
     const client = this.getClientOrThrow();
     return client.collections.create({ ...props });
@@ -262,13 +281,13 @@ export class WeaviateDb {
     options: CollectionConfigCreate<undefined, string>,
     documents: string[],
     vectors?: number[][],
-    ids?: string[]
+    ids?: string[],
   ): Promise<string[]> {
     const client = this.getClientOrThrow();
 
     if (!options.vectorizers && !vectors) {
       throw new Error(
-        "Vectors are required when vectorizers are not provided."
+        'Vectors are required when vectorizers are not provided.',
       );
     }
 
@@ -293,109 +312,109 @@ export class WeaviateDb {
   }
 
   async fromCollection(
-    type: "VectorSearch",
+    type: 'VectorSearch',
     content: number[],
     collectionName: string,
-    opts?: BaseNearOptions<undefined>
+    opts?: BaseNearOptions<undefined>,
   ): Promise<WeaviateReturn<undefined>>;
 
   async fromCollection(
-    type: "TextSearch",
+    type: 'TextSearch',
     content: string[] | string,
     collectionName: string,
-    opts?: BaseNearTextOptions<undefined>
+    opts?: BaseNearTextOptions<undefined>,
   ): Promise<WeaviateReturn<undefined>>;
 
   async fromCollection(
-    type: "HybridSearch",
+    type: 'HybridSearch',
     content: string,
     collectionName: string,
-    opts?: BaseHybridOptions<undefined>
+    opts?: BaseHybridOptions<undefined>,
   ): Promise<WeaviateReturn<undefined>>;
 
   async fromCollection(
-    type: "ImageSearch",
+    type: 'ImageSearch',
     content: string | Buffer,
     collectionName: string,
-    opts?: BaseNearOptions<undefined>
+    opts?: BaseNearOptions<undefined>,
   ): Promise<WeaviateReturn<undefined>>;
 
   async fromCollection(
-    type: "ObjectSearch",
+    type: 'ObjectSearch',
     content: string,
     collectionName: string,
-    opts?: BaseNearOptions<undefined>
+    opts?: BaseNearOptions<undefined>,
   ): Promise<WeaviateReturn<undefined>>;
 
   async fromCollection(
     type:
-      | "VectorSearch"
-      | "TextSearch"
-      | "HybridSearch"
-      | "ImageSearch"
-      | "ObjectSearch",
+      | 'VectorSearch'
+      | 'TextSearch'
+      | 'HybridSearch'
+      | 'ImageSearch'
+      | 'ObjectSearch',
     content: number[] | string[] | string | Buffer,
     collectionName: string,
     opts?:
       | BaseNearOptions<undefined>
       | BaseNearTextOptions<undefined>
-      | BaseHybridOptions<undefined>
+      | BaseHybridOptions<undefined>,
   ): Promise<WeaviateReturn<undefined>> {
     const client = this.getClientOrThrow();
     const myCollection = client.collections.get(collectionName);
 
     switch (type) {
-      case "VectorSearch":
+      case 'VectorSearch':
         return myCollection.query.nearVector(
           content as number[],
-          opts as BaseNearOptions<undefined>
+          opts as BaseNearOptions<undefined>,
         );
-      case "TextSearch":
+      case 'TextSearch':
         return myCollection.query.nearText(
           content as string | string[],
-          opts as BaseNearTextOptions<undefined>
+          opts as BaseNearTextOptions<undefined>,
         );
-      case "HybridSearch":
+      case 'HybridSearch':
         return myCollection.query.hybrid(
           content as string,
-          opts as BaseHybridOptions<undefined>
+          opts as BaseHybridOptions<undefined>,
         );
-      case "ImageSearch":
+      case 'ImageSearch':
         return myCollection.query.nearImage(
           content as string | Buffer,
-          opts as BaseNearOptions<undefined>
+          opts as BaseNearOptions<undefined>,
         );
-      case "ObjectSearch":
+      case 'ObjectSearch':
         return myCollection.query.nearObject(
           content as string,
-          opts as BaseNearOptions<undefined>
+          opts as BaseNearOptions<undefined>,
         );
       default:
-        throw new Error("Invalid search type.");
+        throw new Error('Invalid search type.');
     }
   }
 
   async updateCollection(
-    type: "Update",
+    type: 'Update',
     collectionName: string,
-    objs: UpdateObject<undefined>
+    objs: UpdateObject<undefined>,
   ): Promise<void>;
 
   async updateCollection(
-    type: "Replace",
+    type: 'Replace',
     collectionName: string,
-    objs: ReplaceObject<undefined>
+    objs: ReplaceObject<undefined>,
   ): Promise<void>;
 
   async updateCollection(
-    type: "Update" | "Replace",
+    type: 'Update' | 'Replace',
     collectionName: string,
-    objs: UpdateObject<undefined> | ReplaceObject<undefined>
+    objs: UpdateObject<undefined> | ReplaceObject<undefined>,
   ): Promise<void> {
     const client = this.getClientOrThrow();
     const myCollection = client.collections.get(collectionName);
 
-    if (type === "Update") {
+    if (type === 'Update') {
       await myCollection.data.update(objs as UpdateObject<undefined>);
     } else {
       await myCollection.data.replace(objs as ReplaceObject<undefined>);
@@ -407,6 +426,13 @@ export class WeaviateDb {
 
 </CodeBlockWrapper>
 </Steps>
+
+
+
+
+</TabsContent>
+
+</Tabs>
 
 ## Usage
 

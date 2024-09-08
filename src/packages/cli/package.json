@@ -17,7 +17,8 @@
     "figlet": "^1.7.0",
     "inquirer": "^10.2.0",
     "ora": "^8.1.0",
-    "unstructured-client": "^0.16.0"
+    "unstructured-client": "^0.16.0",
+    "weaviate-client": "^3.1.4"
   },
   "bin": {
     "agentgenesis": "./index.js"

@@ -81,6 +81,48 @@ program
         }
       }
     }
+    if (component === 'weaviateDb') {
+      let weaviateClientInstalled = false;
+      try {
+        require.resolve(path.join(rootPath, 'node_modules', 'weaviate-client'));
+        weaviateClientInstalled = true;
+      } catch (err) {
+        weaviateClientInstalled = false;
+      }
+
+      if (!weaviateClientInstalled) {
+        const { installWeaviateClient } = await inquirer.prompt([
+          {
+            type: 'confirm',
+            name: 'installWeaviateClient',
+            message:
+              "'Weaviate DB' requires 'weaviate-client'. Would you like to install it now?",
+            default: true,
+          },
+        ]);
+
+        if (installWeaviateClient) {
+          const spinner = ora('Installing weaviate-client...').start();
+          try {
+            execSync(`npm install weaviate-client`, {
+              stdio: 'inherit',
+              cwd: rootPath,
+            });
+            spinner.succeed('Successfully installed weaviate-client.');
+          } catch (error) {
+            spinner.fail(`Failed to install weaviate-client: ${error.message}`);
+            return;
+          }
+        } else {
+          console.log(
+            chalk.red(
+              "'Weaviate DB' cannot be added without 'weaviate-client'. Please install it and try again.",
+            ),
+          );
+          return;
+        }
+      }
+    }
     if (component === 'chatOpenAI') {
       let openaiInstalled = false;
       try {
