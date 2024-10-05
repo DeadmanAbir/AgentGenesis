@@ -69,7 +69,7 @@ const Features = () => {
           </div>
           <div className="tracking-wide leading-7 w-full text-center md:text-left ">
             Our Chat Models allows you to generate responses to text inputs from
-            differnt LLMs. OpenAI, Gemini and Anthrotopic are supported for now.
+            different LLMs. OpenAI, Gemini and Anthropic are supported for now.
           </div>
           <Link
             href="/docs/components/chatOpenAi"
