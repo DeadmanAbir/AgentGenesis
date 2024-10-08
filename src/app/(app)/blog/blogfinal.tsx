@@ -51,7 +51,7 @@ export default async function Blog() {
                   height={400}
                   className="rounded border border-zinc-200"
                   src={post.coverImage.url}
-                  alt=""
+                  alt={post.title}
                 />
               </Link>
               <div>
