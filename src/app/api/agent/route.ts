@@ -3,6 +3,7 @@ import { LinkedinTool } from '@/utils/linkedinTool';
 import { ChatOpenAI } from '@/utils/chatOpenAi';
 import { z } from 'zod';
 import { ChatGemini } from '@/utils/chatGemini';
+import { ratelimit } from './core';
 
 export const maxDuration = 300;
 
@@ -88,6 +89,23 @@ export async function POST(request: NextRequest) {
 
     const { type, apiKey, proxyUrlKey, model } = validateRequestBody(body);
 
+    const detectedIp =
+      request.ip ||
+      (request.headers.get('x-forwarded-for') ?? '127.0.0.1').split(',')[0];
+    const { success, limit, reset, remaining } =
+      await ratelimit.limit(detectedIp);
+    if (!success) {
+      const data = {
+        limit,
+        remaining,
+        reset,
+      };
+      return NextResponse.json({
+        success: false,
+        status: 429,
+        data,
+      });
+    }
     const tool = new LinkedinTool({ apiKey: proxyUrlKey });
     const chatOpenAI = new ChatOpenAI({ apiKey, model: 'gpt-4o' });
     const chatGemini = new ChatGemini({ apiKey, model: 'gemini-1.5-flash' });
