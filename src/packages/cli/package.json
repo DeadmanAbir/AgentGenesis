@@ -3,24 +3,32 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "node dist/agentgenesis.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.27.2",
+    "@anthropic-ai/sdk": "^0.27.3",
+    "@google/generative-ai": "^0.21.0",
+    "@langchain/openai": "^0.3.5",
     "chalk": "^5.3.0",
     "cohere-ai": "^7.13.0",
     "commander": "^12.1.0",
     "expr-eval": "^2.0.2",
-    "figlet": "^1.7.0",
-    "inquirer": "^10.2.0",
+    "figlet": "^1.8.0",
+    "inquirer": "^10.2.2",
+    "openai": "^4.67.3",
     "ora": "^8.1.0",
-    "unstructured-client": "^0.16.0"
+    "unstructured-client": "^0.16.0",
+    "weaviate-client": "^3.1.5"
   },
   "bin": {
     "agentgenesis": "./index.js"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "@types/figlet": "^1.7.0"
+  }
 }
