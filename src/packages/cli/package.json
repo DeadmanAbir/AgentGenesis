@@ -1,34 +1,13 @@
 {
-  "name": "agentgenesis-cli",
+  "name": "cli",
   "version": "1.0.0",
-  "description": "Add components to your apps.",
-  "publishConfig": {
-    "access": "public"
-  },
-  "license": "MIT",
-  "author": {
-    "name": "agentgenesis",
-    "url": "https://agentgenesis.dev/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/DeadmanAbir/AgentGenesis",
-    "directory": "src/packages/cli"
-  },
-  "keywords": [
-    "components",
-    "gen-ai",
-    "agents",
-    "code-snippets",
-    "agentgenesis"
-  ],
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
-  "homepage": "https://github.com/DeadmanAbir/AgentGenesis/blob/dev/src/packages/cli/README.md",
+  "main": "index.js",
   "scripts": {
-    "build": "tsup"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.2",
     "chalk": "^5.3.0",
@@ -38,15 +17,10 @@
     "figlet": "^1.7.0",
     "inquirer": "^10.2.0",
     "ora": "^8.1.0",
-    "unstructured-client": "^0.16.0",
-    "weaviate-client": "^3.1.4"
+    "unstructured-client": "^0.16.0"
   },
   "bin": {
-    "agentgenesis": "dist/index.js"
+    "agentgenesis": "./index.js"
   },
-  "type": "module",
-  "devDependencies": {
-    "tsup": "^8.3.0",
-    "typescript": "^5.6.2"
-  }
+  "type": "module"
 }
