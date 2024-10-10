@@ -1,9 +1,18 @@
 import { MainNavItem, SidebarNavItem } from '@/types/nav';
+import { cachedBlogPosts, fetchBlogPosts } from './blog-list-search';
 
 interface DocsConfig {
   mainNav: MainNavItem[];
   sidebarNav: SidebarNavItem[];
 }
+
+(async () => {
+  await fetchBlogPosts();
+})();
+
+const blogPosts = cachedBlogPosts;
+console.log(blogPosts);
+
 export const docsConfig: DocsConfig = {
   mainNav: [
     {
@@ -117,6 +126,15 @@ export const docsConfig: DocsConfig = {
           label: 'New',
         },
       ],
+    },
+    {
+      title: 'Blog',
+      items: blogPosts.map((post) => ({
+        title: post.title,
+        href: post.slug,
+        items: [],
+        label: 'New',
+      })),
     },
   ],
 };
