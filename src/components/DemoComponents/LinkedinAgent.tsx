@@ -20,7 +20,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '../ui/tooltip';
-
+import moment from 'moment';
 const LinkedinAgent: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -66,6 +66,11 @@ const LinkedinAgent: React.FC = () => {
         data.data?.content?.replace(/```html\n|```/g, '');
       if (data.success === true) {
         setMdxContent(responseData || '');
+      }
+      if (data.status === 429) {
+        setError(
+          `It looks like you've reached your daily limit. Please check back in ${moment(data.data.reset).fromNow()}`,
+        );
       } else {
         setError('Error processing request, please try again.');
       }
