@@ -157,3 +157,25 @@
 html{
   scroll-behavior: smooth;
 }
+
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #e3e3e6; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #757474;
+  border-radius: 12px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #a19d9d; 
+  border-radius: 12px;
+}
