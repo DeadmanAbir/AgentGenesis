@@ -121,10 +121,6 @@ A ⭐️ to <b>Agentgenesis</b> is to make us more 💪 stronger and motivated.
 ## Contributors ✨
 
 Thanks goes to these wonderful people :
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
 <table>
   <tbody>
     <tr>
@@ -134,6 +130,18 @@ Thanks goes to these wonderful people :
     </tr>
   </tbody>
 </table>
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+## 👀 Our Other Contributors
+- We extend our heartfelt gratitude for your invaluable contribution to our project! Your efforts play a pivotal role in elevating Ratna-Supermarket to greater heights.
+- Make sure you show some love by giving ⭐ to our repository.
+<div align="center">
+  <a href="https://github.com/DeadmanAbir/AgentGenesis">
+    <img src="https://contrib.rocks/image?repo=DeadmanAbir/AgentGenesis&&max=1000" />
+  </a>
+</div>
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
