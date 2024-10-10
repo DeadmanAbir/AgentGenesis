@@ -1,5 +1,8 @@
 import { MainNavItem, SidebarNavItem } from '@/types/nav';
-import { cachedBlogPosts, fetchBlogPosts } from './blog-list-search';
+import {
+  cachedBlogPosts,
+  fetchBlogPosts,
+} from '../components/blog-list-search';
 
 interface DocsConfig {
   mainNav: MainNavItem[];
