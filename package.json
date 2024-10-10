@@ -46,7 +46,7 @@
     "mdast-util-toc": "^7.1.0",
     "mini-svg-data-uri": "^1.4.4",
     "mongoose": "^8.3.4",
-    "next": "14.2.3",
+    "next": "^14.2.3",
     "next-contentlayer": "^0.3.4",
     "next-mdx-remote": "^0.5.1",
     "next-themes": "^0.3.0",
