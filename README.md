@@ -125,15 +125,14 @@ Thanks goes to these wonderful people :
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/DeadmanAbir"><img src="https://avatars.githubusercontent.com/u/102755654?v=4" width="100px;" alt="Abir Dutta"/><br /><sub><b>Abir Dutta</b></sub></a><br /><a href="https://github.com/DeadmanAbir/AgentGenesis/commits?author=deadmanabir" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/faisal004"><img src="https://avatars.githubusercontent.com/u/88244542?v=4" width="100px;" alt="Faisal"/><br /><sub><b>Faisal</b></sub></a><br /><a href="https://github.com/DeadmanAbir/AgentGenesis/commits?author=faisal004" title="Code">💻</a></td>
-       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Kirtikagoyal"><img src="https://avatars.githubusercontent.com/u/86429933?v=4" width="100px;" alt="Kirtika"/><br /><sub><b>Kirtika</b></sub></a><br /><a href="#" title="Code">💻</a></td>
-    </tr>
-  </tbody>
-</table>
+# 👀 Our Contributors
+- We extend our heartfelt gratitude for your invaluable contribution to our project! Your efforts play a pivotal role in elevating Ratna-Supermarket to greater heights.
+- Make sure you show some love by giving ⭐ to our repository.
+<div align="center">
+  <a href="https://github.com/DeadmanAbir/AgentGenesis">
+    <img src="https://contrib.rocks/image?repo=DeadmanAbir/AgentGenesis&&max=1000" />
+  </a>
+</div>
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
