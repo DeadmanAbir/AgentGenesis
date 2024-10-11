@@ -1,9 +1,9 @@
 {
-  "name": "cli",
+  "name": "agentgenesisfaisal",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsup",
     "start": "node dist/agentgenesis.js"
   },
   "author": "",
@@ -21,6 +21,7 @@
     "inquirer": "^10.2.2",
     "openai": "^4.67.3",
     "ora": "^8.1.0",
+    "tsup": "^8.3.0",
     "unstructured-client": "^0.16.0",
     "weaviate-client": "^3.1.5"
   },

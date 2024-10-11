@@ -10,6 +10,6 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["src"],
+  "include": ["src/**/*.ts", "components/**/*.ts"],
   "exclude": ["node_modules"]
 }
