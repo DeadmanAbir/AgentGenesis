@@ -9,13 +9,6 @@ interface DocsConfig {
   sidebarNav: SidebarNavItem[];
 }
 
-(async () => {
-  await fetchBlogPosts();
-})();
-
-const blogPosts = cachedBlogPosts;
-console.log(blogPosts);
-
 export const docsConfig: DocsConfig = {
   mainNav: [
     {
@@ -130,14 +123,23 @@ export const docsConfig: DocsConfig = {
         },
       ],
     },
+
     {
       title: 'Blog',
-      items: blogPosts.map((post) => ({
-        title: post.title,
-        href: post.slug,
-        items: [],
-        label: 'New',
-      })),
+      items: [],
     },
   ],
 };
+
+(async () => {
+  await fetchBlogPosts();
+  const blogPosts = cachedBlogPosts;
+
+  docsConfig.sidebarNav.find((section) => section.title === 'Blog')!.items =
+    blogPosts.map((post) => ({
+      title: post.title,
+      href: post.slug,
+      items: [],
+      label: 'New',
+    }));
+})();
