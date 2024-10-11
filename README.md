@@ -1,12 +1,10 @@
 # AgentGenesis
 
-
 <p align="center">
   <a href="https://reactplay.io" target="_blank" style="font-size:80px"><img src="public/logo-white.png" alt="react-play" width="125" /></a>
 </p>
 
 <h4 align="center">Seamlessly build custom RAG flows and AI agents using open-source, copy-paste components.</h4>
-
 
 <p align="center">
     <a href="https://www.agentgenesis.dev/" target="blank">View Demo</a>
@@ -15,7 +13,6 @@
     ·
     <a href="https://github.com/DeadmanAbir/AgentGenesis/issues/new/choose">Request Feature</a>
 </p>
-
 
 ## 👋 Introducing Agentgenesis
 
@@ -33,11 +30,9 @@ Here is the link to the app. We hope you enjoy it.
 
 > [Demo Link](https://www.agentgenesis.dev/)
 
-
 Please support the work by giving the repository a ⭐, contributing to it. You can also follow our core members on Twitter [Abir](https://x.com/ItsDutta99) **&** [Faisal](https://x.com/Faisalh004) **&** [Kirtika](https://x.com/kirtikastwt).
 
 ## 🏗️ How to Set up `Agentgenesis` for Development?
-
 
 - You may want to contribute to the `agentgenesis` repo in general. Please check the [Contribution Guide](./CONTRIBUTING.md) to get started.
 
@@ -50,13 +45,17 @@ First, you need to fork the `agentgenesis` repo. You can do this by clicking the
 Once forked, you can clone the repo by clicking the `Clone or Download` button on the top right corner of the forked repo.
 
 Please change the directory after cloning the repository using the `cd <folder-name>` command.
+
 ### With Docker
 
 #### 🚀 Start the app inside a docker container
+
 Need to have docker on your system and to start the app in container using docker you just need to simple run below command.
+
 ```bash
 docker compose up
 ```
+
 ### Without Docker
 
 #### ⬇️ Install Dependencies
@@ -74,9 +73,10 @@ Use the following command to start the app in the development mode:
 ```bash
 npm run dev
 ```
+
 It runs the app in development mode. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes. 
+The page will reload when you make changes.
 
 ### 🧱 Build the App for Production
 
@@ -88,8 +88,7 @@ npm run build
 
 It builds the app for production to the `build` folder. It correctly bundles Next JS in production mode and optimizes the build for the best performance. The build is minified and the filenames include the hashes.
 
---------------------------------------------------------------
-
+---
 
 ## 🤝 Contributing to `Agentgenesis`
 
@@ -121,6 +120,7 @@ A ⭐️ to <b>Agentgenesis</b> is to make us more 💪 stronger and motivated.
 ## Contributors ✨
 
 Thanks goes to these wonderful people :
+
 <table>
   <tbody>
     <tr>
@@ -135,7 +135,7 @@ Thanks goes to these wonderful people :
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 ## 👀 Our Other Contributors
-- We extend our heartfelt gratitude for your invaluable contribution to our project! Your efforts play a pivotal role in elevating Ratna-Supermarket to greater heights.
+- We extend our heartfelt gratitude for your invaluable contribution to our project! Your efforts play a pivotal role in elevating Agentgenesis to greater heights.
 - Make sure you show some love by giving ⭐ to our repository.
 <div align="center">
   <a href="https://github.com/DeadmanAbir/AgentGenesis">
