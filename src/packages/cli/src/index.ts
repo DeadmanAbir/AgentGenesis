@@ -104,6 +104,46 @@ program
         return false;
       }
     };
+    const ensureAgentGenesisFaisal = async (): Promise<boolean> => {
+      const moduleName = 'agentgenesisfaisal';
+      if (!isModuleInstalled(moduleName)) {
+        const { installAgentgenesisfaisal } = await inquirer.prompt([
+          {
+            type: 'confirm',
+            name: 'installAgentgenesisfaisal',
+            message: `'${moduleName}' is not installed. Would you like to install it now?`,
+            default: true,
+          },
+        ]);
+
+        if (installAgentgenesisfaisal) {
+          const spinner = ora(`Installing ${moduleName}...`).start();
+          try {
+            execSync(`npm install ${moduleName}`, {
+              stdio: 'inherit',
+              cwd: rootPath,
+            });
+            spinner.succeed(`Successfully installed ${moduleName}.`);
+            return true;
+          } catch (error: any) {
+            spinner.fail(`Failed to install ${moduleName}: ${error.message}`);
+            return false;
+          }
+        } else {
+          console.log(
+            chalk.red(
+              `Cannot proceed without '${moduleName}'. Please install it and try again.`,
+            ),
+          );
+          return false;
+        }
+      }
+      return true;
+    };
+    const agentGenesisInstalled = await ensureAgentGenesisFaisal();
+    if (!agentGenesisInstalled) {
+      return;
+    }
 
     // Handle each component's dependencies
     switch (component) {
