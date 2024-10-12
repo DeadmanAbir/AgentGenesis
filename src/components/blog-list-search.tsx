@@ -6,16 +6,12 @@ export let cachedBlogPosts: Array<{ title: string; slug: string }> = [];
 export async function fetchBlogPosts(): Promise<
   Array<{ title: string; slug: string }>
 > {
-  const host = 'deadmanabir.hashnode.dev';
-
+  const host = process.env.NEXT_PUBLIC_HASHNODE_HOST;
   if (!host) {
     console.error('HASHNODE_HOST is not defined.');
-    console.log('Hashnode Host:', host);
     return [];
   }
 
-  console.log('Hashnode Host:', host);
-  console.log(cachedBlogPosts);
   try {
     const {
       data: { publication },
