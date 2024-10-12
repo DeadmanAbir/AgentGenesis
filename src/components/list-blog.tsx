@@ -29,7 +29,7 @@ export default async function listblog() {
       }
     `,
     variables: {
-      host: process.env.HASHNODE_HOST,
+      host: process.env.NEXT_PUBLIC_HASHNODE_HOST,
     },
   });
 

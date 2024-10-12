@@ -31,7 +31,7 @@ export default async function Blog() {
       }
     `,
     variables: {
-      host: process.env.HASHNODE_HOST,
+      host: process.env.NEXT_PUBLIC_HASHNODE_HOST,
     },
   });
 
