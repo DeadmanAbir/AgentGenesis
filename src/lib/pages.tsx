@@ -24,7 +24,7 @@ export async function getPageBySlug(slug: string) {
       }
     `,
     variables: {
-      host: process.env.HASHNODE_HOST,
+      host: process.env.NEXT_PUBLIC_HASHNODE_HOST,
       slug,
     },
   });

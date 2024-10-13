@@ -19,7 +19,7 @@ export async function getPublication() {
       }
     `,
     variables: {
-      host: process.env.HASHNODE_HOST,
+      host: process.env.NEXT_PUBLIC_HASHNODE_HOST,
     },
   });
 

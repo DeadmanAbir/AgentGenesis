@@ -21,7 +21,7 @@ export default async function Nav() {
             <li key={item.id} className="mr-6">
               <Link
                 href={item.url.replace(
-                  `https://${process.env.HASHNODE_HOST}`,
+                  `https://${process.env.NEXT_PUBLIC_HASHNODE_HOST}`,
                   '',
                 )}
               >
