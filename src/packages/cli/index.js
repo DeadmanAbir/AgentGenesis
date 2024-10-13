@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { program } from 'commander';
+import { Command } from 'commander';
 import chalk from 'chalk';
 import figlet from 'figlet';
 import inquirer from 'inquirer';
@@ -11,20 +11,29 @@ import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
+// Define the types for prompts
+
+// Get __dirname and __filename equivalents in ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Display the banner
 console.log(
   chalk.yellow(figlet.textSync('AgentGenesis', { horizontalLayout: 'full' })),
 );
 
+// Initialize Commander
+const program = new Command();
+
 program.version('1.0.0').description('My Node CLI');
 
+// Define the 'add' command
 program
   .command('add <component>')
   .description('Add a specified component inside the utils/agentgenesis folder')
   .action(async (component) => {
-    const { rootPath } = await inquirer.prompt([
+    // Prompt for rootPath
+    const questions = [
       {
         type: 'input',
         name: 'rootPath',
@@ -37,347 +46,185 @@ program
           return 'The path you entered does not exist. Please enter a valid path.';
         },
       },
-    ]);
+    ];
+    //@ts-ignore
+    const answers = await inquirer.prompt(questions);
+    const rootPath = answers.rootPath 
 
-    if (component === 'calculatortool') {
-      let exprevalInstalled = false;
+    // Function to check if a module is installed
+    const isModuleInstalled = (moduleName) => {
       try {
-        require.resolve(path.join(rootPath, 'node_modules', 'expr-eval'));
-        exprevalInstalled = true;
-      } catch (err) {
-        exprevalInstalled = false;
+        require.resolve(path.join(rootPath, 'node_modules', moduleName));
+        return true;
+      } catch {
+        return false;
       }
+    };
 
-      if (!exprevalInstalled) {
-        const { installexpreval } = await inquirer.prompt([
+    // Function to prompt installation of a module
+    const promptInstallModule = async (
+      moduleName,
+      displayName,
+      installCommand,
+    ) => {
+      const { [`install${displayName}`]: install } = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: `install${displayName}`,
+          message: `'${displayName}' requires '${moduleName}'. Would you like to install it now?`,
+          default: true,
+        },
+      ]);
+
+      if (install) {
+        const spinner = ora(`Installing ${moduleName}...`).start();
+        try {
+          execSync(installCommand, {
+            stdio: 'inherit',
+            cwd: rootPath,
+          });
+          spinner.succeed(`Successfully installed ${moduleName}.`);
+          return true;
+        } catch (error) {
+          spinner.fail(`Failed to install ${moduleName}: ${error.message}`);
+          return false;
+        }
+      } else {
+        console.log(
+          chalk.red(
+            `'${displayName}' cannot be added without '${moduleName}'. Please install it and try again.`,
+          ),
+        );
+        return false;
+      }
+    };
+    const ensureAgentGenesisFaisal = async () => {
+      const moduleName = 'agentgenesisfaisal';
+      if (!isModuleInstalled(moduleName)) {
+        const { installAgentgenesisfaisal } = await inquirer.prompt([
           {
             type: 'confirm',
-            name: 'installexpreval',
-            message:
-              "'calculatortool' requires 'expr-eval'. Would you like to install it now?",
+            name: 'installAgentgenesisfaisal',
+            message: `'${moduleName}' is not installed. Would you like to install it now?`,
             default: true,
           },
         ]);
 
-        if (installexpreval) {
-          const spinner = ora('Installing expr-eval...').start();
+        if (installAgentgenesisfaisal) {
+          const spinner = ora(`Installing ${moduleName}...`).start();
           try {
-            execSync(`npm install expr-eval`, {
+            execSync(`npm install ${moduleName}`, {
               stdio: 'inherit',
               cwd: rootPath,
             });
-            spinner.succeed('Successfully installed expr-eval.');
+            spinner.succeed(`Successfully installed ${moduleName}.`);
+            return true;
           } catch (error) {
-            spinner.fail(`Failed to install expr-eval: ${error.message}`);
-            return;
+            spinner.fail(`Failed to install ${moduleName}: ${error.message}`);
+            return false;
           }
         } else {
           console.log(
             chalk.red(
-              "'searchapitool' cannot be added without 'expr-eval'. Please install it and try again.",
+              `Cannot proceed without '${moduleName}'. Please install it and try again.`,
             ),
           );
-          return;
+          return false;
         }
       }
+      return true;
+    };
+    const agentGenesisInstalled = await ensureAgentGenesisFaisal();
+    if (!agentGenesisInstalled) {
+      return;
     }
-    if (component === 'chatOpenAI') {
-      let openaiInstalled = false;
-      try {
-        require.resolve(path.join(rootPath, 'node_modules', 'openai'));
-        openaiInstalled = true;
-      } catch (err) {
-        openaiInstalled = false;
-      }
 
-      if (!openaiInstalled) {
-        const { installopenai } = await inquirer.prompt([
-          {
-            type: 'confirm',
-            name: 'installopenai',
-            message:
-              "'chatOpenAI' requires 'openai'. Would you like to install it now?",
-            default: true,
-          },
-        ]);
-
-        if (installopenai) {
-          const spinner = ora('Installing openai...').start();
-          try {
-            execSync(`npm install openai`, {
-              stdio: 'inherit',
-              cwd: rootPath,
-            });
-            spinner.succeed('Successfully installed openai.');
-          } catch (error) {
-            spinner.fail(`Failed to install openai: ${error.message}`);
-            return;
-          }
-        } else {
-          console.log(
-            chalk.red(
-              "'ChatOpenAi' cannot be added without 'openai'. Please install it and try again.",
-            ),
+    // Handle each component's dependencies
+    switch (component) {
+      case 'calculatortool':
+        if (!isModuleInstalled('expr-eval')) {
+          const installed = await promptInstallModule(
+            'expr-eval',
+            'expr-eval',
+            'npm install expr-eval',
           );
-          return;
+          if (!installed) return;
         }
-      }
-    }
-    if (component === 'chatAnthropic') {
-      let openaiInstalled = false;
-      try {
-        require.resolve(path.join(rootPath, 'node_modules', '@anthropic-ai/sdk'));
-        openaiInstalled = true;
-      } catch (err) {
-        openaiInstalled = false;
-      }
+        break;
 
-      if (!openaiInstalled) {
-        const { installopenai } = await inquirer.prompt([
-          {
-            type: 'confirm',
-            name: 'installopenai',
-            message:
-              "'chatAnthropic' requires '@anthropic-ai/sdk'. Would you like to install it now?",
-            default: true,
-          },
-        ]);
-
-        if (installopenai) {
-          const spinner = ora('Installing @anthropic-ai/sdk...').start();
-          try {
-            execSync(`npm install @anthropic-ai/sdk`, {
-              stdio: 'inherit',
-              cwd: rootPath,
-            });
-            spinner.succeed('Successfully installed @anthropic-ai/sdk.');
-          } catch (error) {
-            spinner.fail(`Failed to install @anthropic-ai/sdk: ${error.message}`);
-            return;
-          }
-        } else {
-          console.log(
-            chalk.red(
-              "'Chatanthropic' cannot be added without '@anthropic-ai/sdk'. Please install it and try again.",
-            ),
+      case 'chatOpenAI':
+      case 'openAIEmbeddings':
+        if (!isModuleInstalled('openai')) {
+          const installed = await promptInstallModule(
+            'openai',
+            'openai',
+            'npm install openai',
           );
-          return;
+          if (!installed) return;
         }
-      }
-    }
-    if (component === 'chatGemini') {
-      let geminiaiInstalled = false;
-      try {
-        require.resolve(path.join(rootPath, 'node_modules', '@google/generative-ai'));
-        geminiaiInstalled = true;
-      } catch (err) {
-        geminiaiInstalled = false;
-      }
+        break;
 
-      if (!geminiaiInstalled) {
-        const { installgeminiai } = await inquirer.prompt([
-          {
-            type: 'confirm',
-            name: 'installgeminiai',
-            message:
-              "'chatgeminiai' requires '@google/generative-ai'. Would you like to install it now?",
-            default: true,
-          },
-        ]);
-
-        if (installgeminiai) {
-          const spinner = ora('Installing @google/generative-ai...').start();
-          try {
-            execSync(`npm install @google/generative-ai`, {
-              stdio: 'inherit',
-              cwd: rootPath,
-            });
-            spinner.succeed('Successfully installed geminiai.');
-          } catch (error) {
-            spinner.fail(`Failed to install geminiai: ${error.message}`);
-            return;
-          }
-        } else {
-          console.log(
-            chalk.red(
-              "'Chatgeminiai' cannot be added without 'geminiai'. Please install it and try again.",
-            ),
+      case 'chatAnthropic':
+        if (!isModuleInstalled('@anthropic-ai/sdk')) {
+          const installed = await promptInstallModule(
+            '@anthropic-ai/sdk',
+            '@anthropic-ai/sdk',
+            'npm install @anthropic-ai/sdk',
           );
-          return;
+          if (!installed) return;
         }
-      }
-    }
-    if (component === 'openAIEmbeddings') {
-      let openaiInstalled = false;
-      try {
-        require.resolve(path.join(rootPath, 'node_modules', 'openai'));
-        openaiInstalled = true;
-      } catch (err) {
-        openaiInstalled = false;
-      }
+        break;
 
-      if (!openaiInstalled) {
-        const { installopenai } = await inquirer.prompt([
-          {
-            type: 'confirm',
-            name: 'installopenai',
-            message:
-              "'OpenAIEmbedding' requires 'openai'. Would you like to install it now?",
-            default: true,
-          },
-        ]);
-
-        if (installopenai) {
-          const spinner = ora('Installing openai...').start();
-          try {
-            execSync(`npm install openai`, {
-              stdio: 'inherit',
-              cwd: rootPath,
-            });
-            spinner.succeed('Successfully installed openai.');
-          } catch (error) {
-            spinner.fail(`Failed to install openai: ${error.message}`);
-            return;
-          }
-        } else {
-          console.log(
-            chalk.red(
-              "'OpenAiEmbeddings' cannot be added without 'openai'. Please install it and try again.",
-            ),
+      case 'chatGemini':
+      case 'geminiEmbeddings':
+        if (!isModuleInstalled('@google/generative-ai')) {
+          const installed = await promptInstallModule(
+            '@google/generative-ai',
+            '@google/generative-ai',
+            'npm install @google/generative-ai',
           );
-          return;
+          if (!installed) return;
         }
-      }
-    }
-    if (component === 'geminiEmbeddings') {
-      let geminiaiInstalled = false;
-      try {
-        require.resolve(path.join(rootPath, 'node_modules', '@google/generative-ai'));
-        geminiaiInstalled = true;
-      } catch (err) {
-        geminiaiInstalled = false;
-      }
+        break;
 
-      if (!geminiaiInstalled) {
-        const { installgeminiai } = await inquirer.prompt([
-          {
-            type: 'confirm',
-            name: 'installgeminiai',
-            message:
-              "'geminiEmbeddings' requires '@google/generative-ai'. Would you like to install it now?",
-            default: true,
-          },
-        ]);
-
-        if (installgeminiai) {
-          const spinner = ora('Installing @google/generative-ai...').start();
-          try {
-            execSync(`npm install @google/generative-ai`, {
-              stdio: 'inherit',
-              cwd: rootPath,
-            });
-            spinner.succeed('Successfully installed geminiai.');
-          } catch (error) {
-            spinner.fail(`Failed to install geminiai: ${error.message}`);
-            return;
-          }
-        } else {
-          console.log(
-            chalk.red(
-              "'geminiEmbeddings' cannot be added without 'geminiai'. Please install it and try again.",
-            ),
+      case 'reranker':
+        if (!isModuleInstalled('cohere-ai')) {
+          const installed = await promptInstallModule(
+            'cohere-ai',
+            'reranker',
+            'npm install -s cohere-ai',
           );
-          return;
+          if (!installed) return;
         }
-      }
-    }
-    if (component === 'reranker') {
-      let geminiaiInstalled = false;
-      try {
-        require.resolve(path.join(rootPath, 'node_modules', 'cohere-ai'));
-        geminiaiInstalled = true;
-      } catch (err) {
-        geminiaiInstalled = false;
-      }
+        break;
 
-      if (!geminiaiInstalled) {
-        const { installgeminiai } = await inquirer.prompt([
-          {
-            type: 'confirm',
-            name: 'installgeminiai',
-            message:
-              "'reranker' requires 'reranker'. Would you like to install it now?",
-            default: true,
-          },
-        ]);
-
-        if (installgeminiai) {
-          const spinner = ora('Installing reranker...').start();
-          try {
-            execSync(`npm i -s cohere-ai`, {
-              stdio: 'inherit',
-              cwd: rootPath,
-            });
-            spinner.succeed('Successfully installed reranker.');
-          } catch (error) {
-            spinner.fail(`Failed to install reranker: ${error.message}`);
-            return;
-          }
-        } else {
-          console.log(
-            chalk.red(
-              "'reranker' cannot be added without 'cohere'. Please install it and try again.",
-            ),
+      case 'unstructuredLoader':
+        if (!isModuleInstalled('unstructured-client')) {
+          const installed = await promptInstallModule(
+            'unstructured-client',
+            'unstructured-client',
+            'npm install unstructured-client --include=dev',
           );
-          return;
+          if (!installed) return;
         }
-      }
-    }
-    if (component === 'unstructuredLoader') {
-      let geminiaiInstalled = false;
-      try {
-        require.resolve(path.join(rootPath, 'node_modules', 'unstructured-client'));
-        geminiaiInstalled = true;
-      } catch (err) {
-        geminiaiInstalled = false;
-      }
+        break;
 
-      if (!geminiaiInstalled) {
-        const { installgeminiai } = await inquirer.prompt([
-          {
-            type: 'confirm',
-            name: 'installgeminiai',
-            message:
-                "'unstructured' requires 'unstructured-client'. Would you like to install it now?",
-            default: true,
-          },
-        ]);
-
-        if (installgeminiai) {
-          const spinner = ora('Installing unstructured-client...').start();
-          try {
-            execSync(`npm install unstructured-client --include=dev`, {
-              stdio: 'inherit',
-              cwd: rootPath,
-            });
-            spinner.succeed('Successfully installed unstructured-client.');
-          } catch (error) {
-            spinner.fail(`Failed to install unstructured-client.: ${error.message}`);
-            return;
-          }
-        } else {
-          console.log(
-            chalk.red(
-              "'unstructured' cannot be added without 'unstructured-client.'. Please install it and try again.",
-            ),
-          );
-          return;
-        }
-      }
+      default:
+        console.log(
+          chalk.red(
+            `Unknown component '${component}'. Please choose a valid component.`,
+          ),
+        );
+        return;
     }
+
+    // Paths for utils and agentgenesis directories
     const utilsPath = path.join(rootPath, 'utils');
     const agentGenesisPath = path.join(utilsPath, 'agentgenesis');
-    const componentFilePath = path.join(agentGenesisPath, `${component}.ts`);
+    const componentFilePath = path.join(
+      agentGenesisPath,
+      `${component}.ts`,
+    );
     const templateFilePath = path.join(
       __dirname,
       'components',
@@ -392,10 +239,13 @@ program
         return;
       }
 
+      // Create 'utils' directory if it doesn't exist
       if (!fs.existsSync(utilsPath)) {
         fs.mkdirSync(utilsPath);
         spinner.succeed(`Created 'utils' folder at ${utilsPath}.`);
       }
+
+      // Create 'agentgenesis' directory if it doesn't exist
       if (!fs.existsSync(agentGenesisPath)) {
         fs.mkdirSync(agentGenesisPath);
         spinner.succeed(
@@ -403,7 +253,10 @@ program
         );
       }
 
-      const templateContent = fs.readFileSync(templateFilePath, 'utf-8');
+      const templateContent = fs.readFileSync(
+        templateFilePath,
+        'utf-8',
+      );
 
       if (!fs.existsSync(componentFilePath)) {
         fs.writeFileSync(componentFilePath, templateContent);
@@ -414,7 +267,6 @@ program
         );
       }
     } catch (error) {
-      //@ts-ignore
       spinner.fail(`Failed to add ${component}: ${error.message}`);
     }
   });
