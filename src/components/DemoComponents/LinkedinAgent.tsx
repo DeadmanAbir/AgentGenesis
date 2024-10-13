@@ -66,6 +66,7 @@ const LinkedinAgent: React.FC = () => {
         data.data?.content?.replace(/```html\n|```/g, '');
       if (data.success === true) {
         setMdxContent(responseData || '');
+        return;
       }
       if (data.status === 429) {
         setError(
