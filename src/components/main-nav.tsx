@@ -54,15 +54,15 @@ export function MainNav() {
           Blogs
         </Link>
 
-        <Link
-          href="/contact"
+        <a
+          href="mailto:agentgenesisdev@gmail.com"
           className={cn(
-            'transition-colors hover:text-foreground/80 hover:dark:bg-neutral-700 hover:bg-neutral-100  px-2 py-1 rounded-lg',
-            pathname === '/contact' ? 'text-foreground ' : 'text-foreground/60',
+            'transition-colors hover:text-foreground/80 hover:dark:bg-neutral-700 hover:bg-neutral-100 px-2 py-1 rounded-lg text-foreground/60'
           )}
         >
           Contact Us
-        </Link>
+        </a>
+
       </nav>
     </div>
   );
