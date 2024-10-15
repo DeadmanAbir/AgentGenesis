@@ -21,7 +21,7 @@ export const docsConfig: DocsConfig = {
       items: [
         {
           title: 'Introduction',
-          href: '/docs',
+          href: '/components',
           items: [],
         },
       ],
@@ -31,7 +31,7 @@ export const docsConfig: DocsConfig = {
       items: [
         {
           title: 'Cohere Reranker',
-          href: '/docs/components/cohereReranker',
+          href: '/components/cohereReranker',
           items: [],
         },
       ],
@@ -41,7 +41,7 @@ export const docsConfig: DocsConfig = {
       items: [
         {
           title: 'Unstructured Loader',
-          href: '/docs/components/unstructuredLoader',
+          href: '/components/unstructuredLoader',
           items: [],
           label: 'New',
         },
@@ -52,22 +52,22 @@ export const docsConfig: DocsConfig = {
       items: [
         {
           title: 'Wikipedia Tool',
-          href: '/docs/components/wikipediaTool',
+          href: '/components/wikipediaTool',
           items: [],
         },
         {
           title: 'SearchApi Tool',
-          href: '/docs/components/searchapiTool',
+          href: '/components/searchapiTool',
           items: [],
         },
         {
           title: 'Calculator Tool',
-          href: '/docs/components/calculatorTool',
+          href: '/components/calculatorTool',
           items: [],
         },
         {
           title: 'LinkedIn Tool',
-          href: '/docs/components/linkedinTool',
+          href: '/components/linkedinTool',
           items: [],
         },
       ],
@@ -77,17 +77,17 @@ export const docsConfig: DocsConfig = {
       items: [
         {
           title: 'ChatOpenAI',
-          href: '/docs/components/chatOpenAi',
+          href: '/components/chatOpenAi',
           items: [],
         },
         {
           title: 'ChatGemini',
-          href: '/docs/components/chatGemini',
+          href: '/components/chatGemini',
           items: [],
         },
         {
           title: 'ChatAnthropic',
-          href: '/docs/components/chatAnthropic',
+          href: '/components/chatAnthropic',
           items: [],
         },
       ],
@@ -97,12 +97,12 @@ export const docsConfig: DocsConfig = {
       items: [
         {
           title: 'OpenAIEmbeddings',
-          href: '/docs/components/openAiEmbedding',
+          href: '/components/openAiEmbedding',
           items: [],
         },
         {
           title: 'GeminiEmbeddings',
-          href: '/docs/components/geminiEmbedding',
+          href: '/components/geminiEmbedding',
           items: [],
         },
       ],
@@ -112,7 +112,7 @@ export const docsConfig: DocsConfig = {
       items: [
         {
           title: 'LinkedIn Agent',
-          href: '/docs/components/linkedinAgent',
+          href: '/components/linkedinAgent',
           items: [],
           label: 'New',
         },

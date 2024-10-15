@@ -39,7 +39,9 @@ export function MainNav() {
           href="/components"
           className={cn(
             'transition-colors hover:text-foreground/80 hover:dark:bg-neutral-700 hover:bg-neutral-100  px-2 py-1 rounded-lg',
-            pathname === '/components' ? 'text-foreground ' : 'text-foreground/60',
+            pathname === '/components'
+              ? 'text-foreground '
+              : 'text-foreground/60',
           )}
         >
           Components
@@ -57,12 +59,11 @@ export function MainNav() {
         <a
           href="mailto:agentgenesisdev@gmail.com"
           className={cn(
-            'transition-colors hover:text-foreground/80 hover:dark:bg-neutral-700 hover:bg-neutral-100 px-2 py-1 rounded-lg text-foreground/60'
+            'transition-colors hover:text-foreground/80 hover:dark:bg-neutral-700 hover:bg-neutral-100 px-2 py-1 rounded-lg text-foreground/60',
           )}
         >
           Contact Us
         </a>
-
       </nav>
     </div>
   );
