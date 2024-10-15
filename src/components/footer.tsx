@@ -73,8 +73,8 @@ const Footer = () => {
         </div>
         <div className="grid grid-cols-1  gap-10 items-start ">
           <div className="flex md:flex-row flex-col  gap-4">
-            <Link className="hover:underline" href="/docs">
-              Docs
+            <Link className="hover:underline" href="/components">
+              Components
             </Link>
             <Link className="hover:underline" href="/blogs">
               Blog

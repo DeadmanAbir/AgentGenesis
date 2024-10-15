@@ -45,7 +45,7 @@ const IndexPage = () => {
           copy-paste components.
         </PageHeaderDescription>
         <PageActions className="z-20">
-          <Link href="/docs" className={cn(buttonVariants())}>
+          <Link href="/components" className={cn(buttonVariants())}>
             Get Started
           </Link>
           <Link
