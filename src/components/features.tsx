@@ -20,7 +20,7 @@ const Features = () => {
             summarizes data from public LinkedIn profiles.
           </div>
           <Link
-            href="/docs/components/linkedinAgent"
+            href="/components/linkedinAgent"
             className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-md border border-neutral-200 bg-transparent px-6 font-medium text-neutral-600 dark:text-neutral-100 transition-all duration-100 [box-shadow:5px_5px_rgb(82_82_82)] hover:translate-x-[3px] hover:translate-y-[3px] hover:[box-shadow:0px_0px_rgb(82_82_82)] w-full md:w-[30%]"
           >
             Check Out
@@ -46,7 +46,7 @@ const Features = () => {
             data from public LinkedIn profiles when you provide a link.
           </div>
           <Link
-            href="/docs/components/linkedinTool"
+            href="/components/linkedinTool"
             className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-md border border-neutral-200 bg-transparent px-6 font-medium text-neutral-600 dark:text-neutral-100 transition-all duration-100 [box-shadow:5px_5px_rgb(82_82_82)] hover:translate-x-[3px] hover:translate-y-[3px] hover:[box-shadow:0px_0px_rgb(82_82_82)] w-full md:w-[30%]"
           >
             Check Out
@@ -72,7 +72,7 @@ const Features = () => {
             different LLMs. OpenAI, Gemini and Anthropic are supported for now.
           </div>
           <Link
-            href="/docs/components/chatOpenAi"
+            href="/components/chatOpenAi"
             className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-md border border-neutral-200 bg-transparent px-6 font-medium text-neutral-600 dark:text-neutral-100 transition-all duration-100 [box-shadow:5px_5px_rgb(82_82_82)] hover:translate-x-[3px] hover:translate-y-[3px] hover:[box-shadow:0px_0px_rgb(82_82_82)] w-full md:w-[30%]"
           >
             Check Out

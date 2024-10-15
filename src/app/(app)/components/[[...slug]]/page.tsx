@@ -84,6 +84,7 @@ export async function Agents({ params }: AgentsPageProps) {
   if (!doc) {
     notFound();
   }
+
   const toc = await getTableOfContents(doc.body.raw);
   return (
     <main className="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px] mt-14 ">
