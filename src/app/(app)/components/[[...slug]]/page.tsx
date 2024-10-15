@@ -82,10 +82,8 @@ export async function Agents({ params }: AgentsPageProps) {
   const doc = await getDocFromParams({ params });
 
   if (!doc) {
-    console.error('Doc not found:', params.slug);
     notFound();
   }
-  console.error('Doc found:', params.slug);
 
   const toc = await getTableOfContents(doc.body.raw);
   return (
