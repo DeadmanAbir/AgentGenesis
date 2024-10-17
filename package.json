@@ -51,7 +51,7 @@
     "mongoose": "^8.3.4",
     "next": "^14.2.3",
     "next-contentlayer": "^0.3.4",
-    "next-mdx-remote": "^0.5.1",
+    "next-mdx-remote": "^5.0.0",
     "next-themes": "^0.3.0",
     "openai": "^4.53.2",
     "react": "^18",

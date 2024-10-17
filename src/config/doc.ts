@@ -123,23 +123,11 @@ export const docsConfig: DocsConfig = {
         },
       ],
     },
-
-    {
-      title: 'Blog',
-      items: [],
-    },
   ],
 };
 
 (async () => {
   await fetchBlogPosts();
   const blogPosts = cachedBlogPosts;
-
-  docsConfig.sidebarNav.find((section) => section.title === 'Blog')!.items =
-    blogPosts.map((post) => ({
-      title: post.title,
-      href: post.slug,
-      items: [],
-      label: 'New',
-    }));
+  console.log(blogPosts);
 })();
