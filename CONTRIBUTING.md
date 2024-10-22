@@ -1,29 +1,3 @@
-# Contributing
-
-Thanks for your interest in contributing to https://www.agentgenesis.dev/. We're happy to have you here.
-
-Please take a moment to review this document before submitting your first pull request. We also strongly recommend that you check for open issues and pull requests to see if someone else is working on something similar.
-
-If you need any help, feel free to reach out to [@AbirDutta](https://x.com/ItsDutta99).
-
-## About this repository
-
-This repository is using NextJS with Typescript.
-
-
-## Structure
-
-This repository is structured as follows:
-
-
-
-| Path                  | Description                              |
-| --------------------- | ---------------------------------------- |
-| `src/app/(app)`       | The Next.js application for the website. |
-| `src/components`      | The React components for the website.    |
-| `src/app/content/docs`| The mdx content for the website.         |
-
-
 # Contributing 🎯
 
 Thanks for your interest in contributing to https://www.agentgenesis.dev/. We're happy to have you here.
