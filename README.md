@@ -24,6 +24,11 @@
 
 **AgentGenesis** is not distributed via `npm` and does not need to be installed as a dependency. Simply pick the code you need, copy and paste it into your project, and build on top of it according to your requirements. The code is entirely yours to `use and modify`.
 
+## 📈 GitHub Repository Stats
+| 🌟 **Stars** | 🍴 **Forks** | 🐛 **Issues** | 🔔 **Open PRs** | 🔕 **Closed PRs** | 🛠️ **Languages** | ✅ **Contributors** |
+|--------------|--------------|---------------|-----------------|------------------|------------------|------------------|
+| ![GitHub stars](https://img.shields.io/github/stars/DeadmanAbir/AgentGenesis) | ![forks](https://img.shields.io/github/forks/DeadmanAbir/AgentGenesis) | ![issues](https://img.shields.io/github/issues/DeadmanAbir/AgentGenesis?color=32CD32) | ![pull requests](https://img.shields.io/github/issues-pr/DeadmanAbir/AgentGenesis?color=FFFF8F) | ![Closed PRs](https://img.shields.io/github/issues-pr-closed/DeadmanAbir/AgentGenesis?color=20B2AA) | ![Languages](https://img.shields.io/github/languages/count/DeadmanAbir/AgentGenesis?color=20B2AA) | ![Contributors](https://img.shields.io/github/contributors/DeadmanAbir/AgentGenesis?color=00FA9A) |
+
 ## 🔥 Demo
 
 Here is the link to the app. We hope you enjoy it.
