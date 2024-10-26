@@ -11,19 +11,24 @@ export interface DocsSidebarNavProps {
 
 export function DocsSidebarNav({ items }: DocsSidebarNavProps) {
   const pathname = usePathname();
+  // console.log(items,"start");
 
   return items.length ? (
     <div className="w-full">
-      {items.map((item, index) => (
-        <div key={index} className={cn('pb-4')}>
-          <h4 className="mb-1 rounded-md px-2 py-1 text-sm font-semibold">
-            {item.title}
-          </h4>
-          {item?.items?.length && (
-            <DocsSidebarNavItems items={item.items} pathname={pathname} />
-          )}
-        </div>
-      ))}
+      {items.map((item, index) =>
+        item.title !== 'Blog' ? (
+          <div key={index} className={cn('pb-4')}>
+            <h4 className="mb-1 rounded-md px-2 py-1 text-sm font-semibold">
+              {item.title}
+            </h4>
+            {item?.items?.length && (
+              <DocsSidebarNavItems items={item.items} pathname={pathname} />
+            )}
+          </div>
+        ) : (
+          ''
+        ),
+      )}
     </div>
   ) : null;
 }
@@ -37,6 +42,8 @@ export function DocsSidebarNavItems({
   items,
   pathname,
 }: DocsSidebarNavItemsProps) {
+  // console.log(items,pathname);
+
   return items?.length ? (
     <div className="grid grid-flow-row auto-rows-max text-sm">
       {items.map((item, index) =>
