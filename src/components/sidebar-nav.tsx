@@ -11,7 +11,6 @@ export interface DocsSidebarNavProps {
 
 export function DocsSidebarNav({ items }: DocsSidebarNavProps) {
   const pathname = usePathname();
-  // console.log(items,"start");
 
   return items.length ? (
     <div className="w-full">
@@ -42,8 +41,6 @@ export function DocsSidebarNavItems({
   items,
   pathname,
 }: DocsSidebarNavItemsProps) {
-  // console.log(items,pathname);
-
   return items?.length ? (
     <div className="grid grid-flow-row auto-rows-max text-sm">
       {items.map((item, index) =>

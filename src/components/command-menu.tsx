@@ -71,8 +71,6 @@ export function CommandMenu({ ...props }: DialogProps) {
             {docsConfig.mainNav
               .filter((navitem) => !navitem.external)
               .map((navItem) => {
-                console.log(navItem, navItem.title);
-
                 return (
                   <CommandItem
                     key={navItem.href}
