@@ -1,0 +1,69 @@
+name: Sync Issue Labels and Assignees to PR
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  sync-labels-assignees:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Sync Labels and Assignees
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const prBody = pr.body || '';
+            
+            // Regular expressions to match "fixes #123", "closes #123", or "fix #123" (case insensitive)
+            const issueRefs = prBody.match(/(?:fixes|closes|fix)\s*#(\d+)/gi);
+            
+            if (!issueRefs) {
+              console.log('No issue references found in PR description');
+              return;
+            }
+            
+            // Extract issue numbers
+            const issueNumbers = issueRefs.map(ref => 
+              parseInt(ref.match(/\d+/)[0])
+            );
+            
+            for (const issueNumber of issueNumbers) {
+              try {
+                // Get issue details
+                const issue = await github.rest.issues.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber
+                });
+                
+                // Sync labels
+                if (issue.data.labels && issue.data.labels.length > 0) {
+                  const labels = issue.data.labels.map(label => label.name);
+                  await github.rest.issues.addLabels({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: pr.number,
+                    labels: labels
+                  });
+                  console.log(`Synced labels from issue #${issueNumber} to PR #${pr.number}`);
+                }
+                
+                // Sync assignees
+                if (issue.data.assignees && issue.data.assignees.length > 0) {
+                  const assignees = issue.data.assignees.map(assignee => assignee.login);
+                  await github.rest.issues.addAssignees({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: pr.number,
+                    assignees: assignees
+                  });
+                  console.log(`Synced assignees from issue #${issueNumber} to PR #${pr.number}`);
+                }
+              } catch (error) {
+                console.error(`Error processing issue #${issueNumber}:`, error);
+              }
+            }
