@@ -1,3 +1,5 @@
+'use client'; // Mark this file as a Client Component
+import { useEffect } from 'react';
 import Banner from '@/components/banner';
 import { Beam, Beam2 } from '@/components/beam';
 import Features from '@/components/features';
@@ -18,6 +20,32 @@ import { Star } from 'lucide-react';
 import Link from 'next/link';
 
 const IndexPage = () => {
+  useEffect(() => {
+    // Create and append the configuration script
+    const configScript = document.createElement('script');
+    configScript.innerHTML = `
+      window.embeddedChatbotConfig = {
+        chatbotId: "CgIoEqUF_3FxcQasT8MFb",
+        domain: "www.chatbase.co"
+      }
+    `;
+    document.body.appendChild(configScript);
+
+    // Create and append the chatbot script
+    const chatbotScript = document.createElement('script');
+    chatbotScript.src = 'https://www.chatbase.co/embed.min.js';
+    chatbotScript.setAttribute('chatbotId', 'CgIoEqUF_3FxcQasT8MFb');
+    chatbotScript.setAttribute('domain', 'www.chatbase.co');
+    chatbotScript.setAttribute('defer', '');
+    document.body.appendChild(chatbotScript);
+
+    // Cleanup function to remove scripts on unmount
+    return () => {
+      document.body.removeChild(configScript);
+      document.body.removeChild(chatbotScript);
+    };
+  }, []);
+
   return (
     <>
       <PageHeader className=" relative z-30  ">
