@@ -21,7 +21,7 @@ const VideoPlayer = () => {
           <div className="h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-gray-500" />
         </div>
       )}
-      <div className="rounded-2xl p-1 bg-black aspect-video w-full max-w-screen-2xl h-full">
+      <div className="rounded-2xl p-1 bg-black aspect-video w-full max-w-screen-2xl h-full pointer-events-none">
         <ReactPlayer
           url="https://youtu.be/DzFtMr146aU"
           width="100%"
@@ -30,6 +30,7 @@ const VideoPlayer = () => {
           controls={false}
           muted={true}
           playing={true}
+          loop={true}
           onReady={handleReady}
         />
       </div>
