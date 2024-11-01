@@ -1,44 +1,21 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-import { query } from '@/lib/hashnode';
 import { Post } from '@/types/posts';
 
 import Container from '@/components/Container';
+import { fetchBlogPosts } from '@/utils/hashnode';
 
 export default async function Blog() {
-  const {
-    data: { publication },
-  } = await query({
-    query: `
-      query($host: String!) {
-        publication(host: $host) {
-          posts(first: 10) {
-            edges {
-              node {
-                coverImage {
-                  url
-                }
-                id
-                publishedAt
-                slug
-                title
-              }
-            }
-          }
-          title
-        }
-      }
-    `,
-    variables: {
-      host: process.env.NEXT_PUBLIC_HASHNODE_HOST,
-    },
-  });
+  const publication = await fetchBlogPosts();
+
+  if (!publication) {
+    throw new Error('Failed to fetch blog posts');
+  }
 
   const posts: Array<Post> = publication.posts.edges.map(
     ({ node }: { node: Post }) => node,
   );
-
   return (
     <>
       <Container className="max-w-4xl">
