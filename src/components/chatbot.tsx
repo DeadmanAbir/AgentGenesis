@@ -1,4 +1,4 @@
-// src/app/(app)/components/Chatbot.tsx
+'use client';
 import React, { useEffect } from 'react';
 
 const Chatbot: React.FC = () => {
@@ -7,7 +7,7 @@ const Chatbot: React.FC = () => {
     const configScript = document.createElement('script');
     configScript.innerHTML = `
       window.embeddedChatbotConfig = {
-        chatbotId: "CgIoEqUF_3FxcQasT8MFb",
+        chatbotId: ${process.env.NEXT_PUBLIC_CHATBASE_CHATBOT_ID as string},
         domain: "www.chatbase.co"
       }
     `;
@@ -16,7 +16,10 @@ const Chatbot: React.FC = () => {
     // Load the Chatbase embed script
     const chatbotScript = document.createElement('script');
     chatbotScript.src = 'https://www.chatbase.co/embed.min.js';
-    chatbotScript.setAttribute('chatbotId', 'CgIoEqUF_3FxcQasT8MFb');
+    chatbotScript.setAttribute(
+      'chatbotId',
+      process.env.NEXT_PUBLIC_CHATBASE_CHATBOT_ID as string,
+    );
     chatbotScript.setAttribute('domain', 'www.chatbase.co');
     chatbotScript.setAttribute('defer', '');
     document.body.appendChild(chatbotScript);

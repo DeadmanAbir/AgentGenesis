@@ -1,6 +1,3 @@
-// src/app/(app)/page.tsx
-'use client';
-
 import Banner from '@/components/banner';
 import { Beam, Beam2 } from '@/components/beam';
 import Features from '@/components/features';
@@ -19,7 +16,7 @@ import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
 import { Star } from 'lucide-react';
 import Link from 'next/link';
-import Chatbot from './components/Chatbot'; // Ensure correct import
+import Chatbot from '@/components/chatbot';
 
 const IndexPage = () => {
   return (
