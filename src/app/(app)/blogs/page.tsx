@@ -32,27 +32,24 @@ export async function Blog() {
       </div>
 
       {/* Featured Post */}
-      <div className="relative flex gap-8 items-center text-white rounded-lg p-8 shadow-lg overflow-hidden">
+      {/* Featured Post */}
+      <div className="relative flex flex-col md:flex-row gap-8 items-center text-white rounded-lg p-8 shadow-lg overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 opacity-70 animate-liquid"></div>
-        <div className="w-1/2 relative z-10">
-          <h2 className="text-2xl font-semibold">
-            10 Inspiring Web Application Designs for 2024
-          </h2>
-          <p className="mt-2">
-            Discover some of the most innovative and visually stunning web
-            applications that have set the bar high in 2024. Perfect for
-            inspiration and design ideas.
-          </p>
-          <button className="mt-4 py-2 px-4 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-100">
-            Read More
-          </button>
+        <div className="w-full md:w-1/2 relative z-10 text-center md:text-left">
+          <h2 className="text-2xl font-semibold">{posts[0].title}</h2>
+          <p className="mt-2">{posts[0].excerpt}</p>
+          <Link href={`/blog/${posts[0].slug}`}>
+            <button className="mt-4 py-2 px-4 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-100">
+              Read More
+            </button>
+          </Link>
         </div>
         <Image
           width={300}
           height={200}
-          src="/blog1.svg"
+          src={posts[0].coverImage.url}
           alt="Featured Post Image"
-          className="rounded-lg relative z-10"
+          className="rounded-lg relative z-10 w-full md:w-auto"
         />
       </div>
 
