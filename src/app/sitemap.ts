@@ -13,7 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const posts = await fetchBlogPosts();
   const slugs = posts.posts.edges.map((post: any) => ({
-    url: `${url}/blog/${post.node.slug}`,
+    url: `${url}/blogs/${post.node.slug}`,
     lastModified: currentDate,
   }));
 
