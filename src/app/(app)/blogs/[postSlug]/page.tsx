@@ -74,7 +74,7 @@ export default async function PageComponent({ params }: PageParams) {
             })}
           </p>
           <div
-            className="pb-12 pt-8 prose max-w-3xl text-foreground dark:text-white" // Updated for dark mode
+            className="pb-12 pt-8 prose max-w-3xl text-foreground dark:text-white"
             dangerouslySetInnerHTML={{
               __html: post.content.html,
             }}

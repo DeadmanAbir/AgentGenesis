@@ -1,6 +1,5 @@
 import { allDocuments } from 'contentlayer/generated';
 import { notFound } from 'next/navigation';
-
 import { ChevronRightIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Balancer from 'react-wrap-balancer';
