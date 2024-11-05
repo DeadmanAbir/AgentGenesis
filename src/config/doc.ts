@@ -1,8 +1,8 @@
 import { MainNavItem, SidebarNavItem } from '@/types/nav';
-import {
-  cachedBlogPosts,
-  fetchBlogPosts,
-} from '../components/blog-list-search';
+// import {
+//   cachedBlogPosts,
+//   fetchBlogPosts,
+// } from '../components/blog-list-search';
 
 interface DocsConfig {
   mainNav: MainNavItem[];
@@ -123,23 +123,18 @@ export const docsConfig: DocsConfig = {
         },
       ],
     },
-
-    {
-      title: 'Blog',
-      items: [],
-    },
   ],
 };
 
-(async () => {
-  await fetchBlogPosts();
-  const blogPosts = cachedBlogPosts;
+// (async () => {
+//   await fetchBlogPosts();
+//   const blogPosts = cachedBlogPosts;
 
-  docsConfig.sidebarNav.find((section) => section.title === 'Blog')!.items =
-    blogPosts.map((post) => ({
-      title: post.title,
-      href: post.slug,
-      items: [],
-      label: 'New',
-    }));
-})();
+//   docsConfig.sidebarNav.find((section) => section.title === 'Blog')!.items =
+//     blogPosts.map((post) => ({
+//       title: post.title,
+//       href: post.slug,
+//       items: [],
+//       label: 'New',
+//     }));
+// })();
