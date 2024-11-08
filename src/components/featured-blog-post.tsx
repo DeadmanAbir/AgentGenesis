@@ -7,11 +7,13 @@ import Link from 'next/link';
 const FeaturedBlogPost = ({ title, slug, imageUrl }: BlogParams) => {
   return (
     <div className="relative flex flex-col md:flex-row gap-8 items-center text-white rounded-lg p-8 shadow-lg overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 opacity-70 animate-liquid"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-[#454545] to-[#ffffff] dark:from-[#434343] dark:to-[#000000] opacity-70 animate-liquid"></div>
       <div className="w-full md:w-1/2 relative z-10 text-center md:text-left">
-        <h2 className="text-2xl font-semibold">{title}</h2>
+        <h2 className="text-2xl text-slate-800 dark:text-white font-semibold">
+          {title}
+        </h2>
         <Link href={`/blogs/${slug}`}>
-          <Button className="mt-4 py-2 px-4 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-100">
+          <Button className="mt-4 py-2 px-4 bg-white text-pink-700 font-normal antialiased rounded-lg hover:bg-gray-100">
             Read More
           </Button>
         </Link>
