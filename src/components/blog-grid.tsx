@@ -14,17 +14,17 @@ const BlogGrid = ({ posts }: BlogGridProps) => {
         {posts?.slice(1)?.map((post) => (
           <li
             key={post.id}
-            className="bg-white text-black dark:bg-neutral-950 relative overflow-hidden rounded-md shadow-xl dark:shadow-lg dark:shadow-zinc-900 transition-transform duration-300 transform hover:-translate-y-1 cursor-pointer group h-[450px]"
+            className="bg-white text-black dark:bg-neutral-950 relative overflow-hidden rounded-md shadow-xl dark:shadow-lg dark:shadow-zinc-800 transition-transform duration-300 transform  cursor-pointer group h-[340px] ring-2 dark:ring-zinc-700 ring-zinc-200"
           >
             <Link
               href={`/blogs/${post.slug}`}
               className=" h-full flex flex-col"
             >
-              <div className="relative aspect-w-16 aspect-h-9 rounded-t-md overflow-hidden h-52 ">
+              <div className="relative  rounded-t-md overflow-hidden h-52 ">
                 <Image
                   width={400}
                   height={250}
-                  className="object-contain w-full h-full transition-transform duration-300 group-hover:scale-105"
+                  className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105 "
                   src={post.coverImage.url}
                   alt={post.title}
                 />
@@ -32,11 +32,11 @@ const BlogGrid = ({ posts }: BlogGridProps) => {
               </div>
               <div className="p-6 flex flex-col justify-between flex-grow">
                 <div>
-                  <h3 className="font-light text-sm md:text-xl text-black dark:text-gray-50 group-hover:text-indigo-400 transition-colors duration-300 antialiased">
+                  <h3 className="font-light text-sm md:text-xl text-black dark:text-gray-50 group-hover:text-zinc-400 transition-colors duration-300 antialiased line-clamp-2">
                     {post.title}
                   </h3>
                 </div>
-                <p className="text-xs font-extralight text-gray-700 dark:text-gray-400 mt-auto self-end antialiased">
+                <p className="text-xs font-extralight text-gray-700 dark:text-gray-400 mt-auto self-start antialiased pt-2">
                   {new Date(post.publishedAt).toLocaleDateString('en-us', {
                     weekday: 'long',
                     year: 'numeric',
