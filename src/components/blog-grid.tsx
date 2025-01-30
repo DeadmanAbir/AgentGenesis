@@ -14,7 +14,7 @@ const BlogGrid = ({ posts }: BlogGridProps) => {
         {posts?.slice(1)?.map((post) => (
           <li
             key={post.id}
-            className="bg-white text-black dark:bg-neutral-950 relative overflow-hidden rounded-md shadow-xl dark:shadow-lg dark:shadow-zinc-800 transition-transform duration-300 transform  cursor-pointer group h-[340px] ring-2 dark:ring-zinc-700 ring-zinc-200"
+            className="bg-white text-black dark:bg-zinc-900 relative overflow-hidden rounded-md shadow-xl  transition-transform duration-300 transform  cursor-pointer group h-[340px] ring-2 dark:ring-zinc-700 ring-zinc-200"
           >
             <Link
               href={`/blogs/${post.slug}`}

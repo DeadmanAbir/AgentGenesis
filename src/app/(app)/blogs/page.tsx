@@ -4,7 +4,7 @@ import { Blog } from '@/components/blog';
 const Blogs = () => {
   return (
     <>
-      <div className="container mt-32 font-semibold flex flex-col items-center gap-20 ">
+      <div className="container md:mt-32 mt-20 font-semibold flex flex-col items-center gap-20 ">
         <Blog />
       </div>
       <Footer />
