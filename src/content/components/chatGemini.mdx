@@ -136,7 +136,11 @@ import {
   Part,
   RequestOptions,
 } from "@google/generative-ai";
-
+import {
+  FileState,
+  GoogleAIFileManager,
+  UploadFileResponse,
+} from "@google/generative-ai/server";
 interface ChatGeminiArgs {
   apiKey: string;
   model: string;
@@ -149,6 +153,9 @@ interface GeminiChatProps {
   options?: RequestOptions;
   context?: string;
   outputFormat?: string;
+  file?:
+    | Record<"path" | "mimetype", string>[]
+    | Record<"link" | "mimetype", string>[];
 }
 
 interface GeminiChatWithHistoryProps extends GeminiChatProps {
@@ -172,10 +179,14 @@ interface ChatGeminiCountTokensProps {
   options?: RequestOptions;
   context?: string;
   outputFormat?: string;
+  file?:
+    | Record<"path" | "mimetype", string>[]
+    | Record<"link" | "mimetype", string>[];
 }
 
 export class ChatGemini {
   private client: GoogleGenerativeAI;
+  private fileManager: GoogleAIFileManager;
   private model: string;
 
   constructor(props: ChatGeminiArgs) {
@@ -184,6 +195,7 @@ export class ChatGemini {
       throw new Error("No API key provided for Gemini AI.");
     }
     this.client = new GoogleGenerativeAI(apiKey);
+    this.fileManager = new GoogleAIFileManager(apiKey);
     this.model = model;
   }
 
@@ -197,27 +209,29 @@ export class ChatGemini {
       systemInstruction,
       context,
       outputFormat,
+      file,
     } = props;
 
     const client = this.createClient(this.model, systemInstruction, options);
-
     const content = this.createContext(prompt, context, outputFormat);
 
-    if (!stream) {
-      const result = await client.generateContent(content);
-      const response = await result.response;
-      const text = await response.text();
+    const fileParts =
+      file && file.length > 0 ? await this.fileUpload(file) : [];
 
-      return {
-        content: text.replace("```json\n", "").replace("\n```", "") ?? "",
-        promptTokenCount: response?.usageMetadata?.promptTokenCount ?? null,
-        candidatesTokenCount:
-          response?.usageMetadata?.candidatesTokenCount ?? null,
-      };
+    if (stream) {
+      return await client.generateContentStream([content, ...fileParts]);
     }
 
-    const result = await client.generateContentStream(content);
-    return result;
+    const result = await client.generateContent([content, ...fileParts]);
+    const response = await result.response;
+    const text = await response.text();
+
+    return {
+      content: text.replace("```json\n", "").replace("\n```", "") ?? "",
+      promptTokenCount: response?.usageMetadata?.promptTokenCount ?? null,
+      candidatesTokenCount:
+        response?.usageMetadata?.candidatesTokenCount ?? null,
+    };
   }
 
   async chatWithHistory(
@@ -270,8 +284,6 @@ export class ChatGemini {
     const { options, chatHistory } = props;
 
     const client = this.createClient(this.model, undefined, options);
-
-    
     const history = this.createChatHistory(chatHistory);
     const chat = client.startChat({
       history,
@@ -287,13 +299,14 @@ export class ChatGemini {
   async countTokens(
     props: ChatGeminiCountTokensProps
   ): Promise<CountTokensResponse> {
-    const { prompt, context, outputFormat, options } = props;
+    const { prompt, context, outputFormat, file, options } = props;
 
     const client = this.createClient(this.model, undefined, options);
 
     const content = this.createContext(prompt, context, outputFormat);
 
-    const result = await client.countTokens(content);
+    const fileParts = file ? await this.fileUpload(file) : [];
+    const result = await client.countTokens([content, ...fileParts]);
 
     return result;
   }
@@ -336,6 +349,71 @@ export class ChatGemini {
 
     return content;
   }
+
+  private async fileUpload(
+    file:
+      | Record<"path" | "mimetype", string>[]
+      | Record<"link" | "mimetype", string>[]
+  ) {
+    const fileUploads = file.some((f) => "path" in f)
+      ? await Promise.all(
+          (file as Record<"path" | "mimetype", string>[]).map((img) =>
+            this.handleFileUpload(img.path, img.mimetype)
+          )
+        )
+      : [];
+
+    const localFileParts = await Promise.all(
+      fileUploads.map(async (upload) => ({
+        fileData: {
+          fileUri: upload.file.uri,
+          mimeType: upload.file.mimeType,
+        },
+      }))
+    );
+
+    const onlineFileParts = file.some((f) => "link" in f)
+      ? await Promise.all(
+          (file as Record<"link" | "mimetype", string>[]).map(async (img) => {
+            const response = await fetch(img.link);
+            const buffer = await response.arrayBuffer();
+
+            return {
+              inlineData: {
+                data: Buffer.from(buffer).toString("base64"),
+                mimeType: img.mimetype,
+              },
+            };
+          })
+        )
+      : [];
+
+    const fileParts = [...localFileParts, ...onlineFileParts];
+
+    return fileParts;
+  }
+
+  private async handleFileUpload(
+    path: string,
+    mimeType: string
+  ): Promise<UploadFileResponse> {
+    const uploadResult = await this.fileManager.uploadFile(path, {
+      mimeType: mimeType,
+    });
+    let file = await this.fileManager.getFile(uploadResult.file.name);
+
+    while (file.state === FileState.PROCESSING) {
+      process.stdout.write(".");
+
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      file = await this.fileManager.getFile(uploadResult.file.name);
+    }
+
+    if (file.state === FileState.FAILED) {
+      throw new Error("Media processing failed.");
+    }
+    return uploadResult;
+  }
 }
 
 ```
@@ -354,7 +432,7 @@ import { ChatGemini } from "@/utils/chatGemini";
 
 const chatGemini = new ChatGemini({
   apiKey: process.env.GEMINI_API_KEY as string,
-  model: "gemini-1.5-flash",
+  model: "gemini-2.0-flash",
 });
 
 ```
@@ -431,6 +509,56 @@ console.log(responseTextWithContext);
 }
 **/
 ```
+### Multimodal Chat
+
+ChatGemini supports multimodal inputs, allowing you to combine text with media files.  
+Check out the supported file types on the [Google Support page](https://support.google.com/gemini/answer/14903178?co=GENIE.Platform%3DDesktop&hl=en).
+
+#### Example: Using Public URLs
+
+The following examples demonstrate how to send single and multiple files using public URLs.
+
+```tsx showLineNumbers
+const responseTextWithSingleFile = await chatGemini.chat({
+  prompt: "Summarize all the files provided.",
+  file: [
+    {
+      link: "https://files.eric.ed.gov/fulltext/EJ1172284.pdf",
+      mimetype: "application/pdf",
+    },
+  ],
+});
+
+const responseTextWithMultiFiles = await chatGemini.chat({
+  prompt: "Summarize all the files provided.",
+  file: [
+    {
+      link: "https://files.eric.ed.gov/fulltext/EJ1172284.pdf",
+      mimetype: "application/pdf",
+    },
+    {
+      link: "https://thumbs.dreamstime.com/z/woman-has-busy-day-work-254938010.jpg",
+      mimetype: "image/jpeg",
+    },
+  ],
+});
+```
+#### Example: Using Local File Paths
+
+You can also provide local file paths instead of URLs.
+
+```tsx showLineNumbers
+const responseTextWithLocalFile = await chatGemini.chat({
+  prompt: "Summarize all the files provided.",
+  file: [
+    {
+      path: "./public/sample.pdf",
+      mimetype: "application/pdf",
+    },
+  ],
+});
+```
+
 ### Streaming text
 
 Sample example of creating and handling stream responses.
@@ -528,15 +656,16 @@ console.log(countHistoryTokens);
 
 ### chat
 
-| Prop               | Type                        | Description                                             | Default |
-| ------------------ | --------------------------- | ------------------------------------------------------- | ------- |
-| prompt             | string                      | Prompt provided by user.                                | ""      |
-| context            | string?                     | Additional context user wants to provide.               | ""      |
-| stream             | boolean?                    | If yes, there will be stream output of texts.           | false   |
-| outputFormat       | string?                     | Particular format in which the user wants their output. | ""      |
-| chatHistory        | optional                    | Conversational history.                                 | ""      |
-| systemInstruction  | RequestOptions?             | Any specific instruction to the system user wants to feed. | ""   |
-| options            | RequestOptions?             | Additional args as per Google Gemini docs.              | {}      |
+| Prop              | Type            | Description                                              | Default |
+|-------------------|-----------------|----------------------------------------------------------|---------|
+| prompt            | string          | Prompt provided by user                                  | ""      |
+| context           | string?         | Additional context user wants to provide                 | ""      |
+| stream            | boolean?        | If yes, there will be stream output of texts            | false   |
+| outputFormat      | string?         | Particular format in which the user wants their output  | ""      |
+| chatHistory       | optional        | Conversational history                                  | ""      |
+| systemInstruction | RequestOptions? | Any specific instruction to the system user wants to feed| ""      |
+| file              | optional        | File path                                               | []      |
+| options           | RequestOptions? | Additional args as per Google Gemini docs               | {}      |
 
 ### chatWithHistory
 
@@ -560,12 +689,14 @@ console.log(countHistoryTokens);
 
 ### countTokens
 
-| Prop         | Type            | Description                                           | Default |
-|--------------|-----------------|-------------------------------------------------------|---------|
-| prompt       | string          | Prompt provided by user.                              | ""      |
-| options      | RequestOptions? | Additional args as per Google Gemini docs.            | {}      |
-| context      | string?         | Additional context user wants to provide.             | ""      |
-| outputFormat | string?         | Particular format in which the user wants their output. | ""    |
+| Prop          | Type             | Description                                              | Default |
+|---------------|------------------|----------------------------------------------------------|---------|
+| prompt        | string           | Prompt provided by user                                  | ""      |
+| options       | RequestOptions?  | Additional args as per Google Gemini docs               | {}      |
+| context       | string?          | Additional context user wants to provide                 | ""      |
+| outputFormat  | string?          | Particular format in which the user wants their output  | ""      |
+| file         | optional         | File path                                               | []      |
+
 
 
 ## Credits

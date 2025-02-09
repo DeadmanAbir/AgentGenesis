@@ -397,7 +397,31 @@ console.log(dataWithContext);
 
 ```
 
+### Multimodal Chat
+ChatOpenAi supports multimodal inputs, allowing you to combine text with image files.
+Check out the supported image types on the [Openai Platform](https://platform.openai.com/docs/guides/vision#what-type-of-files-can-i-upload).
 
+#### Example: Using Public URLs and Local paths
+
+The following examples demonstrate how to send single and multiple files using public URLs and Local paths.
+
+```tsx showLineNumbers 
+const dataWithImage = await chatOpenAI.chat({
+  prompt: "what the 2nd image is depicting...?",
+  image: [
+    {
+      path: "./public/busy.jpg",
+      type: "local",
+    },
+    {
+      path: "https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg",
+      type: "remote",
+    },
+  ],
+
+  temperature: 0.6,
+});
+```
 
 ### Streaming text
 Sample example of creating and handling stream responses.
@@ -455,6 +479,7 @@ const data = await chatOpenAI.detectThreat({
 | chatHistory        | optional                    | Conversational history.                                 | ""      |
 | temperature        | number?                     | Randomness of the LLM.                                  | 0.5     |
 | systemInstruction  | string?                     | Any specific instruction to the system user wants to feed. | ""      |
+| image             | optional        | Image path                                               | []      |
 | options            | ChatOpenAICompletionProps?  | Additional args as per OpenAI docs.                     | {}      |
 
 
