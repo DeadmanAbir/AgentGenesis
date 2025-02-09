@@ -154,8 +154,8 @@ interface GeminiChatProps {
   context?: string;
   outputFormat?: string;
   file?:
-    | Record<string, { path: string; mimetype: string }>
-    | Record<string, { link: string; mimetype: string }>;
+    | Record<"path" | "mimetype", string>[]
+    | Record<"link" | "mimetype", string>[];
 }
 
 interface GeminiChatWithHistoryProps extends GeminiChatProps {
@@ -180,8 +180,8 @@ interface ChatGeminiCountTokensProps {
   context?: string;
   outputFormat?: string;
   file?:
-    | Record<string, { path: string; mimetype: string }>
-    | Record<string, { link: string; mimetype: string }>;
+    | Record<"path" | "mimetype", string>[]
+    | Record<"link" | "mimetype", string>[];
 }
 
 export class ChatGemini {
@@ -215,7 +215,8 @@ export class ChatGemini {
     const client = this.createClient(this.model, systemInstruction, options);
     const content = this.createContext(prompt, context, outputFormat);
 
-    const fileParts = file ? await this.fileUpload(file) : [];
+    const fileParts =
+      file && file.length > 0 ? await this.fileUpload(file) : [];
 
     if (stream) {
       return await client.generateContentStream([content, ...fileParts]);
@@ -351,17 +352,16 @@ export class ChatGemini {
 
   private async fileUpload(
     file:
-      | Record<string, { path: string; mimetype: string }>
-      | Record<string, { link: string; mimetype: string }>
+      | Record<"path" | "mimetype", string>[]
+      | Record<"link" | "mimetype", string>[]
   ) {
-    const fileUploads =
-      file && Object.values(file)[0].hasOwnProperty("path")
-        ? await Promise.all(
-            Object.values(
-              file as Record<string, { path: string; mimetype: string }>
-            ).map((img) => this.handleFileUpload(img.path, img.mimetype))
+    const fileUploads = file.some((f) => "path" in f)
+      ? await Promise.all(
+          (file as Record<"path" | "mimetype", string>[]).map((img) =>
+            this.handleFileUpload(img.path, img.mimetype)
           )
-        : [];
+        )
+      : [];
 
     const localFileParts = await Promise.all(
       fileUploads.map(async (upload) => ({
@@ -372,24 +372,21 @@ export class ChatGemini {
       }))
     );
 
-    const onlineFileParts =
-      file && Object.values(file)[0].hasOwnProperty("link")
-        ? await Promise.all(
-            Object.values(
-              file as Record<string, { link: string; mimetype: string }>
-            ).map(async (img) => {
-              const response = await fetch(img.link);
-              const buffer = await response.arrayBuffer();
+    const onlineFileParts = file.some((f) => "link" in f)
+      ? await Promise.all(
+          (file as Record<"link" | "mimetype", string>[]).map(async (img) => {
+            const response = await fetch(img.link);
+            const buffer = await response.arrayBuffer();
 
-              return {
-                inlineData: {
-                  data: Buffer.from(buffer).toString("base64"),
-                  mimeType: img.mimetype,
-                },
-              };
-            })
-          )
-        : [];
+            return {
+              inlineData: {
+                data: Buffer.from(buffer).toString("base64"),
+                mimeType: img.mimetype,
+              },
+            };
+          })
+        )
+      : [];
 
     const fileParts = [...localFileParts, ...onlineFileParts];
 
@@ -524,26 +521,26 @@ The following examples demonstrate how to send single and multiple files using p
 ```tsx showLineNumbers
 const responseTextWithSingleFile = await chatGemini.chat({
   prompt: "Summarize all the files provided.",
-  file: {
-    file1: {
+  file: [
+    {
       link: "https://files.eric.ed.gov/fulltext/EJ1172284.pdf",
       mimetype: "application/pdf",
     },
-  },
+  ],
 });
 
 const responseTextWithMultiFiles = await chatGemini.chat({
   prompt: "Summarize all the files provided.",
-  file: {
-    file1: {
+  file: [
+    {
       link: "https://files.eric.ed.gov/fulltext/EJ1172284.pdf",
       mimetype: "application/pdf",
     },
-    file2: {
+    {
       link: "https://thumbs.dreamstime.com/z/woman-has-busy-day-work-254938010.jpg",
       mimetype: "image/jpeg",
     },
-  },
+  ],
 });
 ```
 #### Example: Using Local File Paths
@@ -553,12 +550,12 @@ You can also provide local file paths instead of URLs.
 ```tsx showLineNumbers
 const responseTextWithLocalFile = await chatGemini.chat({
   prompt: "Summarize all the files provided.",
-  file: {
-    file1: {
+  file: [
+    {
       path: "./public/sample.pdf",
       mimetype: "application/pdf",
     },
-  },
+  ],
 });
 ```
 
@@ -667,7 +664,7 @@ console.log(countHistoryTokens);
 | outputFormat      | string?         | Particular format in which the user wants their output  | ""      |
 | chatHistory       | optional        | Conversational history                                  | ""      |
 | systemInstruction | RequestOptions? | Any specific instruction to the system user wants to feed| ""      |
-| file              | optional        | File path                                               | {}      |
+| file              | optional        | File path                                               | []      |
 | options           | RequestOptions? | Additional args as per Google Gemini docs               | {}      |
 
 ### chatWithHistory
@@ -698,7 +695,7 @@ console.log(countHistoryTokens);
 | options       | RequestOptions?  | Additional args as per Google Gemini docs               | {}      |
 | context       | string?          | Additional context user wants to provide                 | ""      |
 | outputFormat  | string?          | Particular format in which the user wants their output  | ""      |
-| file         | optional         | File path                                               | {}      |
+| file         | optional         | File path                                               | []      |
 
 
 
