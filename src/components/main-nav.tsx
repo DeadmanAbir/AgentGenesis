@@ -8,6 +8,7 @@ import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
+import { docsConfig } from '@/config/doc';
 
 export function MainNav() {
   const pathname = usePathname();
@@ -35,27 +36,21 @@ export function MainNav() {
         </span>
       </Link>
       <nav className="flex items-center  gap-4 text-sm lg:gap-4  ">
-        <Link
-          href="/components"
-          className={cn(
-            'transition-colors hover:text-foreground/80 hover:dark:bg-neutral-700 hover:bg-neutral-100  px-2 py-1 rounded-lg',
-            pathname === '/components'
-              ? 'text-foreground '
-              : 'text-foreground/60',
-          )}
-        >
-          Components
-        </Link>
-        <Link
-          href="/blogs"
-          className={cn(
-            'transition-colors hover:text-foreground/80 hover:dark:bg-neutral-700 hover:bg-neutral-100  px-2 py-1 rounded-lg',
-            pathname === '/blogs' ? 'text-foreground ' : 'text-foreground/60',
-          )}
-        >
-          Blogs
-        </Link>
-
+        {docsConfig.mainNav &&
+          docsConfig.mainNav.map((item) => (
+            <Link
+              key={item.title}
+              href={item.href || '/'}
+              className={cn(
+                'transition-colors hover:text-foreground/80 hover:dark:bg-neutral-700 hover:bg-neutral-100  px-2 py-1 rounded-lg',
+                pathname === item.href
+                  ? 'text-foreground '
+                  : 'text-foreground/60',
+              )}
+            >
+              {item.title}
+            </Link>
+          ))}
         <a
           href="mailto:agentgenesisdev@gmail.com"
           className={cn(
