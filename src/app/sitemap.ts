@@ -17,6 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: currentDate,
   }));
 
+  pages.push({ url: `${url}/about`, lastModified: currentDate });
   pages.push({ url: `${url}/blogs`, lastModified: currentDate });
   pages = pages.concat(slugs);
   pages.unshift({ url, lastModified: currentDate });
