@@ -30,7 +30,7 @@ export function CodeBlockWrapper({
         >
           <div
             className={cn(
-              '[&_pre]:my-0 [&_pre]:max-h-[650px] [&_pre]:pb-[100px]',
+              '[&_pre]:mb-16 [&_pre]:max-h-[650px] [&_pre]:pb-[100px]',
               !isOpened ? '[&_pre]:overflow-hidden' : '[&_pre]:overflow-auto]',
             )}
           >
