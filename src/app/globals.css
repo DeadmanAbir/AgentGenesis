@@ -179,3 +179,16 @@ html{
   background: #a19d9d; 
   border-radius: 12px;
 }
+ pre {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  width: 100%; 
+  max-width: 700px;
+  background-color: rgb(36, 35, 35) !important;
+  overflow-x: auto; 
+  overflow-y: hidden; 
+  box-sizing: border-box; 
+  margin: 0 auto;
+  border-radius: 0px !important; 
+  
+}
