@@ -179,16 +179,25 @@ html{
   background: #a19d9d; 
   border-radius: 12px;
 }
- pre {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  width: 100%; 
+pre {
+  -ms-overflow-style: none; 
+  scrollbar-width: thin; 
+  width: 100%;
   max-width: 700px;
   background-color: rgb(36, 35, 35) !important;
   overflow-x: auto; 
-  overflow-y: hidden; 
-  box-sizing: border-box; 
+  overflow-y: hidden;
+  box-sizing: border-box;
   margin: 0 auto;
-  border-radius: 0px !important; 
-  
+  border-radius: 0px !important;
+}
+
+pre::-webkit-scrollbar {
+  height: 6px; 
+  width: 0px; 
+}
+
+pre::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
 }
