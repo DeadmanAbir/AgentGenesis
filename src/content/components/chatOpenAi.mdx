@@ -137,6 +137,7 @@ import {
 } from "openai/resources/index.mjs";
 import { ChatCompletionChunk } from "openai/src/resources/index.js";
 import { Stream } from "openai/streaming.mjs";
+import fs from "fs";
 
 type ChatOpenAICompletionProps = {
   stream?: boolean;
@@ -147,7 +148,8 @@ interface ChatOpenAiArgs extends ClientOptions {
     | ChatModel
     | "text-moderation-latest"
     | "text-moderation-stable"
-    | "text-moderation-007";
+    | "text-moderation-007"
+    | "gpt-4o-mini";
 }
 
 interface OpenAICallProps {
@@ -157,6 +159,7 @@ interface OpenAICallProps {
   outputFormat?: string;
   chatHistory?: Record<"assistant" | "user", string>[];
   temperature?: number;
+  image?: { path: string; type: "local" | "remote" }[];
   options?: ChatOpenAICompletionProps;
 }
 
@@ -177,7 +180,8 @@ export class ChatOpenAI {
     | ChatModel
     | "text-moderation-latest"
     | "text-moderation-stable"
-    | "text-moderation-007";
+    | "text-moderation-007"
+    | "gpt-4o-mini";
 
   constructor(props: ChatOpenAiArgs) {
     const { apiKey, model } = props;
@@ -203,6 +207,7 @@ export class ChatOpenAI {
       chatHistory,
       temperature,
       systemInstruction,
+      image,
     } = props;
 
     let userMessages: Array<ChatCompletionMessageParam> = [];
@@ -218,8 +223,11 @@ export class ChatOpenAI {
       });
     }
 
-    const content = this.createContext(prompt, context, outputFormat);
-    userMessages.push({ role: "user", content });
+    const content = this.createContext(prompt, context, outputFormat, image);
+    userMessages.push({
+      role: "user",
+      content: image && image.length > 0 ? JSON.parse(content) : content,
+    });
 
     const chatCompletion = await this.client.chat.completions.create({
       messages: userMessages,
@@ -262,7 +270,8 @@ export class ChatOpenAI {
   private createContext(
     prompt: string,
     context?: string,
-    outputFormat?: string
+    outputFormat?: string,
+    file?: { path: string; type: "local" | "remote" }[]
   ): string {
     let content = prompt;
 
@@ -274,8 +283,26 @@ export class ChatOpenAI {
       content += `\noutput format:\n${outputFormat}`;
     }
 
+    if (file && file.length > 0) {
+      let finalContent = [
+        { type: "text", text: content },
+        ...file.map((f) => ({
+          type: "image_url",
+          image_url: {
+            url: f.type === "local" ? this.encodeImage(f.path) : f.path,
+          },
+        })),
+      ];
+      return JSON.stringify(finalContent);
+    }
+
     return content;
   }
+
+  private encodeImage = (imagePath: string) => {
+    const imageBuffer = fs.readFileSync(imagePath);
+    return `data:image/jpeg;base64,${imageBuffer.toString("base64")}`;
+  };
 }
 
 
