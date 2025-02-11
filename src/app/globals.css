@@ -186,7 +186,7 @@ pre {
   max-width: 700px;
   background-color: rgb(36, 35, 35) !important;
   overflow-x: auto; 
-  overflow-y: hidden;
+  overflow-y: auto;
   box-sizing: border-box;
   margin: 0 auto;
   border-radius: 0px !important;
