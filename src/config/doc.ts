@@ -99,6 +99,11 @@ export const docsConfig: DocsConfig = {
           href: '/components/chatAnthropic',
           items: [],
         },
+        {
+          title: 'WatsonxAi',
+          href: '/components/watsonxAiChat',
+          items: [],
+        },
       ],
     },
     {

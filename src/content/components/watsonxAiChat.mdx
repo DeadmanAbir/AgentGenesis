@@ -1,0 +1,517 @@
+---
+title: WatsonxAIChat
+description: Use different IBM's text generation models by following these instructions:.
+---
+
+<Tabs defaultValue="preview">
+
+<TabsList>
+  <TabsTrigger value="preview">Preview</TabsTrigger>
+
+</TabsList>
+
+
+
+<TabsContent value="code">
+
+<CodeBlockWrapper>
+
+```tsx showLineNumbers {4-7}
+import { ChatOpenAI } from "@/utils/chatOpenAi";
+
+// Initialize Client
+const chatOpenAI = new ChatOpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+  model: "gpt-3.5-turbo-0125",
+});
+
+// Single call chat
+const data = await chatOpenAI.chat({
+  prompt: "what is gemini ai? Respond in markdown format!",
+});
+
+
+// Call with Chat History
+const dataWithHistory = await chatOpenAI.chat({
+  prompt: "Who I am?",
+  chatHistory: [
+    { user: "Hello", assistant: "Hi there! How can I help you today?" },
+    { user: "My name is John Doe, and I am a AI developer!", assistant: "Sure, I will remember that!" },
+  ],
+});
+
+
+// Call with Output Format
+const dataWithFormat = await chatOpenAI.chat({
+  prompt: "Who I am?",
+  chatHistory: [
+    { user: "Hello", assistant: "Hi there! How can I help you today?" },
+    { user: "My name is John Doe, and I am a AI developer!", assistant: "Sure, I will remember that!" },
+  ],
+  outputFormat: `{"name: "", occupation: ""}`,
+});
+
+
+// Adding Context and other optional parameters
+const dataWithContext = await chatOpenAI.chat({
+  prompt: "Who I am?",
+  chatHistory: [
+    { user: "Hello", assistant: "Hi there! How can I help you today?" },
+    { user: "My name is John Doe, and I am a AI developer!", assistant: "Sure, I will remember that!" },
+  ],
+  context: "John Doe is a AI developer, specialized in chatbot development and RAG research.",
+  systemInstruction: "You're a helpful assistant and your name is AgentGenesis!",
+  outputFormat: `{"name: "", occupation: "", speciality: "", your_name : ""}`,
+  temperature: 0.6,
+  options: {
+    max_tokens: 100,
+    stream: false,
+  },
+});
+
+
+
+
+// Handling Streaming output
+const dataWithStreaming = await chatOpenAI.chat({
+  prompt: "Who I am?",
+  chatHistory: [
+    { user: "Hello", assistant: "Hi there! How can I help you today?" },
+    { user: "My name is John Doe, and I am a AI developer!", assistant: "Sure, I will remember that!" },
+  ],
+  context: "John Doe is a AI developer, specialized in chatbot development and RAG research.",
+  systemInstruction: "You're a helpful assistant and your name is AgentGenesis!",
+  temperature: 0.6,
+  options: {
+    max_tokens: 100,
+    stream: true,
+  },
+});
+
+// @ts-ignore
+for await (const chunk of dataWithStreaming) {
+  process.stdout.write(chunk.choices[0]?.delta?.content || "");
+}
+
+```
+
+</CodeBlockWrapper>
+
+</TabsContent>
+
+</Tabs>
+
+## Installation
+
+<Steps>
+
+<Step>Install peer dependencies:</Step>
+
+```bash
+npm install @ibm-cloud/watsonx-ai
+```
+<Step>Add Environment Variables</Step>
+
+```tsx title=".env" showLineNumbers {}
+WATSONX_AI_AUTH_TYPE=iam
+WATSONX_AI_APIKEY="YOUR_SAMPLE_API_KEY"
+WATSONX_AI_PROJECT_ID="YOUR_SAMPLE_PROJECT_ID"
+WATSONX_AI_SERVICE_URL="YOUR_SAMPLE_SERVICE_URL"
+/* You can get one from - https://www.ibm.com/products/watsonx-ai */
+```
+
+<Step>Copy the code</Step>
+
+Add the following code to your `utils/watsonxAiChat.ts` file:
+
+<CodeBlockWrapper>
+```tsx title="watsonxAiChat.ts" showLineNumbers {}
+import { WatsonXAI } from "@ibm-cloud/watsonx-ai";
+import { Stream } from "@ibm-cloud/watsonx-ai/dist/lib/common";
+import WatsonxAiMlVml_v1, {
+  ObjectStreamed,
+  TextChatStreamResponse,
+} from "@ibm-cloud/watsonx-ai/dist/watsonx-ai-ml/vml_v1";
+import { UserOptions } from "ibm-cloud-sdk-core";
+import fs from "fs";
+
+interface WatsonxAIConfig extends UserOptions {
+  modelId: string;
+  projectId: string;
+}
+
+interface ChatResponse {
+  output: string;
+}
+
+interface WatsonxAICallOptions {
+  prompt: string;
+  stream?: boolean;
+  context?: string;
+  systemInstruction?: string;
+  outputFormat?: string;
+  chatHistory?: Record<"assistant" | "user", string>[];
+  images?: { path: string; type: "local" | "remote" }[];
+  options?: Omit<
+    WatsonxAiMlVml_v1.TextChatParams,
+    "modelId" | "messages" | "projectId"
+  >;
+}
+
+export class WatsonxAIChat {
+  private client: WatsonXAI;
+  private modelId: string;
+  private projectId: string;
+
+  constructor(config: WatsonxAIConfig) {
+    const { modelId, projectId, serviceUrl, version } = config;
+
+    this.client = WatsonXAI.newInstance({
+      version: version ?? "2024-05-31",
+      serviceUrl,
+      ...config,
+    });
+
+    this.modelId = modelId;
+    this.projectId = projectId;
+  }
+
+  async chat(
+    options: WatsonxAICallOptions
+  ): Promise<ChatResponse | Stream<ObjectStreamed<TextChatStreamResponse>>> {
+    const {
+      prompt,
+      context,
+      stream,
+      outputFormat,
+      images,
+      chatHistory,
+      systemInstruction,
+    } = options;
+
+    let userMessages: { role: string; content: string }[] = [];
+
+    if (systemInstruction) {
+      userMessages.push({ role: "system", content: systemInstruction });
+    }
+
+    if (chatHistory && chatHistory.length > 0) {
+      chatHistory.forEach((chat) => {
+        userMessages.push({ role: "user", content: chat.user });
+        userMessages.push({ role: "assistant", content: chat.assistant });
+      });
+    }
+
+    const content = await this.buildMessage(
+      prompt,
+      context,
+      outputFormat,
+      images
+    );
+    userMessages.push({
+      role: "user",
+      content: images && images.length > 0 ? JSON.parse(content) : content,
+    });
+
+    if (stream) {
+      const response = await this.client.textChatStream({
+        modelId: this.modelId,
+        projectId: this.projectId,
+        returnObject: true,
+        messages: userMessages,
+        ...options.options,
+      });
+      return response;
+    }
+
+    const response = await this.client.textChat({
+      modelId: this.modelId,
+      projectId: this.projectId,
+      messages: userMessages,
+      ...options.options,
+    });
+
+    return {
+      output:
+        response.result?.choices?.[0]?.message?.content?.replace(
+          /^```json\n|\n```$/g,
+          ""
+        ) ?? "",
+    };
+  }
+
+  private async buildMessage(
+    prompt: string,
+    context?: string,
+    outputFormat?: string,
+    file?: { path: string; type: "local" | "remote" }[]
+  ): Promise<string> {
+    let content = prompt;
+
+    if (context) {
+      content += `\ncontext:\n${context}`;
+    }
+
+    if (outputFormat) {
+      content += `\noutput format:\n${outputFormat}`;
+    }
+
+    if (file && file.length > 0) {
+      const filePromises = file.map(async (f) => ({
+        type: "image_url",
+        image_url: {
+          url: await this.encodeImage(f.path, f.type),
+        },
+      }));
+
+      const resolvedFiles = await Promise.all(filePromises);
+
+      const finalContent = [{ type: "text", text: content }, ...resolvedFiles];
+      return JSON.stringify(finalContent);
+    }
+
+    return content;
+  }
+
+  private async encodeImage(
+    path: string,
+    type: "local" | "remote"
+  ): Promise<string> {
+    if (type === "remote") {
+      const response = await fetch(path);
+      const buffer = Buffer.from(await response.arrayBuffer()).toString(
+        "base64"
+      );
+      return `data:image/jpeg;base64,${buffer}`;
+    }
+
+    return `data:image/jpeg;base64,${fs.readFileSync(path).toString("base64")}`;
+  }
+}
+
+```
+
+</CodeBlockWrapper>
+</Steps>
+
+## Usage
+
+### Initialize client
+
+We can use IBM's **granite models** for chat inferencing.
+
+**Choosing the Right Model**
+
+| Use Case                                      | Best Model                          |
+|-----------------------------------------------|-------------------------------------|
+| General-purpose AI (chatbots, summaries, reasoning) | `ibm/granite-13b-instruct-v2`         |
+| Code generation, AI-assisted coding          | `ibm/granite-20b-code-instruct`       |
+| Lightweight applications, low latency        | `ibm/granite-3-2b-instruct`           |
+| Balanced performance and efficiency          | `ibm/granite-3-8b-instruct`           |
+
+
+Checkout models of IBM's on their 
+[Data Platform](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-models.html?context=wx#ibm-provided)
+
+
+
+Initialize the WatsonxAIChat client.
+```tsx showLineNumbers 
+import { WatsonxAIChat } from "@/utils/watsonxAiChat";
+
+const watsonxChat = new WatsonxAIChat({
+  modelId: "ibm/granite-3-2b-instruct",
+  projectId: process.env.WATSONX_AI_PROJECT_ID!,
+  serviceUrl: process.env.WATSONX_AI_SERVICE_URL,
+});
+
+```
+### Simple Chat
+
+Sample chat with a simple single prompt.
+
+
+
+```tsx showLineNumbers 
+const data = await watsonxChat.chat({
+  prompt: "What is YCombinator? Respond in one liner!",
+});
+
+console.log(data);
+
+/**
+{
+  "output": "YCombinator is a seed money startup accelerator program."
+}
+**/
+
+```
+
+### Multi Conversational chat
+
+Sample chats involving addition of chat history.
+
+```tsx showLineNumbers 
+const dataWithHistory = await watsonxChat.chat({
+  prompt: "Who I am?",
+  chatHistory: [
+    { user: "Hello", assistant: "Hi there! How can I help you today?" },
+    {
+      user: "My name is John Doe, and I am an AI developer!",
+      assistant: "Sure, I will remember that!",
+    },
+  ],
+});
+
+console.log(dataWithHistory);
+
+/**
+{
+  "output": "You are John Doe, an AI developer. How can I assist you further today?"
+}
+**/
+```
+### Defining Output Format
+
+Example of defining output format. Though it's not 100% accurate, LLM can hallucinate sometime.
+
+```tsx showLineNumbers 
+const dataWithFormat = await watsonxChat.chat({
+  prompt: "Who I am?",
+  chatHistory: [
+    { user: "Hello", assistant: "Hi there! How can I help you today?" },
+    {
+      user: "My name is John Doe, and I am an AI developer!",
+      assistant: "Sure, I will remember that!",
+    },
+  ],
+  outputFormat: `{"name: "", occupation: ""}`,
+});
+
+console.log(dataWithFormat);
+
+/**
+{
+  "output": "{\"name\": \"John Doe\", \"occupation\": \"AI developer\"}"
+}
+**/
+```
+
+### Defining Context and other optional parameters
+```tsx showLineNumbers 
+const dataWithContext = await watsonxChat.chat({
+  prompt: "Who I am?",
+  chatHistory: [
+    { user: "Hello", assistant: "Hi there! How can I help you today?" },
+    {
+      user: "My name is John Doe, and I am an AI developer!",
+      assistant: "Sure, I will remember that!",
+    },
+  ],
+  context:
+    "John Doe is an AI developer, specialized in chatbot development and RAG research.",
+  systemInstruction: "You're a helpful assistant and your name is AgentGenesis!",
+  outputFormat: `{"name: "", occupation: "", speciality: "", your_name : ""}`,
+  options: {
+    maxTokens: 100,
+    temperature: 0.7,
+  },
+});
+
+console.log(dataWithContext);
+
+/**
+{
+  "output": "{\n    \"name\": \"John Doe\",\n    \"occupation\": \"AI developer\",\n    \"speciality\": \"chatbot development and RAG research\",\n    \"your_name\": \"AgentGenesis\"\n}"
+}
+**/
+
+```
+
+### Multimodal Chat
+WatsonxAIChat supports multimodal inputs, allowing you to combine text with image files. 
+
+For multimodal chat interactions, we use vision-capable models like `meta-llama/llama-3-2-11b-vision-instruct` which can process both text and images
+
+
+####  Example: Using Public URLs and Local paths
+
+The following examples demonstrate how to send file using public URLs and Local paths.
+
+```tsx showLineNumbers 
+
+const watsonxChat = new WatsonxAIChat({
+  modelId: "meta-llama/llama-3-2-11b-vision-instruct",
+  projectId: process.env.WATSONX_AI_PROJECT_ID!,
+  serviceUrl: process.env.WATSONX_AI_SERVICE_URL,
+});
+
+const dataWithImage = await watsonxChat.chat({
+  prompt: "what the image is depicting...?",
+  images: [
+    {
+      path: "https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg",
+      type: "remote",
+    },
+  ],
+  options: {
+    temperature: 0.6,
+  },
+});
+```
+
+### Streaming text
+Sample example of creating and handling stream responses.
+
+```tsx showLineNumbers 
+const dataWithStreaming = await watsonxChat.chat({
+  prompt: "Who I am?",
+  chatHistory: [
+    { user: "Hello", assistant: "Hi there! How can I help you today?" },
+    {
+      user: "My name is John Doe, and I am an AI developer!",
+      assistant: "Sure, I will remember that!",
+    },
+  ],
+  context: "John Doe is an AI developer, specialized in chatbot development and RAG research.",
+  systemInstruction: "You're a helpful assistant and your name is AgentGenesis!",
+  options: {
+    temperature: 0.6,
+    maxTokens: 100,
+  },
+  stream: true,
+});
+
+// @ts-ignore
+for await (const chunk of dataWithStreaming) {
+  console.log(chunk.data?.choices[0]?.delta?.content ?? "");
+}
+
+/**
+You are John Doe, an AI developer specialized in chatbot development and RAG research. How can I assist you further, John?
+**/
+```
+
+
+## Props
+
+### chat
+
+| Prop               | Type                        | Description                                             | Default |
+| ------------------ | --------------------------- | ------------------------------------------------------- | ------- |
+| prompt             | string                      | Prompt provided by user.                                | ""      |
+| context            | string?                     | Additional context user wants to provide.               | ""      |
+| outputFormat       | string?                     | Particular format in which the user wants their output. | ""      |
+| chatHistory        | optional                    | Conversational history.                                 | ""      |
+| systemInstruction  | string?                     | Any specific instruction to the system user wants to feed. | ""      |
+| image             | optional        | Image path                                               | []      |
+| options            | optional?  | Additional args as per IBM docs.                     | {}      |
+
+
+
+
+
+## Credits
+
+This component is built on top of [Watsonx AI's node sdk](https://github.com/IBM/watsonx-ai-node-sdk)
+
