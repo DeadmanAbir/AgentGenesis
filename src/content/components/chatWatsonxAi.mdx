@@ -1,6 +1,6 @@
 ---
-title: WatsonxAIChat
-description: Use different IBM's text generation models by following these instructions:.
+title: ChatWatsonxAI
+description: Use different IBM's text generation models by following these instructions.
 ---
 
 <Tabs defaultValue="preview">
@@ -21,10 +21,10 @@ description: Use different IBM's text generation models by following these instr
 <CodeBlockWrapper>
 
 ```tsx showLineNumbers {4-9}
-import { chatWatsonxAIChat } from "@/utils/chatwatsonxAiChat";
+import { chatWatsonxAI } from "@/utils/chatwatsonxAi";
 
 // Initialize the Client
-const watsonxChat = new chatWatsonxAIChat({
+const watsonxChat = new chatWatsonxAI({
   modelId: "ibm/granite-3-2b-instruct",
   projectId: process.env.WATSONX_AI_PROJECT_ID!,
   serviceUrl: process.env.WATSONX_AI_SERVICE_URL,
@@ -165,10 +165,10 @@ WATSONX_AI_SERVICE_URL="YOUR_SAMPLE_SERVICE_URL"
 
 <Step>Copy the code</Step>
 
-Add the following code to your `utils/watsonxAiChat.ts` file:
+Add the following code to your `utils/chatWatsonxAi.ts` file:
 
 <CodeBlockWrapper>
-```tsx title="watsonxAiChat.ts" showLineNumbers {}
+```tsx title="chatWatsonxAi.ts" showLineNumbers {}
 import { WatsonXAI } from "@ibm-cloud/watsonx-ai";
 import { Stream } from "@ibm-cloud/watsonx-ai/dist/lib/common";
 import WatsonxAiMlVml_v1, {
@@ -204,7 +204,7 @@ interface WatsonxAICallWithChatOptions extends WatsonxAICallOptions {
   >;
 }
 
-export class WatsonxAIChat {
+export class ChatWatsonxAI {
   private client: WatsonXAI;
   private modelId: string;
   private projectId: string;
@@ -413,9 +413,9 @@ To obtain the required `version` and `modelId`:
 
 Initialize the WatsonxAIChat client.
 ```tsx showLineNumbers 
-import { WatsonxAIChat } from "@/utils/watsonxAiChat";
+import { ChatWatsonxAI} from "@/utils/chatWatsonxAi";
 
-const watsonxChat = new WatsonxAIChat({
+const watsonxChat = new ChatWatsonxAI({
   modelId: "ibm/granite-13b-instruct-v2",
   projectId: process.env.WATSONX_AI_PROJECT_ID!,
   serviceUrl: process.env.WATSONX_AI_SERVICE_URL,
@@ -455,7 +455,7 @@ Models like `granite-3-2b-instruct` supports multi-conversational chats.
 
 ```tsx showLineNumbers 
 
-const watsonxChat = new WatsonxAIChat({
+const watsonxChat = new ChatWatsonxAI({
   modelId: "ibm/granite-3-2b-instruct",
   projectId: process.env.WATSONX_AI_PROJECT_ID!,
   serviceUrl: process.env.WATSONX_AI_SERVICE_URL,
@@ -551,7 +551,7 @@ The following examples demonstrate how to send file using public URLs and Local 
 
 ```tsx showLineNumbers 
 
-const watsonxChat = new WatsonxAIChat({
+const watsonxChat = new ChatWatsonxAI({
   modelId: "meta-llama/llama-3-2-11b-vision-instruct",
   projectId: process.env.WATSONX_AI_PROJECT_ID!,
   serviceUrl: process.env.WATSONX_AI_SERVICE_URL,
