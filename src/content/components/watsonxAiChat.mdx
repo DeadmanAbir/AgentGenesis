@@ -7,91 +7,111 @@ description: Use different IBM's text generation models by following these instr
 
 <TabsList>
   <TabsTrigger value="preview">Preview</TabsTrigger>
-
+  <TabsTrigger value="code">Code</TabsTrigger>
 </TabsList>
 
-
+<TabsContent value="preview">
+  <ComponentPreviewTemp>
+    <ChatWatsonxDemo/>
+  </ComponentPreviewTemp>
+</TabsContent>
 
 <TabsContent value="code">
 
 <CodeBlockWrapper>
 
-```tsx showLineNumbers {4-7}
-import { ChatOpenAI } from "@/utils/chatOpenAi";
+```tsx showLineNumbers {4-9}
+import { chatWatsonxAIChat } from "@/utils/chatwatsonxAiChat";
 
-// Initialize Client
-const chatOpenAI = new ChatOpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  model: "gpt-3.5-turbo-0125",
+// Initialize the Client
+const watsonxChat = new chatWatsonxAIChat({
+  modelId: "ibm/granite-3-2b-instruct",
+  projectId: process.env.WATSONX_AI_PROJECT_ID!,
+  serviceUrl: process.env.WATSONX_AI_SERVICE_URL,
+  version: "2023-05-29",
 });
 
-// Single call chat
-const data = await chatOpenAI.chat({
-  prompt: "what is gemini ai? Respond in markdown format!",
-});
-
-
-// Call with Chat History
-const dataWithHistory = await chatOpenAI.chat({
+// Call With Chat History
+const dataWithHistory = await watsonxChat.chatWithHistory({
   prompt: "Who I am?",
   chatHistory: [
     { user: "Hello", assistant: "Hi there! How can I help you today?" },
-    { user: "My name is John Doe, and I am a AI developer!", assistant: "Sure, I will remember that!" },
+    {
+      user: "My name is John Doe, and I am an AI developer!",
+      assistant: "Sure, I will remember that!",
+    },
   ],
 });
-
-
-// Call with Output Format
-const dataWithFormat = await chatOpenAI.chat({
-  prompt: "Who I am?",
-  chatHistory: [
-    { user: "Hello", assistant: "Hi there! How can I help you today?" },
-    { user: "My name is John Doe, and I am a AI developer!", assistant: "Sure, I will remember that!" },
-  ],
-  outputFormat: `{"name: "", occupation: ""}`,
-});
-
 
 // Adding Context and other optional parameters
-const dataWithContext = await chatOpenAI.chat({
+const dataWithContext = await watsonxChat.chatWithHistory({
   prompt: "Who I am?",
   chatHistory: [
     { user: "Hello", assistant: "Hi there! How can I help you today?" },
-    { user: "My name is John Doe, and I am a AI developer!", assistant: "Sure, I will remember that!" },
+    {
+      user: "My name is John Doe, and I am an AI developer!",
+      assistant: "Sure, I will remember that!",
+    },
   ],
-  context: "John Doe is a AI developer, specialized in chatbot development and RAG research.",
+  context:
+    "John Doe is an AI developer, specialized in chatbot development and RAG research.",
   systemInstruction: "You're a helpful assistant and your name is AgentGenesis!",
-  outputFormat: `{"name: "", occupation: "", speciality: "", your_name : ""}`,
-  temperature: 0.6,
+  outputFormat: `{name: "", occupation: "", speciality: "", your_name : ""}`,
   options: {
-    max_tokens: 100,
-    stream: false,
+    maxTokens: 100,
+    temperature: 0.7,
   },
 });
 
-
-
-
 // Handling Streaming output
-const dataWithStreaming = await chatOpenAI.chat({
+const dataWithStreaming = await watsonxChat.chatWithHistory({
   prompt: "Who I am?",
   chatHistory: [
     { user: "Hello", assistant: "Hi there! How can I help you today?" },
-    { user: "My name is John Doe, and I am a AI developer!", assistant: "Sure, I will remember that!" },
+    {
+      user: "My name is John Doe, and I am an AI developer!",
+      assistant: "Sure, I will remember that!",
+    },
   ],
-  context: "John Doe is a AI developer, specialized in chatbot development and RAG research.",
+  context: "John Doe is an AI developer, specialized in chatbot development and RAG research.",
   systemInstruction: "You're a helpful assistant and your name is AgentGenesis!",
-  temperature: 0.6,
   options: {
-    max_tokens: 100,
-    stream: true,
+    temperature: 0.6,
+    maxTokens: 100,
   },
+  stream: true,
 });
 
 // @ts-ignore
 for await (const chunk of dataWithStreaming) {
-  process.stdout.write(chunk.choices[0]?.delta?.content || "");
+  console.log(chunk.data?.choices[0]?.delta?.content ?? "");
 }
+
+const singleDataWithStreaming = await watsonxChat.chat({
+  prompt: "Who I am?",
+  context: "John Doe is an AI developer, specialized in chatbot development and RAG research.",
+  outputFormat: `{name: "", occupation: "", speciality: "", your_name : ""}`,
+  stream: true,
+});
+
+// @ts-ignore
+for await (const chunk of singleDataWithStreaming) {
+  console.log(chunk.data.results[0].generated_text);
+}
+
+// Handling Multimodal Inputs
+const dataWithRemoteImage = await watsonxChat.chatWithHistory({
+  prompt: "what the image is depicting...?",
+  image: [
+    {
+      path: "https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg",
+      type: "remote",
+    },
+  ],
+  options: {
+    temperature: 0.6,
+  },
+});
 
 ```
 
@@ -110,6 +130,29 @@ for await (const chunk of dataWithStreaming) {
 ```bash
 npm install @ibm-cloud/watsonx-ai
 ```
+<Step> Prerequisites</Step>
+
+Before setting up the component, you'll need to obtain the necessary environment variables from the [IBM WatsonX AI platform](https://www.ibm.com/products/watsonx-ai). Follow these steps:
+
+1. **Create an IBM Account and API Key**
+  - Sign up for an IBM WatsonX AI account
+  - Navigate to the API Key section
+  - Click "Create API Key" to generate your credentials
+  ![API Key Generation](https://cdn.hashnode.com/res/hashnode/image/upload/v1739446478745/e74681ab-b3d5-4d38-b783-e547a18673d4.png)
+
+2. **Set Up Your Project**
+  - Create a new project if you don't have one
+  - Access the project's "Manage" section to find your Project ID
+  - Important: Enable "WatsonMachineLearning" under **/Manage/Services & integrations**
+  ![Project ID Location](https://cdn.hashnode.com/res/hashnode/image/upload/v1739446893349/c1789981-d04f-4823-9f5b-f1683c3a80a1.png)
+
+3. **Get Service URL**
+  - Navigate to the dashboard
+  - Locate and copy your service URL
+  ![Service URL Location](https://cdn.hashnode.com/res/hashnode/image/upload/v1739447163295/ef76ae63-5e1c-4b28-832f-cff32aaa06b9.png)
+
+Once you have these credentials, you can proceed with the environment variable setup.
+
 <Step>Add Environment Variables</Step>
 
 ```tsx title=".env" showLineNumbers {}
@@ -148,10 +191,13 @@ interface WatsonxAICallOptions {
   prompt: string;
   stream?: boolean;
   context?: string;
-  systemInstruction?: string;
   outputFormat?: string;
+}
+
+interface WatsonxAICallWithChatOptions extends WatsonxAICallOptions {
   chatHistory?: Record<"assistant" | "user", string>[];
-  images?: { path: string; type: "local" | "remote" }[];
+  image?: { path: string; type: "local" | "remote" }[];
+  systemInstruction?: string;
   options?: Omit<
     WatsonxAiMlVml_v1.TextChatParams,
     "modelId" | "messages" | "projectId"
@@ -167,7 +213,7 @@ export class WatsonxAIChat {
     const { modelId, projectId, serviceUrl, version } = config;
 
     this.client = WatsonXAI.newInstance({
-      version: version ?? "2024-05-31",
+      version: version,
       serviceUrl,
       ...config,
     });
@@ -178,13 +224,50 @@ export class WatsonxAIChat {
 
   async chat(
     options: WatsonxAICallOptions
+  ): Promise<
+    | ChatResponse
+    | Stream<
+        WatsonxAiMlVml_v1.ObjectStreamed<WatsonxAiMlVml_v1.TextGenResponse>
+      >
+  > {
+    const { prompt, context, stream, outputFormat } = options;
+
+    const content = await this.buildMessage(prompt, context, outputFormat);
+
+    if (stream) {
+      const response = await this.client.generateTextStream({
+        modelId: this.modelId,
+        projectId: this.projectId,
+        input: content,
+        returnObject: true,
+      });
+      return response;
+    }
+
+    const response = await this.client.generateText({
+      modelId: this.modelId,
+      projectId: this.projectId,
+      input: content,
+    });
+
+    return {
+      output:
+        response.result?.results?.[0]?.generated_text?.replace(
+          /^```json\n|\n```$/g,
+          ""
+        ) ?? "",
+    };
+  }
+
+  async chatWithHistory(
+    options: WatsonxAICallWithChatOptions
   ): Promise<ChatResponse | Stream<ObjectStreamed<TextChatStreamResponse>>> {
     const {
       prompt,
       context,
       stream,
       outputFormat,
-      images,
+      image,
       chatHistory,
       systemInstruction,
     } = options;
@@ -206,11 +289,11 @@ export class WatsonxAIChat {
       prompt,
       context,
       outputFormat,
-      images
+      image
     );
     userMessages.push({
       role: "user",
-      content: images && images.length > 0 ? JSON.parse(content) : content,
+      content: image && image.length > 0 ? JSON.parse(content) : content,
     });
 
     if (stream) {
@@ -289,6 +372,7 @@ export class WatsonxAIChat {
   }
 }
 
+
 ```
 
 </CodeBlockWrapper>
@@ -298,37 +382,53 @@ export class WatsonxAIChat {
 
 ### Initialize client
 
-We can use IBM's **granite models** for chat inferencing.
+## Model Selection Guide
 
-**Choosing the Right Model**
+IBM's **Granite** models offer various capabilities for different use cases. Before initializing the client, you'll need to select the appropriate model for your needs.
 
-| Use Case                                      | Best Model                          |
-|-----------------------------------------------|-------------------------------------|
-| General-purpose AI (chatbots, summaries, reasoning) | `ibm/granite-13b-instruct-v2`         |
-| Code generation, AI-assisted coding          | `ibm/granite-20b-code-instruct`       |
-| Lightweight applications, low latency        | `ibm/granite-3-2b-instruct`           |
-| Balanced performance and efficiency          | `ibm/granite-3-8b-instruct`           |
+### Available Models and Use Cases
 
+| Model                           | Best For                                          |
+|--------------------------------|--------------------------------------------------|
+| `ibm/granite-13b-instruct-v2`  | General-purpose AI (chatbots, summaries, reasoning) |
+| `ibm/granite-20b-code-instruct`| Code generation and AI-assisted programming       |
+| `ibm/granite-3-2b-instruct`    | Lightweight applications requiring low latency    |
+| `ibm/granite-3-8b-instruct`    | Balanced performance and resource efficiency      |
 
-Checkout models of IBM's on their 
-[Data Platform](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-models.html?context=wx#ibm-provided)
+For a complete list of IBM's models, visit the [IBM Data Platform Documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-models.html?context=wx#ibm-provided).
 
+### Getting Model Information
 
+To obtain the required `version` and `modelId`:
+
+1. Navigate to the Dashboard and select "Explore Foundational Models"
+  ![Foundational Models Navigation](https://cdn.hashnode.com/res/hashnode/image/upload/v1739454506289/3863948a-a8fb-4d36-89c3-085487f249e1.png)
+
+2. Select your desired model and open it in the prompt lab
+
+3. Click "View Code" in the top right corner to find:
+  - `modelId` (e.g., `ibm/granite-13b-instruct-v2`)
+  - `version` (e.g., `2023-05-29`)
+  ![Model Details](https://cdn.hashnode.com/res/hashnode/image/upload/v1739454867526/592c5f46-c80b-47fb-829c-d3b153859085.png)
 
 Initialize the WatsonxAIChat client.
 ```tsx showLineNumbers 
 import { WatsonxAIChat } from "@/utils/watsonxAiChat";
 
 const watsonxChat = new WatsonxAIChat({
-  modelId: "ibm/granite-3-2b-instruct",
+  modelId: "ibm/granite-13b-instruct-v2",
   projectId: process.env.WATSONX_AI_PROJECT_ID!,
   serviceUrl: process.env.WATSONX_AI_SERVICE_URL,
+  version: "2023-05-29"
 });
 
 ```
 ### Simple Chat
 
 Sample chat with a simple single prompt.
+
+Models like `granite-13b-instruct-v2` are best to use for single prompt chats.
+
 
 
 
@@ -351,8 +451,19 @@ console.log(data);
 
 Sample chats involving addition of chat history.
 
+Models like `granite-3-2b-instruct` supports multi-conversational chats.
+
 ```tsx showLineNumbers 
-const dataWithHistory = await watsonxChat.chat({
+
+const watsonxChat = new WatsonxAIChat({
+  modelId: "ibm/granite-3-2b-instruct",
+  projectId: process.env.WATSONX_AI_PROJECT_ID!,
+  serviceUrl: process.env.WATSONX_AI_SERVICE_URL,
+  version: "2023-05-29",
+
+});
+
+const dataWithHistory = await watsonxChat.chatWithHistory({
   prompt: "Who I am?",
   chatHistory: [
     { user: "Hello", assistant: "Hi there! How can I help you today?" },
@@ -376,7 +487,7 @@ console.log(dataWithHistory);
 Example of defining output format. Though it's not 100% accurate, LLM can hallucinate sometime.
 
 ```tsx showLineNumbers 
-const dataWithFormat = await watsonxChat.chat({
+const dataWithFormat = await watsonxChat.chatWithHistory({
   prompt: "Who I am?",
   chatHistory: [
     { user: "Hello", assistant: "Hi there! How can I help you today?" },
@@ -385,7 +496,7 @@ const dataWithFormat = await watsonxChat.chat({
       assistant: "Sure, I will remember that!",
     },
   ],
-  outputFormat: `{"name: "", occupation: ""}`,
+  outputFormat: `{name: "", occupation: ""}`,
 });
 
 console.log(dataWithFormat);
@@ -399,7 +510,7 @@ console.log(dataWithFormat);
 
 ### Defining Context and other optional parameters
 ```tsx showLineNumbers 
-const dataWithContext = await watsonxChat.chat({
+const dataWithContext = await watsonxChat.chatWithHistory({
   prompt: "Who I am?",
   chatHistory: [
     { user: "Hello", assistant: "Hi there! How can I help you today?" },
@@ -411,7 +522,7 @@ const dataWithContext = await watsonxChat.chat({
   context:
     "John Doe is an AI developer, specialized in chatbot development and RAG research.",
   systemInstruction: "You're a helpful assistant and your name is AgentGenesis!",
-  outputFormat: `{"name: "", occupation: "", speciality: "", your_name : ""}`,
+  outputFormat: `{name: "", occupation: "", speciality: "", your_name : ""}`,
   options: {
     maxTokens: 100,
     temperature: 0.7,
@@ -444,14 +555,29 @@ const watsonxChat = new WatsonxAIChat({
   modelId: "meta-llama/llama-3-2-11b-vision-instruct",
   projectId: process.env.WATSONX_AI_PROJECT_ID!,
   serviceUrl: process.env.WATSONX_AI_SERVICE_URL,
+  version: "2023-05-29"
 });
 
-const dataWithImage = await watsonxChat.chat({
+const dataWithRemoteImage = await watsonxChat.chatWithHistory({
   prompt: "what the image is depicting...?",
-  images: [
+  image: [
     {
       path: "https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg",
       type: "remote",
+    },
+  ],
+  options: {
+    temperature: 0.6,
+  },
+});
+
+
+const dataWithLocalImage = await watsonxChat.chatWithHistory({
+  prompt: "what the image is depicting...?",
+  image: [
+    {
+      path: "./public/sample_image.jpg",
+      type: "local",
     },
   ],
   options: {
@@ -462,9 +588,9 @@ const dataWithImage = await watsonxChat.chat({
 
 ### Streaming text
 Sample example of creating and handling stream responses.
-
+You can stream in both the `chat` and `chatWithHistory` methods.
 ```tsx showLineNumbers 
-const dataWithStreaming = await watsonxChat.chat({
+const dataWithStreaming = await watsonxChat.chatWithHistory({
   prompt: "Who I am?",
   chatHistory: [
     { user: "Hello", assistant: "Hi there! How can I help you today?" },
@@ -490,12 +616,40 @@ for await (const chunk of dataWithStreaming) {
 /**
 You are John Doe, an AI developer specialized in chatbot development and RAG research. How can I assist you further, John?
 **/
+
+const singleDataWithStreaming = await watsonxChat.chat({
+  prompt: "Who I am?",
+  context: "John Doe is an AI developer, specialized in chatbot development and RAG research.",
+  outputFormat: `{name: "", occupation: "", speciality: "", your_name : ""}`,
+  stream: true,
+});
+
+// @ts-ignore
+for await (const chunk of singleDataWithStreaming) {
+  console.log(chunk.data.results[0].generated_text);
+}
+
+
+
+
 ```
 
 
 ## Props
 
 ### chat
+
+| Prop         | Type     | Description                                             | Default |
+|--------------|----------|--------------------------------------------------------|---------|
+| prompt       | string   | Prompt provided by user.                                | ""      |
+| context      | string?  | Additional context user wants to provide.               | ""      |
+| outputFormat | string?  | Particular format in which the user wants their output. | ""      |
+| stream       | boolean? | Returns streamed text if true                          | false   |
+
+
+
+
+### chatWithHistory
 
 | Prop               | Type                        | Description                                             | Default |
 | ------------------ | --------------------------- | ------------------------------------------------------- | ------- |
@@ -510,8 +664,7 @@ You are John Doe, an AI developer specialized in chatbot development and RAG res
 
 
 
-
 ## Credits
 
-This component is built on top of [Watsonx AI's node sdk](https://github.com/IBM/watsonx-ai-node-sdk)
+This component is built on top of [Watsonx AI's Node SDK](https://github.com/IBM/watsonx-ai-node-sdk)
 
