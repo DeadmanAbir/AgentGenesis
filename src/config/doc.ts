@@ -100,8 +100,8 @@ export const docsConfig: DocsConfig = {
           items: [],
         },
         {
-          title: 'ChatWatsonxAi',
-          href: '/components/chatWatsonxAi',
+          title: 'ChatwatsonxAi',
+          href: '/components/chatwatsonxAi',
           items: [],
         },
       ],
