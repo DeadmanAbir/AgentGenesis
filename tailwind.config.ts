@@ -87,6 +87,18 @@ const config = {
             backgroundPosition: '-200% 0',
           },
         },
+        rotateStar: {
+          '0%': {
+            transform: 'scale(1.2) rotate(-50deg)',
+          },
+          '20%': {
+            transform: 'scale(1.3) rotate(50deg)',
+          },
+          '100%': {
+            transform: 'scale(1.8) rotate(360deg)',
+          },
+        },
+
         scan: {
           '0%': { transform: 'translateY(-100%)', opacity: '1' },
           '50%': { transform: 'translateY(800%)', opacity: '1' },
@@ -103,6 +115,7 @@ const config = {
         'background-shine': 'background-shine 2s linear infinite',
         scan: 'scan 4s ease-in-out forwards',
         'text-animate-2': 'textAnimate 5s ease-in-out ',
+        rotateStar: 'rotateStar 4s ease-in-out forwards',
       },
     },
   },

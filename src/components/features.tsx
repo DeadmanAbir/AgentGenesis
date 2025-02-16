@@ -98,7 +98,7 @@ const Features = () => {
       >
         <div className="flex flex-col items-center justify-center md:px-10 max-w-xl">
           <AnimatePresence mode="wait">
-            <motion.div className=" text-white w-full  ">
+            <motion.div className=" dark:text-white text-black w-full  ">
               {flipped ? (
                 <motion.div
                   key="next"
