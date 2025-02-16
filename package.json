@@ -50,6 +50,7 @@
     "mini-svg-data-uri": "^1.4.4",
     "moment": "^2.30.1",
     "mongoose": "^8.3.4",
+    "motion": "^12.4.3",
     "next": "^14.2.16",
     "next-contentlayer": "^0.3.4",
     "next-mdx-remote": "^0.5.1",
