@@ -89,13 +89,11 @@ const config = {
         },
         rotateStar: {
           '0%': {
-            transform: 'scale(1.2) rotate(-50deg)',
+            transform: 'scale(1) rotate(0deg)',
           },
-          '20%': {
-            transform: 'scale(1.3) rotate(50deg)',
-          },
+
           '100%': {
-            transform: 'scale(1.8) rotate(360deg)',
+            transform: 'scale(1) rotate(720deg)',
           },
         },
 
@@ -115,7 +113,7 @@ const config = {
         'background-shine': 'background-shine 2s linear infinite',
         scan: 'scan 4s ease-in-out forwards',
         'text-animate-2': 'textAnimate 5s ease-in-out ',
-        rotateStar: 'rotateStar 4s ease-in-out forwards',
+        rotateStar: 'rotateStar 2s ease-in-out ',
       },
     },
   },
