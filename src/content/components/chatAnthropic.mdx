@@ -360,8 +360,10 @@ const responseTextWithSingleFile = await chatGemini.chat({
   prompt: "Summarize all the files provided.",
   file: [
     {
-      link: "https://files.eric.ed.gov/fulltext/EJ1172284.pdf",
-      mimetype: "application/pdf",
+      url: "https://files.eric.ed.gov/fulltext/EJ1172284.pdf",
+      mimeType: "application/pdf",
+      mediaType: "document",
+      type: "remote",
     },
   ],
 });
