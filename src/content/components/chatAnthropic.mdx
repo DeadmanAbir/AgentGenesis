@@ -30,12 +30,12 @@ const client = new ChatAnthropic({
 });
 
 // Single Call Chat
-const data = await client.message({
+const data = await client.chat({
   prompt: "Who are you? What's your name?",
 });
 
 // Call with Chat History
-const dataWithHistory = await client.message({
+const dataWithHistory = await client.chat({
   chatHistory: [
     {
       user: "You're a personal assistant named as AgentGenesis!.",
@@ -51,7 +51,7 @@ const dataWithHistory = await client.message({
 
 
 // Call with optional parameters
-const dataWithOptionalParams = await client.message({
+const dataWithOptionalParams = await client.chat({
   chatHistory: [
     {
       user: "You're a personal assistant named as AgentGenesis!.",
@@ -68,7 +68,7 @@ const dataWithOptionalParams = await client.message({
 });
 
 // Streaming Output
-const dataStreaming = await client.message({
+const dataStreaming = await client.chat({
   chatHistory: [
     {
       user: "You're a personal assistant named as AgentGenesis!.",
@@ -272,7 +272,7 @@ const client = new ChatAnthropic({
 Sample chat with a simple single prompt.
 
 ```tsx showLineNumbers
-const data = await client.message({
+const data = await client.chat({
   prompt: "Who are you? What's your name?",
 });
 console.log(data);
@@ -291,7 +291,7 @@ Sample chats involving addition of chat history.
 
 
 ```tsx showLineNumbers
-const dataWithHistory = await client.message({
+const dataWithHistory = await client.chat({
   chatHistory: [
     {
       user: "You're a personal assistant named as AgentGenesis!.",
@@ -317,7 +317,7 @@ console.log(dataWithHistory);
 
 ### Defining Context and other optional parameters
 ```tsx showLineNumbers
-const dataWithOptionalParams = await client.message({
+const dataWithOptionalParams = await client.chat({
   chatHistory: [
     {
       user: "You're a personal assistant named as AgentGenesis!.",
@@ -345,12 +345,70 @@ console.log(dataWithOptionalParams);
 
 
 ```
+
+### Multimodal Chat
+
+ChatAnthropic supports multimodal inputs, allowing you to combine text with media files.  
+Check out the supported file types on the [Anthropic Support page](https://docs.anthropic.com/en/docs/build-with-claude/vision#is-there-a-limit-to-the-image-file-size-i-can-upload).
+
+#### Example: Using Public URLs
+
+The following examples demonstrate how to send single and multiple files using public URLs.
+
+```tsx showLineNumbers
+const responseTextWithSingleFile = await chatGemini.chat({
+  prompt: "Summarize all the files provided.",
+  file: [
+    {
+      link: "https://files.eric.ed.gov/fulltext/EJ1172284.pdf",
+      mimetype: "application/pdf",
+    },
+  ],
+});
+
+const responseTextWithMultiFiles = await client.chat({
+  prompt: "Summarize all the files provided.",
+  file: [
+    {
+      url: "https://files.eric.ed.gov/fulltext/EJ1172284.pdf",
+      mimeType: "application/pdf",
+      mediaType: "document",
+      type: "remote",
+    },
+    {
+      url: "https://thumbs.dreamstime.com/z/woman-has-busy-day-work-254938010.jpg",
+      mimeType: "image/jpeg",
+      mediaType: "image",
+      type: "remote",
+    },
+  ],
+});
+```
+#### Example: Using Local File Paths
+
+You can also provide local file paths instead of URLs.
+
+```tsx showLineNumbers
+const responseTextWithLocalFile = await client.chat({
+  prompt: "Summarize all the files provided.",
+  file: [
+    {
+      url: "./public/sample.pdf",
+      mimeType: "application/pdf",
+      mediaType: "document",
+      type: "local",
+    },
+  ],
+});
+```
+
+
 ### Streaming text
 
 Sample example of creating and handling stream responses.
 
 ```tsx showLineNumbers
-const dataStreaming = await client.message({
+const dataStreaming = await client.chat({
   chatHistory: [
     {
       user: "You're a personal assistant named as AgentGenesis!.",
