@@ -356,7 +356,7 @@ Check out the supported file types on the [Anthropic Support page](https://docs.
 The following examples demonstrate how to send single and multiple files using public URLs.
 
 ```tsx showLineNumbers
-const responseTextWithSingleFile = await chatGemini.chat({
+const responseTextWithSingleFile = await client.chat({
   prompt: "Summarize all the files provided.",
   file: [
     {
