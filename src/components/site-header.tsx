@@ -16,7 +16,7 @@ const SiteHeader = () => {
   const scrolled = useScrollTop();
   const pathname = usePathname();
   return (
-    <header className=" w-full  fixed top-2 z-50 flex items-center justify-center  ">
+    <header className=" w-full  sticky top-2 z-50 flex items-center justify-center  ">
       <div
         className={`container  relative  mx-3 flex h-12 max-w-[1440px]   items-center rounded-full transition duration-500 ${
           scrolled ? 'dark:bg-neutral-900 bg-white  ' : ' bg-transparent'

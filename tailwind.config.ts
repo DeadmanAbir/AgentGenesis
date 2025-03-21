@@ -114,6 +114,7 @@ const config = {
         scan: 'scan 4s ease-in-out forwards',
         'text-animate-2': 'textAnimate 5s ease-in-out ',
         rotateStar: 'rotateStar 2s ease-in-out ',
+        'background-shine-2': 'background-shine 7s linear infinite',
       },
     },
   },
