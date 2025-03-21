@@ -20,12 +20,13 @@ const AnnouncementBanner = () => {
           <div className="container mx-auto flex items-center justify-between px-5 py-1">
             <div></div>
             <p className="p-1">
-              🎊🎊🎊🎊 Hurray 🎉🎉🎉{' '}
+              🔈 Big News! Agentgenesis is an Official 🔈{' '}
               <Link
                 className="font-bold tracking-widest"
-                href="https://www.ibm.com/watsonx/partners"
+                href="https://www.ibm.com/watsonx/partners#AI+agents"
+                target="_blank"
               >
-                IBM
+                IBM Watsonx Partner!
               </Link>
             </p>
             <button
