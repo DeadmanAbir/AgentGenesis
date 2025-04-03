@@ -169,7 +169,7 @@ const LinkedToolEffect = () => {
   console.log(showOutput);
   return (
     <div className="w-full">
-      <div className="max-w-2xl mx-auto">
+      <div className=" mx-auto">
         <AnimatePresence mode="wait">
           {showInput ? (
             <motion.div

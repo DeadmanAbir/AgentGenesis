@@ -135,18 +135,18 @@ const LinkedAgentEffect = () => {
   console.log(showOutput);
   return (
     <div className="w-full">
-      <div className="max-w-2xl mx-auto">
+      <div className=" mx-auto ">
         <AnimatePresence mode="wait">
           {showInput ? (
             <motion.div
               key="input"
-              className="flex flex-col items-center gap-3 mb-6 bg-neutral-900 p-4 rounded-lg h-36"
+              className="flex flex-col items-center gap-3 mb-6 bg-zinc-900 p-4 rounded-lg h-40"
               initial={{ opacity: 0, y: 20, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
               exit={{ opacity: 0, y: -20, scale: 0.98 }}
             >
-              <div className="relative flex-1 h-40 bg-neutral-800 rounded overflow-hidden p-3 w-full">
+              <div className="relative flex-1 h-40 bg-zinc-800 rounded overflow-hidden p-3 w-full">
                 <motion.div
                   className="text-white"
                   animate={{
@@ -173,7 +173,7 @@ const LinkedAgentEffect = () => {
               </div>
 
               <motion.div
-                className="px-4 py-1 bg-neutral-700 rounded text-sm cursor-pointer select-none"
+                className="px-4 py-1  rounded-lg text-sm cursor-pointer select-none"
                 animate={{
                   scale: isGenerating ? 0.95 : scaleValue,
                   backgroundColor: backgroundColorValue,
@@ -191,18 +191,19 @@ const LinkedAgentEffect = () => {
             </motion.div>
           ) : (
             <motion.div
+              id="tabs"
               key="output"
-              className="bg-neutral-800 rounded p-3 w-full h-80 overflow-auto"
+              className="bg-zinc-800 rounded p-3 w-full h-80 overflow-auto"
               initial={{ opacity: 0, y: 20, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
               exit={{ opacity: 0, y: 20 }}
             >
-              <table className="w-full border-collapse border border-gray-700 text-sm font-mono">
+              <table className="w-full border-collapse border border-zinc-700 text-sm font-mono">
                 <thead>
-                  <tr className="bg-gray-700 text-white">
-                    <th className="border border-gray-600 px-3 py-2">Field</th>
-                    <th className="border border-gray-600 px-3 py-2">Value</th>
+                  <tr className="bg-zinc-700 text-white">
+                    <th className="border border-zinc-600 px-3 py-2">Field</th>
+                    <th className="border border-zinc-600 px-3 py-2">Value</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -215,12 +216,12 @@ const LinkedAgentEffect = () => {
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="border border-gray-700"
+                        className="border border-zinc-700"
                       >
-                        <td className="border border-gray-600 px-3 py-2 text-blue-300">
+                        <td className="border border-zinc-600 px-3 py-2 text-blue-300">
                           {key}
                         </td>
-                        <td className="border border-gray-600 px-3 py-2 text-green-300">
+                        <td className="border border-zinc-600 px-3 py-2 text-green-300">
                           {Array.isArray(value) ? (
                             <ul className="list-disc ml-4">
                               {value.map((item, i) => (

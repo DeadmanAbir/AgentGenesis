@@ -64,7 +64,7 @@ const Features = () => {
 
         {testimonials.map(({ id, quote, href, Component }) => (
           <TabsContent key={id} value={id}>
-            <div className="w-full flex flex-col p-5">
+            <div className="w-full flex flex-col ">
               <div>
                 <motion.div
                   initial={{ y: 20, opacity: 0, filter: 'blur(20px)' }}
