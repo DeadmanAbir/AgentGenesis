@@ -1,4 +1,4 @@
-import { motion, useAnimate } from 'motion/react';
+import { AnimatePresence, motion, useAnimate } from 'motion/react';
 import { useState } from 'react';
 import { TextShimmer } from './generate-text';
 import { TextEffect } from './text-effect';
@@ -15,10 +15,16 @@ const LinkedToolEffect = () => {
   const runAnimation = async () => {
     await animate('.enter-button', { scale: 0.9 }, { duration: 0.1 });
     await animate('.enter-button', { scale: 1 }, { duration: 0.1 });
+    // Set a flag to start exit animation
+    setShowInput(false);
+    // Delay the appearance of next element to allow exit animation to complete
     setTimeout(() => {
       setShowGenerate(true);
-      setShowInput(false);
-    }, 1000);
+      // Trigger the answer animation after a small delay
+      setTimeout(() => {
+        setTriggerAns(true);
+      }, 200);
+    }, 500); // Reduced from 1000ms to 500ms for tighter transition
   };
 
   const handleQuestionComplete = () => {
@@ -27,10 +33,7 @@ const LinkedToolEffect = () => {
     runAnimation();
     setTimeout(() => {
       setTrigger(false);
-    }, 1000);
-    setTimeout(() => {
-      setTriggerAns(true);
-    }, 1500);
+    }, 400); // Reduced from 1000ms for tighter transition
   };
 
   const handleComplete = () => {
@@ -58,6 +61,7 @@ const LinkedToolEffect = () => {
         transition: { staggerChildren: 0.01 },
       },
       exit: {
+        opacity: 0,
         transition: { staggerChildren: 0.01, staggerDirection: 1 },
       },
     },
@@ -80,60 +84,75 @@ const LinkedToolEffect = () => {
         y: -30,
         filter: 'blur(10px) brightness(0%)',
         transition: {
-          duration: 0.4,
+          duration: 0.3, // Faster exit for smoother transition
         },
       },
     },
   };
   console.log(callCount);
   return (
-    <div ref={scope} className=" w-full">
+    <div ref={scope} className="w-full">
       <div className="max-w-2xl mx-auto p-6">
-        {/* Input section */}
-        {showInput && (
-          <div className="flex flex-col items-center gap-3 mb-6 bg-neutral-900 p-4 rounded-lg h-36">
-            <div className="relative flex-1 h-40 bg-neutral-800 rounded overflow-hidden p-3 w-full">
+        {/* Both components in one AnimatePresence for coordinated transitions */}
+        <AnimatePresence mode="wait">
+          {showInput ? (
+            <motion.div
+              key="input"
+              className="flex flex-col items-center gap-3 mb-6 bg-neutral-900 p-4 rounded-lg h-36"
+              initial={{ opacity: 0, y: 20, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+              exit={{ opacity: 0, y: -20, scale: 0.98 }}
+            >
+              <div className="relative flex-1 h-40 bg-neutral-800 rounded overflow-hidden p-3 w-full">
+                <TextEffect
+                  per="char"
+                  variants={blurSlideVariants}
+                  trigger={trigger}
+                  onAnimationComplete={handleQuestionComplete}
+                >
+                  Animate your ideas with motion-primitives
+                </TextEffect>
+              </div>
+
+              <motion.div
+                className="enter-button px-4 py-1 bg-neutral-700 rounded text-sm"
+                layout
+                initial={{ width: 'auto' }}
+                animate={{ width: 'auto' }}
+                transition={{ duration: 0.2, ease: 'easeInOut' }}
+              >
+                {showGenerate ? (
+                  <TextShimmer className="font-mono text-sm" duration={1}>
+                    Generating code...
+                  </TextShimmer>
+                ) : (
+                  <span>Enter ↵</span>
+                )}
+              </motion.div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="output"
+              className="bg-neutral-800 rounded p-3 w-full min-h-60"
+              initial={{ opacity: 0, y: 20, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+              exit={{ opacity: 0, y: 20 }}
+            >
               <TextEffect
                 per="char"
-                variants={blurSlideVariants}
-                trigger={trigger}
-                onAnimationComplete={handleQuestionComplete}
+                preset="fade"
+                trigger={triggerAns}
+                onAnimationComplete={handleComplete}
               >
-                Animate your ideas with motion-primitives
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.taque
+                dolore recusandae, velit reprehenderit non asperiores hic minus?
+                Debitis.
               </TextEffect>
-            </div>
-
-            <motion.div
-              className="enter-button px-4 py-1 bg-neutral-700 rounded text-sm "
-              layout
-              initial={{ width: 'auto' }}
-              animate={{ width: 'auto' }}
-              transition={{ duration: 0.2, ease: 'easeInOut' }}
-            >
-              {showGenerate ? (
-                <TextShimmer className="font-mono text-sm" duration={1}>
-                  Generating code...
-                </TextShimmer>
-              ) : (
-                <span>Enter ↵</span>
-              )}
             </motion.div>
-          </div>
-        )}
-        {!showInput && (
-          <div className="   bg-neutral-800 rounded h-full p-3 w-full min-h-60 ">
-            <TextEffect
-              per="char"
-              preset="fade"
-              trigger={triggerAns}
-              onAnimationComplete={handleComplete}
-            >
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.taque
-              dolore recusandae, velit reprehenderit non asperiores hic minus?
-              Debitis.
-            </TextEffect>
-          </div>
-        )}
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
