@@ -42,7 +42,6 @@ const AnimatedChat = () => {
 
       return () => clearTimeout(timer);
     }
-    // Restart animation when all questions are answered
     const restartTimer = setTimeout(() => {
       setMessages([]);
       setIndex(0);
@@ -54,7 +53,7 @@ const AnimatedChat = () => {
 
   return (
     <div className="w-full">
-      <div className=" mx-auto bg-neutral-900 h-80 relative p-4   flex flex-col">
+      <div className=" mx-auto bg-zinc-900 h-80 relative p-4 rounded-lg flex flex-col">
         <div className="flex-1 space-y-4   h-80 overflow-y-auto p-3">
           {messages.map((msg, i) => (
             <motion.div
@@ -67,8 +66,8 @@ const AnimatedChat = () => {
               <div
                 className={`rounded-lg px-4 py-2 max-w-xs ${
                   msg.role === 'user'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-green-600 text-white'
+                    ? 'bg-blue-600 text-white rounded-br-none'
+                    : 'bg-green-600 text-white rounded-bl-none'
                 }`}
               >
                 {msg.text}
@@ -100,7 +99,7 @@ const AnimatedChat = () => {
             </motion.div>
           )}
         </div>
-        <div className="sticky bottom-0 w-full bg-neutral-800 p-2 mt-4 flex items-center">
+        <div className="sticky bottom-0 w-full bg-zinc-800 p-2 mt-4 flex items-center">
           <Input value={input} readOnly className="mr-2" />
           <Button disabled>Ask AI</Button>
         </div>

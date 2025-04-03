@@ -142,7 +142,7 @@ const LinkedToolEffect = () => {
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.15 }}
-              className="bg-neutral-700 p-2 rounded-md mb-2"
+              className="bg-zinc-700 p-2 rounded-md mb-2"
             >
               {typeof item === 'object'
                 ? Object.entries(item).map(([subKey, subValue]) => (
@@ -174,13 +174,13 @@ const LinkedToolEffect = () => {
           {showInput ? (
             <motion.div
               key="input"
-              className="flex flex-col items-center gap-3 mb-6 bg-neutral-900 p-4 rounded-lg h-36"
+              className="flex flex-col items-center gap-3 mb-6 bg-zinc-900 p-4 rounded-lg h-36"
               initial={{ opacity: 0, y: 20, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
               exit={{ opacity: 0, y: -20, scale: 0.98 }}
             >
-              <div className="relative flex-1 h-40 bg-neutral-800 rounded overflow-hidden p-3 w-full">
+              <div className="relative flex-1 h-40 bg-zinc-800 rounded overflow-hidden p-3 w-full">
                 <motion.div
                   className="text-white"
                   animate={{
@@ -207,7 +207,7 @@ const LinkedToolEffect = () => {
               </div>
 
               <motion.div
-                className="px-4 py-1 bg-neutral-700 rounded text-sm cursor-pointer select-none"
+                className="px-4 py-1 bg-zinc-700 rounded text-sm cursor-pointer select-none"
                 animate={{
                   scale: isGenerating ? 0.95 : scaleValue,
                   backgroundColor: backgroundColorValue,
@@ -226,7 +226,7 @@ const LinkedToolEffect = () => {
           ) : (
             <motion.div
               key="output"
-              className="bg-neutral-800  rounded-lg shadow-lg p-3 w-full h-80 overflow-auto"
+              className="bg-zinc-800  rounded-lg shadow-lg p-3 w-full h-80 overflow-auto"
               initial={{ opacity: 0, y: 20, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
