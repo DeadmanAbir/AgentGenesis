@@ -195,7 +195,10 @@ const LinkedToolEffect = () => {
                   >
                     <span className="text-blue-300">"{key}"</span>
                     <span className="text-white">: </span>
-                    {formatValue(key, jsonOutput[key])}
+                    {formatValue(
+                      key,
+                      jsonOutput[key as keyof typeof jsonOutput],
+                    )}
                     {index < displayedKeys.length - 1 && (
                       <span className="text-white">,</span>
                     )}
