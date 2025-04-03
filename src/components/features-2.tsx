@@ -4,6 +4,7 @@ import { ArrowBigLeft, ArrowBigRight } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import LinkedToolEffect from './linked-in-tool';
+import AnimatedChat from './feature-chats';
 
 const testimonials = [
   {
@@ -24,7 +25,7 @@ const testimonials = [
     quote:
       'Our Chat Models allow you to generate responses to text inputs from different LLMs. OpenAI, Gemini, and Anthropic are supported for now.',
     name: 'Chat Models',
-    Component: () => <div>Chat Models Component</div>,
+    Component: () => <AnimatedChat />,
     href: '/components/chatOpenAi',
   },
 ];
