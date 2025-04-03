@@ -54,7 +54,7 @@ const AnimatedChat = () => {
   return (
     <div className="w-full">
       <div className=" mx-auto bg-zinc-900 h-80 relative p-4 rounded-lg flex flex-col">
-        <div className="flex-1 space-y-4   h-80 overflow-y-auto p-3">
+        <div id="tabs" className="flex-1 space-y-4   h-80 overflow-y-auto p-3">
           {messages.map((msg, i) => (
             <motion.div
               key={i}
