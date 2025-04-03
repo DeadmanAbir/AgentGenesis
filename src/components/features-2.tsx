@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { ArrowBigLeft, ArrowBigRight } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import LinkedToolEffect from './linked-in-tool';
 
 const testimonials = [
   {
@@ -16,7 +17,7 @@ const testimonials = [
     quote:
       'Our LinkedIn Tool is a powerful solution that efficiently provides data from public LinkedIn profiles when you provide a link.',
     name: 'LinkedIn Tool',
-    Component: () => <div>LinkedIn Tool Component</div>,
+    Component: () => <LinkedToolEffect />,
     href: '/components/linkedinTool',
   },
   {
