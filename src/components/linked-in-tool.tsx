@@ -7,6 +7,10 @@ const LinkedToolEffect = () => {
   const [showOutput, setShowOutput] = useState(false);
   const [displayedKeys, setDisplayedKeys] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(false);
+  const [inputText, setInputText] = useState(
+    'https://www.linkedin.com/in/abir-dutta-408759223/',
+  );
 
   const jsonOutput = {
     public_identifier: 'abir-dutta-408759223',
@@ -48,7 +52,7 @@ const LinkedToolEffect = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       startAnimation();
-    }, 1000);
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -61,20 +65,37 @@ const LinkedToolEffect = () => {
   };
 
   const simulateEnterPress = () => {
-    // Simulate button press effect
-    setIsGenerating(true);
+    // First indicate button press
+    setButtonClicked(true);
 
-    // Start transition animation after a short delay
+    // After a brief moment, start text processing
     setTimeout(() => {
-      setShowInput(false);
+      setButtonClicked(false);
+      setIsGenerating(true);
 
-      // Show output and start JSON animation
+      // Start fading out the input text
+      const fadeTextInterval = setInterval(() => {
+        setInputText((prev) => {
+          if (prev.length <= 5) {
+            clearInterval(fadeTextInterval);
+            return '';
+          }
+          return prev.substring(0, prev.length - 5);
+        });
+      }, 100);
+
+      // Start transition animation after text processing
       setTimeout(() => {
-        setShowOutput(true);
-        setDisplayedKeys([]);
-        animateKeys();
-      }, 500);
-    }, 1000);
+        setShowInput(false);
+
+        // Show output and start JSON animation
+        setTimeout(() => {
+          setShowOutput(true);
+          setDisplayedKeys([]);
+          animateKeys();
+        }, 500);
+      }, 1500);
+    }, 200);
   };
 
   const animateKeys = () => {
@@ -99,13 +120,14 @@ const LinkedToolEffect = () => {
 
     // Reset to input view after exit animation
     setTimeout(() => {
+      setInputText('https://www.linkedin.com/in/abir-dutta-408759223/');
       setIsGenerating(false);
       setShowInput(true);
 
       // Restart the cycle
       setTimeout(() => {
         startAnimation();
-      }, 1500);
+      }, 2000);
     }, 500);
   };
 
@@ -142,6 +164,8 @@ const LinkedToolEffect = () => {
       <span className="text-yellow-300">{String(value)}</span>
     );
   };
+  const scaleValue = buttonClicked ? 0.9 : 1;
+  const backgroundColorValue = isGenerating ? '#4a5568' : '#374151';
   console.log(showOutput);
   return (
     <div className="w-full">
@@ -157,14 +181,37 @@ const LinkedToolEffect = () => {
               exit={{ opacity: 0, y: -20, scale: 0.98 }}
             >
               <div className="relative flex-1 h-40 bg-neutral-800 rounded overflow-hidden p-3 w-full">
-                <div className="text-white opacity-80">
-                  https://www.linkedin.com/in/abir-dutta-408759223/
-                </div>
+                <motion.div
+                  className="text-white"
+                  animate={{
+                    opacity: isGenerating ? 0.5 : 0.8,
+                    color: isGenerating ? '#8a8a8a' : '#ffffff',
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {inputText}
+                </motion.div>
+
+                {/* {isGenerating && (
+                  <motion.div 
+                    className="absolute top-12 left-0 right-0 text-center"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <TextShimmer className="font-mono text-blue-400" duration={1.5}>
+                      Fetching profile data...
+                    </TextShimmer>
+                  </motion.div>
+                )} */}
               </div>
 
               <motion.div
-                className="px-4 py-1 bg-neutral-700 rounded text-sm"
-                animate={{ scale: isGenerating ? 0.95 : 1 }}
+                className="px-4 py-1 bg-neutral-700 rounded text-sm cursor-pointer select-none"
+                animate={{
+                  scale: isGenerating ? 0.95 : scaleValue,
+                  backgroundColor: backgroundColorValue,
+                }}
                 transition={{ duration: 0.1 }}
               >
                 {isGenerating ? (
