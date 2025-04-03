@@ -226,7 +226,7 @@ const LinkedToolEffect = () => {
           ) : (
             <motion.div
               key="output"
-              className="bg-neutral-800 rounded p-3 w-full h-80 overflow-auto"
+              className="bg-neutral-800  rounded-lg shadow-lg p-3 w-full h-80 overflow-auto"
               initial={{ opacity: 0, y: 20, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
