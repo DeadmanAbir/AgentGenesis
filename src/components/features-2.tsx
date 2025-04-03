@@ -110,7 +110,7 @@ const Features = () => {
           </div>
         </div>
 
-        <div className="w-full flex justify-center items-center  ">
+        <div className="w-full flex justify-center items-center min-h-80  ">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentIndex}
