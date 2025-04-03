@@ -1,99 +1,150 @@
-import { AnimatePresence, motion, useAnimate } from 'motion/react';
-import { useState } from 'react';
-import { TextShimmer } from './generate-text';
-import { TextEffect } from './text-effect';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 
 const LinkedToolEffect = () => {
-  const [scope, animate] = useAnimate();
-  const [trigger, setTrigger] = useState(true);
-  const [triggerAns, setTriggerAns] = useState(false);
-  const [hasCompleted, setHasCompleted] = useState(false);
-  const [callCount, setCallCount] = useState(0);
-  const [showGenerate, setShowGenerate] = useState(false);
   const [showInput, setShowInput] = useState(true);
+  const [showOutput, setShowOutput] = useState(false);
+  const [displayedKeys, setDisplayedKeys] = useState<string[]>([]);
+  const [isGenerating, setIsGenerating] = useState(false);
 
-  const runAnimation = async () => {
-    await animate('.enter-button', { scale: 0.9 }, { duration: 0.1 });
-    await animate('.enter-button', { scale: 1 }, { duration: 0.1 });
-    // Set a flag to start exit animation
-    setShowInput(false);
-    // Delay the appearance of next element to allow exit animation to complete
+  const jsonOutput = {
+    public_identifier: 'abir-dutta-408759223',
+    first_name: 'Abir',
+    last_name: 'Dutta',
+    full_name: 'Abir Dutta',
+    follower_count: 1265,
+    occupation: 'Founding Member at Kirak.ai',
+    headline: '💻 Full Stack Developer | ✍🏻 Technical Writer | 🌐 Open Source',
+    country: 'IN',
+    city: 'New Delhi',
+    experiences: [
+      {
+        company: 'Kirak.ai',
+        title: 'Founding Member',
+      },
+    ],
+    education: [
+      {
+        degree_name: 'B.Tech',
+        school: 'Guru Gobind Singh Indraprastha University',
+      },
+    ],
+  };
+
+  // Keys to display in order
+  const keysToAnimate = [
+    'full_name',
+    'headline',
+    'occupation',
+    'follower_count',
+    'country',
+    'city',
+    'experiences',
+    'education',
+  ];
+
+  // Auto-start the loop on component mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      startAnimation();
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Complete animation cycle function
+  const startAnimation = () => {
+    if (showInput) {
+      simulateEnterPress();
+    }
+  };
+
+  const simulateEnterPress = () => {
+    // Simulate button press effect
+    setIsGenerating(true);
+
+    // Start transition animation after a short delay
     setTimeout(() => {
-      setShowGenerate(true);
-      // Trigger the answer animation after a small delay
+      setShowInput(false);
+
+      // Show output and start JSON animation
       setTimeout(() => {
-        setTriggerAns(true);
-      }, 200);
-    }, 500); // Reduced from 1000ms to 500ms for tighter transition
+        setShowOutput(true);
+        setDisplayedKeys([]);
+        animateKeys();
+      }, 500);
+    }, 1000);
   };
 
-  const handleQuestionComplete = () => {
-    if (hasCompleted) return;
-    setHasCompleted(true);
-    runAnimation();
+  const animateKeys = () => {
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index < keysToAnimate.length) {
+        setDisplayedKeys((prev) => [...prev, keysToAnimate[index]]);
+        index++;
+      } else {
+        clearInterval(interval);
+
+        // Auto reset after displaying all keys
+        setTimeout(() => {
+          resetAnimation();
+        }, 2000);
+      }
+    }, 300);
+  };
+
+  const resetAnimation = () => {
+    setShowOutput(false);
+
+    // Reset to input view after exit animation
     setTimeout(() => {
-      setTrigger(false);
-    }, 400); // Reduced from 1000ms for tighter transition
+      setIsGenerating(false);
+      setShowInput(true);
+
+      // Restart the cycle
+      setTimeout(() => {
+        startAnimation();
+      }, 1500);
+    }, 500);
   };
 
-  const handleComplete = () => {
-    setCallCount((prev) => {
-      if (prev === 1) {
-        setCallCount(0);
-        setHasCompleted(false);
-        setTrigger(true);
-        setShowGenerate(false);
-        setShowInput(true);
-      }
-      if (prev === 0) {
-        setTriggerAns(false);
-      }
+  // Format JSON value based on type
+  const formatValue = (key: any, value: any) => {
+    if (Array.isArray(value)) {
+      return (
+        <div className="ml-4 mt-1">
+          {value.map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.15 }}
+              className="bg-neutral-700 p-2 rounded-md mb-2"
+            >
+              {typeof item === 'object'
+                ? Object.entries(item).map(([subKey, subValue]) => (
+                    <div key={subKey} className="text-sm">
+                      <span className="text-blue-300">{subKey}:</span>{' '}
+                      <span className="text-green-300">{String(subValue)}</span>
+                    </div>
+                  ))
+                : String(item)}
+            </motion.div>
+          ))}
+        </div>
+      );
+    }
 
-      return prev + 1;
-    });
+    return typeof value === 'string' ? (
+      <span className="text-green-300">"{value}"</span>
+    ) : (
+      <span className="text-yellow-300">{String(value)}</span>
+    );
   };
-
-  const blurSlideVariants = {
-    container: {
-      hidden: { opacity: 0 },
-      visible: {
-        opacity: 1,
-        transition: { staggerChildren: 0.01 },
-      },
-      exit: {
-        opacity: 0,
-        transition: { staggerChildren: 0.01, staggerDirection: 1 },
-      },
-    },
-    item: {
-      hidden: {
-        opacity: 0,
-        filter: 'blur(10px) brightness(0%)',
-        y: 0,
-      },
-      visible: {
-        opacity: 1,
-        y: 0,
-        filter: 'blur(0px) brightness(100%)',
-        transition: {
-          duration: 0.4,
-        },
-      },
-      exit: {
-        opacity: 0,
-        y: -30,
-        filter: 'blur(10px) brightness(0%)',
-        transition: {
-          duration: 0.3, // Faster exit for smoother transition
-        },
-      },
-    },
-  };
-  console.log(callCount);
+  console.log(showOutput);
   return (
-    <div ref={scope} className="w-full">
-      <div className="max-w-2xl mx-auto p-6">
-        {/* Both components in one AnimatePresence for coordinated transitions */}
+    <div className="w-full">
+      <div className="max-w-2xl mx-auto">
         <AnimatePresence mode="wait">
           {showInput ? (
             <motion.div
@@ -105,27 +156,18 @@ const LinkedToolEffect = () => {
               exit={{ opacity: 0, y: -20, scale: 0.98 }}
             >
               <div className="relative flex-1 h-40 bg-neutral-800 rounded overflow-hidden p-3 w-full">
-                <TextEffect
-                  per="char"
-                  variants={blurSlideVariants}
-                  trigger={trigger}
-                  onAnimationComplete={handleQuestionComplete}
-                >
-                  Animate your ideas with motion-primitives
-                </TextEffect>
+                <div className="text-white opacity-80">
+                  https://www.linkedin.com/in/abir-dutta-408759223/
+                </div>
               </div>
 
               <motion.div
-                className="enter-button px-4 py-1 bg-neutral-700 rounded text-sm"
-                layout
-                initial={{ width: 'auto' }}
-                animate={{ width: 'auto' }}
-                transition={{ duration: 0.2, ease: 'easeInOut' }}
+                className="px-4 py-1 bg-neutral-700 rounded text-sm"
+                animate={{ scale: isGenerating ? 0.95 : 1 }}
+                transition={{ duration: 0.1 }}
               >
-                {showGenerate ? (
-                  <TextShimmer className="font-mono text-sm" duration={1}>
-                    Generating code...
-                  </TextShimmer>
+                {isGenerating ? (
+                  <span className="text-blue-300">Processing...</span>
                 ) : (
                   <span>Enter ↵</span>
                 )}
@@ -134,22 +176,34 @@ const LinkedToolEffect = () => {
           ) : (
             <motion.div
               key="output"
-              className="bg-neutral-800 rounded p-3 w-full min-h-60"
+              className="bg-neutral-800 rounded p-3 w-full h-80 overflow-auto"
               initial={{ opacity: 0, y: 20, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
               exit={{ opacity: 0, y: 20 }}
             >
-              <TextEffect
-                per="char"
-                preset="fade"
-                trigger={triggerAns}
-                onAnimationComplete={handleComplete}
-              >
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.taque
-                dolore recusandae, velit reprehenderit non asperiores hic minus?
-                Debitis.
-              </TextEffect>
+              <div className="font-mono text-sm">
+                <div className="mb-2 text-purple-300">{'{'}</div>
+
+                {displayedKeys.map((key, index) => (
+                  <motion.div
+                    key={key}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="ml-4 mb-1"
+                  >
+                    <span className="text-blue-300">"{key}"</span>
+                    <span className="text-white">: </span>
+                    {formatValue(key, jsonOutput[key])}
+                    {index < displayedKeys.length - 1 && (
+                      <span className="text-white">,</span>
+                    )}
+                  </motion.div>
+                ))}
+
+                <div className="text-purple-300">{'}'}</div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
