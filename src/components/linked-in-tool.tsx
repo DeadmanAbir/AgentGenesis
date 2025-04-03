@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import { TextShimmer } from './generate-text';
 
 const LinkedToolEffect = () => {
   const [showInput, setShowInput] = useState(true);
@@ -167,7 +168,9 @@ const LinkedToolEffect = () => {
                 transition={{ duration: 0.1 }}
               >
                 {isGenerating ? (
-                  <span className="text-blue-300">Processing...</span>
+                  <TextShimmer className="font-mono text-sm" duration={1}>
+                    Processing...
+                  </TextShimmer>
                 ) : (
                   <span>Enter ↵</span>
                 )}
