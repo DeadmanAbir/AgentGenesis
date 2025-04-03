@@ -22,11 +22,16 @@ const AnimatedChat = () => {
       const timer = setTimeout(() => {
         const question = questions[index];
         setInput(question);
-        setMessages((prev) => [...prev, { role: 'user', text: question }]);
-        setIsLoading(true);
+        setTimeout(() => {
+          setMessages((prev) => [...prev, { role: 'user', text: question }]);
+          setInput('');
+          setIsLoading(true);
+        }, 1000);
 
         setTimeout(() => {
           setIsLoading(false);
+          setInput('');
+
           setMessages((prev) => [
             ...prev,
             { role: 'ai', text: `This is the AI response to: "${question}"` },
@@ -57,7 +62,7 @@ const AnimatedChat = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className={`flex ${msg.role === 'user' ? 'justify-start' : 'justify-end'}`}
+              className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
                 className={`rounded-lg px-4 py-2 max-w-xs ${
@@ -74,7 +79,7 @@ const AnimatedChat = () => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="flex justify-end"
+              className="flex justify-start"
             >
               <div className="bg-green-600 text-white rounded-lg px-4 py-2">
                 <div className="flex space-x-1">
