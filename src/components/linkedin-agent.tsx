@@ -140,13 +140,13 @@ const LinkedAgentEffect = () => {
           {showInput ? (
             <motion.div
               key="input"
-              className="flex flex-col items-center gap-3 mb-6 bg-zinc-900 p-4 rounded-lg h-40"
+              className="flex flex-col items-center gap-3 mb-6 bg-zinc-900 p-4 rounded-lg h-60"
               initial={{ opacity: 0, y: 20, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
               exit={{ opacity: 0, y: -20, scale: 0.98 }}
             >
-              <div className="relative flex-1 h-40 bg-zinc-800 rounded overflow-hidden p-3 w-full">
+              <div className="relative flex-1 h-60 bg-zinc-800 rounded overflow-hidden p-3 w-full">
                 <motion.div
                   className="text-white"
                   animate={{
