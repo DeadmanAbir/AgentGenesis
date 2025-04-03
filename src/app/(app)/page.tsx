@@ -1,6 +1,5 @@
 import Banner from '@/components/banner';
 import { Beam, Beam2 } from '@/components/beam';
-import Features from '@/components/features';
 import Footer from '@/components/footer';
 import GridSection from '@/components/grid-section';
 import { Icons } from '@/components/icons';
@@ -17,6 +16,7 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import Chatbot from '@/components/chatbot';
 import StarBadge from '@/components/stars-badge';
+import Features2 from '@/components/features-2';
 
 const IndexPage = () => {
   return (
@@ -51,7 +51,7 @@ const IndexPage = () => {
       </PageHeader>
       <div className="container relative">
         <VideoDisplay />
-        <Features />
+        <Features2 />
         <GridSection />
         <Chatbot /> {/* Integrate the Chatbot component */}
       </div>
