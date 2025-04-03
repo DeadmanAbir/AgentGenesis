@@ -5,13 +5,14 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import LinkedToolEffect from './linked-in-tool';
 import AnimatedChat from './feature-chats';
+import LinkedAgentEffect from './linkedin-agent';
 
 const testimonials = [
   {
     quote:
       'Explore our LinkedIn Agent, a powerful tool that efficiently summarizes data from public LinkedIn profiles.',
     name: 'LinkedIn Agent',
-    Component: () => <div>LinkedIn Agent Component</div>,
+    Component: () => <LinkedAgentEffect />,
     href: '/components/linkedinAgent',
   },
   {
