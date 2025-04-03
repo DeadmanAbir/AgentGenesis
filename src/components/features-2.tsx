@@ -73,7 +73,7 @@ const Features = () => {
                   className="text-black dark:text-white w-full flex flex-col items-center space-y-4 py-10"
                 >
                   {/* <span className="md:text-5xl text-3xl font-bold">{name}</span> */}
-                  <span className="md:text-xl text-md  md:w-2/3 text-center">
+                  <span className="md:text-md text-md  md:w-11/12 text-center">
                     {quote}
                   </span>
                 </motion.div>
