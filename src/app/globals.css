@@ -196,6 +196,14 @@ pre::-webkit-scrollbar {
   height: 6px; 
   width: 0px; 
 }
+#tabs::-webkit-scrollbar {
+  display: none; /* Hides scrollbar in Chrome, Safari */
+}
+
+#tabs {
+  -ms-overflow-style: none; /* Hides scrollbar in Internet Explorer 10+ */
+  scrollbar-width: none; /* Hides scrollbar in Firefox */
+}
 
 pre::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.5);
