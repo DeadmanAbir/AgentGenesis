@@ -6,6 +6,7 @@ import LinkedToolEffect from './linked-in-tool';
 import AnimatedChat from './feature-chats';
 import LinkedAgentEffect from './linkedin-agent';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card } from './ui/card';
 
 const testimonials = [
   {
@@ -62,18 +63,26 @@ const Features = () => {
           ))}
         </TabsList>
 
-        {testimonials.map(({ id, quote, href, Component }) => (
+        {testimonials.map(({ id, quote, name, href, Component }) => (
           <TabsContent key={id} value={id}>
-            <div className="w-full flex flex-col ">
+            <Card className="w-full flex flex-col relative  md:p-10 p-5 mt-5 overflow-hidden rounded-none">
+              <div
+                className="absolute bottom-0 left-0 right-0 top-0 h-[700px]
+    bg-[linear-gradient(to_right,#d4d4d8_1px,transparent_1px),linear-gradient(to_bottom,#d4d4d8_1px,transparent_1px)]
+    dark:bg-[linear-gradient(to_right,#27272a_1px,transparent_1px),linear-gradient(to_bottom,#27272a_1px,transparent_1px)]
+    bg-[size:40px_40px]
+    [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"
+              ></div>
+
               <div>
                 <motion.div
                   initial={{ y: 20, opacity: 0, filter: 'blur(20px)' }}
                   animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
                   transition={{ ease: 'easeInOut', duration: 0.4 }}
-                  className="text-black dark:text-white w-full flex flex-col items-center space-y-4 py-10"
+                  className="text-black dark:text-white w-full flex flex-col items-center space-y-4 pb-10"
                 >
-                  {/* <span className="md:text-5xl text-3xl font-bold">{name}</span> */}
-                  <span className="md:text-md text-md  md:w-11/12 text-center">
+                  <span className="md:text-5xl text-3xl font-bold">{name}</span>
+                  <span className="md:text-md text-md  md:w-11/12 text-center text-black dark:text-white">
                     {quote}
                   </span>
                 </motion.div>
@@ -93,7 +102,7 @@ const Features = () => {
                   </motion.div>
                 </AnimatePresence>
               </div>
-              <div className="flex items-center justify-center w-full mt-20">
+              <div className="flex items-center justify-center w-full mt-8">
                 <motion.div
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
@@ -106,7 +115,7 @@ const Features = () => {
                   </Link>
                 </motion.div>
               </div>
-            </div>
+            </Card>
           </TabsContent>
         ))}
       </Tabs>
