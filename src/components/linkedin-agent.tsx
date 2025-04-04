@@ -4,7 +4,6 @@ import { TextShimmer } from './generate-text';
 
 const LinkedAgentEffect = () => {
   const [showInput, setShowInput] = useState(true);
-  const [showOutput, setShowOutput] = useState(false);
   const [displayedKeys, setDisplayedKeys] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [buttonClicked, setButtonClicked] = useState(false);
@@ -90,7 +89,6 @@ const LinkedAgentEffect = () => {
 
         // Show output and start JSON animation
         setTimeout(() => {
-          setShowOutput(true);
           setDisplayedKeys([]);
           animateKeys();
         }, 500);
@@ -116,8 +114,6 @@ const LinkedAgentEffect = () => {
   };
 
   const resetAnimation = () => {
-    setShowOutput(false);
-
     // Reset to input view after exit animation
     setTimeout(() => {
       setInputText('https://www.linkedin.com/in/abir-dutta-408759223/');
@@ -132,7 +128,6 @@ const LinkedAgentEffect = () => {
   };
   const scaleValue = buttonClicked ? 0.9 : 1;
   const backgroundColorValue = isGenerating ? '#4a5568' : '#374151';
-  console.log(showOutput);
   return (
     <div className="w-full">
       <div className=" mx-auto ">
