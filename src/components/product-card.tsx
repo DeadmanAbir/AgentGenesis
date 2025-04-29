@@ -18,10 +18,7 @@ interface ProductCardProps {
 const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <Card className="h-full flex flex-col overflow-hidden card-hover">
-      <Link
-        href={`/marketplace/${product.id}`}
-        className="flex-1 flex flex-col"
-      >
+      <Link href={`/showcase/${product.id}`} className="flex-1 flex flex-col">
         <div className="aspect-video w-full overflow-hidden relative">
           <Image
             src={product.imageUrl}
@@ -71,7 +68,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           asChild
           className="bg-black hover:bg-gray-800 text-white"
         >
-          <Link href={`/marketplace/${product.id}`}>
+          <Link href={`/showcase/${product.id}`}>
             Details
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>

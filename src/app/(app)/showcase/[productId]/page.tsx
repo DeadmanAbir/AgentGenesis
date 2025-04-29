@@ -117,7 +117,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
 
       <motion.div variants={itemVariants}>
         <Button variant="ghost" asChild className="mb-6">
-          <Link href="/marketplace">
+          <Link href="/showcase">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Marketplace
           </Link>

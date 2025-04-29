@@ -73,13 +73,13 @@ const Marketplace = () => {
     >
       <motion.div className="mb-10 text-center">
         <motion.h1 className="text-4xl font-bold mb-3" variants={titleVariants}>
-          AgentGenesis Marketplace
+          AgentGenesis Showcase
         </motion.h1>
         <motion.p
           className="text-xl text-foreground/70 max-w-2xl mx-auto"
           variants={descriptionVariants}
         >
-          Discover powerful AI agents and components built with AgentGenesis
+          Discover powerful SaaS and apps built with AgentGenesis
         </motion.p>
       </motion.div>
 

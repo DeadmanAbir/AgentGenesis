@@ -24,8 +24,8 @@ export const docsConfig: DocsConfig = {
       href: '/blogs',
     },
     {
-      title: 'MarketPlace',
-      href: '/marketplace',
+      title: 'Showcase',
+      href: '/showcase',
     },
   ],
   sidebarNav: [
