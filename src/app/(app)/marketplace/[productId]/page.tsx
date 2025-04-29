@@ -34,6 +34,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
 
   return (
     <div className="container my-10">
+      <div className="text-center text-4xl font-bold mb-3">{product.name}</div>
       <div className="animate-fade-in">
         <Button variant="ghost" asChild className="mb-6">
           <Link href="/marketplace">
