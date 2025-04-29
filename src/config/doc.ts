@@ -23,6 +23,10 @@ export const docsConfig: DocsConfig = {
       title: 'Blogs',
       href: '/blogs',
     },
+    {
+      title: 'MarketPlace',
+      href: '/marketplace',
+    },
   ],
   sidebarNav: [
     {
