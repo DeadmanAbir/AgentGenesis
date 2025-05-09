@@ -42,7 +42,7 @@ export function MainNav() {
               key={item.title}
               href={item.href || '/'}
               className={cn(
-                'transition-colors hover:text-foreground/80 hover:dark:bg-neutral-700 hover:bg-neutral-100  px-2 py-1 rounded-lg',
+                'transition-colors hover:text-primary hover:font-medium hover:dark:bg-neutral-700 hover:bg-neutral-100 hover:border-b-2 hover:border-primary px-2 py-1 rounded-lg',
                 pathname === item.href
                   ? 'text-foreground '
                   : 'text-foreground/60',
@@ -54,7 +54,7 @@ export function MainNav() {
         <a
           href="mailto:agentgenesisdev@gmail.com"
           className={cn(
-            'transition-colors hover:text-foreground/80 hover:dark:bg-neutral-700 hover:bg-neutral-100 px-2 py-1 rounded-lg text-foreground/60',
+            'transition-colors hover:text-primary hover:font-medium hover:dark:bg-neutral-700 hover:bg-neutral-100 hover:border-b-2 hover:border-primary px-2 py-1 rounded-lg text-foreground/60',
           )}
         >
           Contact Us
