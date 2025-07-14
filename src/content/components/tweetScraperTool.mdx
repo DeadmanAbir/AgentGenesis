@@ -1,0 +1,271 @@
+---
+title: Tweet Scraper Tool
+description: Provide the tweet url or tweet id of a tweet to get the text of the tweet using the Tweet Scraper tool.
+---
+
+<Tabs defaultValue="preview">
+
+<TabsList>
+  <TabsTrigger value="preview">Preview</TabsTrigger>
+  <TabsTrigger value="code">Code</TabsTrigger>
+</TabsList>
+
+<TabsContent value="preview">
+  <ComponentPreviewTemp>
+    <LinkedinToolDemo />
+  </ComponentPreviewTemp>
+</TabsContent>
+
+<TabsContent value="code">
+
+<CodeBlockWrapper>
+
+```tsx showLineNumbers {3-14}
+import { TweetScraperTool } from "@/utils/tweetScraperTool";
+
+// Initialize Client
+const tweetScraper = new TweetScraperTool({
+  apiKey: process.env.APIFY_API_KEY!,
+});
+
+// Single Tweet Scrape
+const singleTweetData = await tweetScraper.scrapeTweetText({
+  tweetId: "1944299394032882148",
+});
+
+// Multi Tweet Scrape
+const latestTweets = await tweetScraper.scrapeTweets("https://x.com/mannupaaji", 5);
+```
+
+</CodeBlockWrapper>
+
+</TabsContent>
+
+</Tabs>
+
+## Installation
+
+<Steps>
+
+<Step>Add Environment Variables</Step>
+
+```tsx title=".env" showLineNumbers {}
+APIFY_API_KEY = "YOUR_SAMPLE_API_KEY";
+/* You can get one from - https://console.apify.com/settings/integrations */
+```
+
+<Step>Copy the code</Step>
+
+Add the following code to your `utils/tweetScraperTool.ts` file:
+
+<CodeBlockWrapper>
+```tsx title="tweetScraperTool.ts" showLineNumbers {}
+
+import { ApifyClient } from "apify-client";
+
+interface TweetScraperToolProps {
+	apiKey: string;
+}
+
+interface TweetData {
+	tweet: string;
+}
+
+export class TweetScraperTool {
+	private client: ApifyClient;
+
+	constructor({ apiKey }: TweetScraperToolProps) {
+		if (!apiKey?.trim()) {
+			throw new Error("TweetScraperTool: Missing APIFY API Key.");
+		}
+
+		this.client = new ApifyClient({ token: apiKey });
+	}
+
+	async scrapeTweetText({
+		tweetUrl,
+		tweetId,
+	}: {
+		tweetUrl?: string;
+		tweetId?: string;
+	}): Promise<TweetData> {
+		const resolvedId = tweetId || this.extractTweetId(tweetUrl);
+
+		if (!resolvedId) {
+			throw new Error("TweetScraperTool: Failed to resolve a valid Tweet ID.");
+		}
+
+		return await this.scrapeTweetData(resolvedId);
+	}
+
+	async scrapeTweets(
+		url: string,
+		tweetCount: number = 10,
+		sinceDate: string = "2024-03-05"
+	): Promise<TweetData[]> {
+		if (!url.trim()) {
+			throw new Error("TweetScraperTool: URL must not be empty.");
+		}
+
+		const input = {
+			start_urls: [{ url }],
+			since_date: sinceDate,
+			result_count: tweetCount.toString(),
+		};
+
+		try {
+			const run = await this.client.actor("2dZb9qNraqcbL8CXP").call(input);
+			const { items } = await this.client
+				.dataset(run.defaultDatasetId)
+				.listItems();
+
+			if (!items?.length) {
+				throw new Error("TweetScraperTool: No tweets found.");
+			}
+
+			return items.map((item) => ({
+				tweet: item.full_text as string,
+			}));
+		} catch (error) {
+			throw new Error(
+				`TweetScraperTool: Failed to scrape tweets. Reason: ${
+					(error as Error).message
+				}`
+			);
+		}
+	}
+
+	private extractTweetId(url?: string): string | null {
+		if (!url) return null;
+
+		const match = url.match(/status\/(\d+)/);
+		return match?.[1] ?? null;
+	}
+
+	private async scrapeTweetData(tweetId: string): Promise<TweetData> {
+		try {
+			const input = {
+				tweetIDs: [tweetId],
+				maxItems: 1,
+			};
+
+			const run = await this.client.actor("CJdippxWmn9uRfooo").call(input);
+			const { items } = await this.client
+				.dataset(run.defaultDatasetId)
+				.listItems();
+
+			if (!items?.length || !items[0]?.text) {
+				throw new Error(
+					`TweetScraperTool: No tweet data found for ID ${tweetId}`
+				);
+			}
+			const tweetData = {
+				tweet: items[0]?.text as string,
+			};
+			return tweetData;
+		} catch (error) {
+			throw new Error(
+				`TweetScraperTool: Failed to scrape tweet data. Reason: ${
+					(error as Error).message
+				}`
+			);
+		}
+	}
+}
+
+
+```
+
+</CodeBlockWrapper>
+</Steps>
+
+## Usage
+
+### Initialize client
+
+Initialize the TweetScraperTool with your APIFY API key
+
+```tsx showLineNumbers 
+import { TweetScraperTool } from "@/utils/tweetScraperTool";
+
+const tweetScraper = new TweetScraperTool({
+  apiKey: process.env.APIFY_API_KEY!,
+});
+
+```
+### Scrape a Single Tweet
+
+Fetch text content from a tweet using its tweet ID or URL
+
+```tsx showLineNumbers 
+const singleTweetData = await tweetScraper.scrapeTweetText({
+  tweetId: "1944299394032882148",
+});
+
+console.log(singleTweetData);
+/**
+{
+  "tweet": "the funniest thing about people saying \"don't rely on ai tools\" is that they're typing this on a phone with autocorrect\n\nyour keyboard is literally predicting your next word but sure cursor is cheating!"
+}
+*/
+
+```
+### Scrape Latest Tweets from an Account
+
+Get the latest N tweets from a specific Twitter profile URL
+
+
+```tsx showLineNumbers 
+const latestTweets = await tweetScraper.scrapeTweets("https://x.com/mannupaaji", 5);
+
+console.log(latestTweets);
+/**
+[
+  {
+    "tweet": "Going to record another project review video on my channel\n\nDrop in your projects if you want me to review them 👇"
+  },
+  {
+    "tweet": "Thank you @leerob for the Monday motivation 💯 https://t.co/PinHWc8nXl"
+  },
+  {
+    "tweet": "Sab viruddh khade hain Madhav.\n\nSab haarenge Parth. https://t.co/t1ThZKTPRy"
+  },
+  {
+    "tweet": "I love jameson"
+  },
+  {
+    "tweet": "They took the soul out of McDonalds. https://t.co/munrNTcATC"
+  }
+]
+*/
+```
+## Props
+
+### TweetScraperTool
+
+| Prop   | Type   | Description             | Default |
+| ------ | ------ | ----------------------- | ------- |
+| apiKey | string | The API key of APIFY | ""      |
+
+### scrapeTweetText
+
+| Prop       | Type   | Description               |
+| ---------- | ------ | ------------------------- |
+| tweetId | string | The Twitter ID of the tweet |
+| tweetUrl | string | The Twitter URL of the tweet |
+
+
+### scrapeTweets
+
+| Prop       | Type   | Description               |
+| ---------- | ------ | ------------------------- |
+| url | string | The Twitter URL of the profile |
+| tweetCount | number | The number of tweets to scrape |
+| sinceDate | string | The date since which tweets should be scraped |
+
+
+
+## Credits
+
+This component is built on top of [APIFY](https://console.apify.com/)
+

@@ -83,6 +83,11 @@ export const docsConfig: DocsConfig = {
           href: '/components/linkedinTool',
           items: [],
         },
+        {
+          title: 'TweetScraper Tool',
+          href: '/components/tweetScraperTool',
+          items: [],
+        },
       ],
     },
     {
