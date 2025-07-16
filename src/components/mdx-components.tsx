@@ -30,6 +30,7 @@ import { SearchApiToolDemo } from './DemoComponents/searchApiToolDemo';
 import { LinkedinToolDemo } from './DemoComponents/linkedinToolDemo';
 import { UnstructuredLoaderDemo } from './DemoComponents/unstructuredLoaderDemo';
 import { ChatWatsonxDemo } from './DemoComponents/chatWatsonxAiDemo';
+import { TwitterScraperToolDemo } from './DemoComponents/twitterScraperTool';
 
 const components = {
   Accordion,
@@ -53,6 +54,7 @@ const components = {
   LinkedinToolDemo,
   UnstructuredLoaderDemo,
   ChatWatsonxDemo,
+  TwitterScraperToolDemo,
   pre: Pre,
 
   h1: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
