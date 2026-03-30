@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { ChatGemini } from '@/utils/chatGemini';
 import { ratelimit } from './core';
 
-export const maxDuration = 300;
+// export const maxDuration = 300;
 
 const requestBodyValidator = z.object({
   url: z.string().url(),
