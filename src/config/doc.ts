@@ -68,9 +68,10 @@ export const docsConfig: DocsConfig = {
           items: [],
         },
         {
-          title: 'SearchApi Tool',
-          href: '/components/searchapiTool',
+          title: 'SerpApi Tool',
+          href: '/components/serpApiTool',
           items: [],
+          label: 'New',
         },
         {
           title: 'Calculator Tool',

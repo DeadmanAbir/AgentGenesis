@@ -26,11 +26,11 @@ import { ChatOpenAIDemo } from './DemoComponents/chatOpenAIDemo';
 import { LinkedInAgentDemo } from './DemoComponents/linkedinAgentDemo';
 import { WikipediaToolDemo } from './DemoComponents/wikipediaToolDemo';
 import { CalculatorToolDemo } from './DemoComponents/calculatorToolDemo';
-import { SearchApiToolDemo } from './DemoComponents/searchApiToolDemo';
 import { LinkedinToolDemo } from './DemoComponents/linkedinToolDemo';
 import { UnstructuredLoaderDemo } from './DemoComponents/unstructuredLoaderDemo';
 import { ChatWatsonxDemo } from './DemoComponents/chatWatsonxAiDemo';
 import { TwitterScraperToolDemo } from './DemoComponents/twitterScraperTool';
+import { SerpApiToolDemo } from './DemoComponents/serpApiToolDemo';
 
 const components = {
   Accordion,
@@ -50,7 +50,7 @@ const components = {
   LinkedinAgent,
   WikipediaToolDemo,
   CalculatorToolDemo,
-  SearchApiToolDemo,
+  SerpApiToolDemo,
   LinkedinToolDemo,
   UnstructuredLoaderDemo,
   ChatWatsonxDemo,

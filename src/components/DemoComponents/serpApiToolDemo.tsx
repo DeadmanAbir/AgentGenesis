@@ -2,7 +2,7 @@
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import React from 'react';
-export function SearchApiToolDemo() {
+export function SerpApiToolDemo() {
   const theme = useTheme();
   const [mounted, setMounted] = React.useState(false);
 
@@ -17,23 +17,23 @@ export function SearchApiToolDemo() {
     <>
       {theme.theme === 'dark' ? (
         <Image
-          src="/componentpics/searchApi Tool dark.png"
+          src="/componentpics/serpApi Tool dark.png"
           loader={() => {
-            return '/componentpics/searchApi Tool dark.png';
+            return '/componentpics/serpApi Tool dark.png';
           }}
           width={800}
           height={500}
-          alt="searchApi_flowchart"
+          alt="serpApi_flowchart"
         />
       ) : (
         <Image
-          src="/componentpics/searchApi Tool light.png"
+          src="/componentpics/serpApi Tool light.png"
           loader={() => {
-            return '/componentpics/searchApi Tool light.png';
+            return '/componentpics/serpApi Tool light.png';
           }}
           width={800}
           height={500}
-          alt="searchApi_flowchart"
+          alt="serpApi_flowchart"
         />
       )}
     </>
