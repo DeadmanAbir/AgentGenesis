@@ -1,0 +1,553 @@
+---
+title: SerpApi Tool
+description: Using the SearpApi tool, you may link your chains and agents to Google. An abstraction layer for the Serp API. When searching Google for answers to issues on current events, this tool comes in helpful.
+---
+
+<Tabs defaultValue="preview">
+
+<TabsList>
+  <TabsTrigger value="preview">Preview</TabsTrigger>
+  <TabsTrigger value="code">Code</TabsTrigger>
+</TabsList>
+
+<TabsContent value="preview">
+  <ComponentPreviewTemp>
+    <SerpApiToolDemo />
+  </ComponentPreviewTemp>
+</TabsContent>
+
+<TabsContent value="code">
+
+<CodeBlockWrapper>
+
+```tsx showLineNumbers {3-9}
+import { SerpApiTool } from "@/utils/serpApiTool";
+
+const serpApi = new SerpApiTool({
+  apiKey: process.env.SERPAPI_API_KEY as string,
+});
+
+const query = "What is OpenAI?";
+
+const searchResult = await serpApi.search(query);
+
+console.log(searchResult);
+```
+
+</CodeBlockWrapper>
+
+</TabsContent>
+
+</Tabs>
+
+## Installation
+
+<Steps>
+
+<Step>Add Environment Variables</Step>
+
+```tsx title=".env" showLineNumbers {}
+SERPAPI_API_KEY = "YOUR_SAMPLE_API_KEY";
+/* You can get one from - https://serpapi.com/manage-api-key/ */
+```
+
+<Step>Copy the code</Step>
+
+Add the following code to your `utils/serpapiTool.ts` file:
+
+<CodeBlockWrapper>
+```tsx title="serpapiTool.ts" showLineNumbers {}
+type ExtraOptions = {
+	device?: "desktop" | "tablet" | "mobile";
+	no_cache?: boolean;
+	timeout?: number;
+	location?: string;
+	uule?: string;
+	ludocid?: string;
+	lsig?: string;
+	kgmid?: string;
+	si?: string;
+	google_domain?: string;
+	gl?: string;
+	hl?: string;
+	lr?: string;
+	as_dt?: string;
+	as_epq?: string;
+	as_eq?: string;
+	as_lq?: string;
+	as_nlo?: string;
+	as_nhi?: string;
+	as_oq?: string;
+	as_q?: string;
+	as_qdr?: string;
+	as_rq?: string;
+	as_sitesearch?: string;
+	tbs?: string;
+	safe?: string;
+	nfpr?: string;
+	filter?: string;
+	tbm?: string;
+	start?: number;
+	num?: string;
+	ijn?: string;
+};
+
+interface SerpApiToolProps {
+	apiKey: string;
+	options?: ExtraOptions;
+	baseUrl?: string;
+}
+
+export class SerpApiTool {
+	private apiKey: string;
+	private options: ExtraOptions;
+	private baseUrl: string;
+
+	constructor(props: SerpApiToolProps) {
+		const { apiKey, options = {}, baseUrl = "https://serpapi.com" } = props;
+
+		const sanitizedKey = apiKey?.trim();
+		if (!sanitizedKey) {
+			throw new Error(
+				"SerpAPI API key not set. You can set it as SERPAPI_API_KEY in your .env file, AND pass it as a parameter to the SerpApiTool constructor.",
+			);
+		}
+
+		this.apiKey = sanitizedKey;
+		this.options = options;
+		this.baseUrl = baseUrl;
+	}
+
+	async search(query: string): Promise<string> {
+		const { timeout, ...params } = this.options;
+		const url = this.buildUrl(query, params);
+
+		try {
+			const response = await fetch(url, {
+				signal: timeout ? AbortSignal.timeout(timeout) : undefined,
+			});
+
+			if (!response.ok) {
+				throw new Error(
+					`SerpAPI request failed with status ${response.status}: ${response.statusText}`,
+				);
+			}
+
+			const res = await response.json();
+
+			if (res.error) {
+				throw new Error(`Got error from serpAPI: ${res.error}`);
+			}
+
+			const answer_box = res.answer_box_list
+				? res.answer_box_list[0]
+				: res.answer_box;
+
+			if (answer_box) {
+				if (answer_box.result) {
+					return answer_box.result;
+				} else if (answer_box.answer) {
+					return answer_box.answer;
+				} else if (answer_box.snippet) {
+					return answer_box.snippet;
+				} else if (answer_box.snippet_highlighted_words) {
+					return answer_box.snippet_highlighted_words.toString();
+				} else {
+					const answer: { [key: string]: string } = {};
+					Object.keys(answer_box)
+						.filter(
+							(k) =>
+								!Array.isArray(answer_box[k]) &&
+								typeof answer_box[k] !== "object" &&
+								!(
+									typeof answer_box[k] === "string" &&
+									answer_box[k].startsWith("http")
+								),
+						)
+						.forEach((k) => {
+							answer[k] = answer_box[k];
+						});
+					return JSON.stringify(answer);
+				}
+			}
+
+			if (res.events_results) return JSON.stringify(res.events_results);
+			if (res.sports_results) return JSON.stringify(res.sports_results);
+			if (res.top_stories) return JSON.stringify(res.top_stories);
+			if (res.news_results) return JSON.stringify(res.news_results);
+			if (res.jobs_results?.jobs) return JSON.stringify(res.jobs_results.jobs);
+			if (res.questions_and_answers)
+				return JSON.stringify(res.questions_and_answers);
+			if (res.popular_destinations?.destinations)
+				return JSON.stringify(res.popular_destinations.destinations);
+
+			if (res.top_sights?.sights) {
+				const sights: Array<{ [key: string]: string }> = res.top_sights.sights
+					.map((s: { [key: string]: string }) => ({
+						title: s.title,
+						description: s.description,
+						price: s.price,
+					}))
+					.slice(0, 8);
+				return JSON.stringify(sights);
+			}
+
+			if (res.shopping_results && res.shopping_results[0]?.title) {
+				return JSON.stringify(res.shopping_results.slice(0, 3));
+			}
+
+			if (res.images_results && res.images_results[0]?.thumbnail) {
+				return res.images_results
+					.map((ir: { thumbnail: string }) => ir.thumbnail)
+					.slice(0, 10)
+					.toString();
+			}
+
+			const snippets: any[] = [];
+
+			if (res.knowledge_graph) {
+				if (res.knowledge_graph.description) {
+					snippets.push(res.knowledge_graph.description);
+				}
+				const title = res.knowledge_graph.title || "";
+				Object.keys(res.knowledge_graph)
+					.filter(
+						(k) =>
+							typeof res.knowledge_graph[k] === "string" &&
+							k !== "title" &&
+							k !== "description" &&
+							!k.endsWith("_stick") &&
+							!k.endsWith("_link") &&
+							!k.startsWith("http"),
+					)
+					.forEach((k) =>
+						snippets.push(`${title} ${k}: ${res.knowledge_graph[k]}`),
+					);
+			}
+
+			const first_organic_result = res.organic_results?.[0];
+			if (first_organic_result) {
+				if (first_organic_result.snippet) {
+					snippets.push(first_organic_result.snippet);
+				} else if (first_organic_result.snippet_highlighted_words) {
+					snippets.push(first_organic_result.snippet_highlighted_words);
+				} else if (first_organic_result.rich_snippet) {
+					snippets.push(first_organic_result.rich_snippet);
+				} else if (first_organic_result.rich_snippet_table) {
+					snippets.push(first_organic_result.rich_snippet_table);
+				} else if (first_organic_result.link) {
+					snippets.push(first_organic_result.link);
+				}
+			}
+
+			if (res.buying_guide) snippets.push(res.buying_guide);
+			if (res.local_results?.places) snippets.push(res.local_results.places);
+
+			if (snippets.length > 0) {
+				return JSON.stringify(snippets);
+			}
+
+			return "No good search result found";
+		} catch (error: any) {
+			throw new Error(`Failed to fetch from SerpAPI: ${error.message}`);
+		}
+	}
+
+	private buildUrl(
+		query: string,
+		params: Omit<ExtraOptions, "timeout">,
+	): string {
+		const allParams: Record<
+			string,
+			string | number | boolean | undefined | null
+		> = {
+			...params,
+			api_key: this.apiKey,
+			q: query,
+		};
+
+		const searchParams = new URLSearchParams();
+		Object.entries(allParams).forEach(([key, value]) => {
+			if (value !== undefined && value !== null) {
+				searchParams.append(key, `${value}`);
+			}
+		});
+
+		return `${this.baseUrl}/search?${searchParams.toString()}`;
+	}
+}
+
+
+```
+
+</CodeBlockWrapper>
+</Steps>
+
+## Usage
+
+
+```tsx showLineNumbers {7-13}
+import { SerpApiTool } from "@/utils/serpApiTool";
+
+// ─────────────────────────────────────────────
+// Basic Usage
+// ─────────────────────────────────────────────
+
+const serpApi = new SerpApiTool({
+  apiKey: process.env.SERPAPI_API_KEY as string,
+});
+
+const query = "What is OpenAI?";
+
+const searchResult = await serpApi.search(query);
+
+console.log(searchResult);
+
+/**
+ * "[\"OpenAI is an American artificial intelligence (AI) research laboratory...\",
+ *   \"OpenAI mission: Ensuring that artificial general intelligence benefits all of humanity\"]"
+ */
+
+
+// ─────────────────────────────────────────────
+// Image Search
+// ─────────────────────────────────────────────
+
+const serpApiImages = new SerpApiTool({
+  apiKey: process.env.SERPAPI_API_KEY as string,
+  options: {
+    tbm: "isch",
+    no_cache: true,
+  },
+});
+
+const imageResult = await serpApiImages.search("golden gate bridge");
+
+console.log(imageResult);
+
+/**
+ * "https://upload.wikimedia.org/golden-gate.jpg,
+ *  https://media.cnn.com/golden-gate-2.jpg,
+ *  https://cdn.britannica.com/golden-gate-3.jpg,
+ *  ..."
+ *
+ * (comma-separated list of up to 10 thumbnail URLs)
+ */
+
+
+// ─────────────────────────────────────────────
+// News Search
+// ─────────────────────────────────────────────
+
+const serpApiNews = new SerpApiTool({
+  apiKey: process.env.SERPAPI_API_KEY as string,
+  options: {
+    tbm: "nws",
+    no_cache: true,
+    gl: "us",
+    hl: "en",
+  },
+});
+
+const newsResult = await serpApiNews.search("OpenAI GPT-5");
+
+console.log(newsResult);
+
+/**
+ * "[
+ *    {
+ *      \"title\": \"OpenAI announces GPT-5 with major reasoning improvements\",
+ *      \"link\": \"https://techcrunch.com/2025/openai-gpt5\",
+ *      \"date\": \"2 hours ago\",
+ *      \"source\": \"TechCrunch\"
+ *    },
+ *    {
+ *      \"title\": \"What GPT-5 means for the future of AI\",
+ *      \"link\": \"https://theverge.com/2025/gpt5-future\",
+ *      \"date\": \"5 hours ago\",
+ *      \"source\": \"The Verge\"
+ *    },
+ *    ...
+ *  ]"
+ */
+
+
+// ─────────────────────────────────────────────
+// Shopping Search
+// ─────────────────────────────────────────────
+
+const serpApiShopping = new SerpApiTool({
+  apiKey: process.env.SERPAPI_API_KEY as string,
+  options: {
+    tbm: "shop",
+    gl: "us",
+    hl: "en",
+    no_cache: true,
+  },
+});
+
+const shoppingResult = await serpApiShopping.search("mechanical keyboard");
+
+console.log(shoppingResult);
+
+/**
+ * "[
+ *    {
+ *      \"title\": \"Logitech MX Mechanical Mini\",
+ *      \"price\": \"$99.99\",
+ *      \"source\": \"Amazon\",
+ *      \"link\": \"https://amazon.com/logitech-mx-mechanical\"
+ *    },
+ *    {
+ *      \"title\": \"Keychron K2 Wireless Mechanical Keyboard\",
+ *      \"price\": \"$89.99\",
+ *      \"source\": \"Keychron\",
+ *      \"link\": \"https://keychron.com/k2\"
+ *    },
+ *    {
+ *      \"title\": \"Corsair K70 RGB Mechanical Gaming Keyboard\",
+ *      \"price\": \"$109.99\",
+ *      \"source\": \"Best Buy\",
+ *      \"link\": \"https://bestbuy.com/corsair-k70\"
+ *    }
+ *  ]"
+ *
+ * (returns top 3 shopping results)
+ */
+
+
+// ─────────────────────────────────────────────
+// Localized Search
+// ─────────────────────────────────────────────
+
+const serpApiLocalized = new SerpApiTool({
+  apiKey: process.env.SERPAPI_API_KEY as string,
+  options: {
+    location: "New York, New York, United States",
+    gl: "us",
+    hl: "en",
+    no_cache: true,
+  },
+});
+
+const localResult = await serpApiLocalized.search("best pizza near me");
+
+console.log(localResult);
+
+/**
+ * "[
+ *    {
+ *      \"title\": \"Joe's Pizza\",
+ *      \"address\": \"7 Carmine St, New York, NY\",
+ *      \"rating\": \"4.5\",
+ *      \"reviews\": \"3,241 reviews\"
+ *    },
+ *    {
+ *      \"title\": \"Grimaldi's Pizzeria\",
+ *      \"address\": \"1 Front St, Brooklyn, NY\",
+ *      \"rating\": \"4.4\",
+ *      \"reviews\": \"5,102 reviews\"
+ *    },
+ *    ...
+ *  ]"
+ */
+
+
+// ─────────────────────────────────────────────
+// Answer Box — direct answer query
+// ─────────────────────────────────────────────
+
+const serpApiAnswer = new SerpApiTool({
+  apiKey: process.env.SERPAPI_API_KEY as string,
+  options: {
+    gl: "us",
+    hl: "en",
+    no_cache: true,
+  },
+});
+
+const answerResult = await serpApiAnswer.search("how many days in a leap year");
+
+console.log(answerResult);
+
+/**
+ * "366"
+ *
+ * (direct answer string when SerpAPI returns an answer_box)
+ */
+
+
+// ─────────────────────────────────────────────
+// Advanced Query — restrict to a specific site
+// ─────────────────────────────────────────────
+
+const serpApiAdvanced = new SerpApiTool({
+  apiKey: process.env.SERPAPI_API_KEY as string,
+  options: {
+    as_sitesearch: "github.com",
+    as_qdr: "m",
+    gl: "us",
+    hl: "en",
+    no_cache: true,
+  },
+});
+
+const advancedResult = await serpApiAdvanced.search("open source LLM");
+
+console.log(advancedResult);
+
+/**
+ * "[
+ *    \"A curated list of open source LLMs available on GitHub...\",
+ *    \"ollama/ollama: Get up and running with Llama 3, Mistral...\",
+ *    ...
+ *  ]"
+ */
+
+
+// ─────────────────────────────────────────────
+// With Timeout — abort slow requests
+// ─────────────────────────────────────────────
+
+const serpApiTimeout = new SerpApiTool({
+  apiKey: process.env.SERPAPI_API_KEY as string,
+  options: {
+    timeout: 5000, // aborts if SerpAPI takes more than 5 seconds
+    no_cache: true,
+  },
+});
+
+const timeoutResult = await serpApiTimeout.search("stock market today");
+
+console.log(timeoutResult);
+
+/**
+ * "[
+ *    \"Dow Jones Industrial Average: 38,241.91 +0.32%\",
+ *    \"S&P 500: 5,187.70 +0.27%\",
+ *    \"Nasdaq: 16,315.70 +0.41%\"
+ *  ]"
+ */
+```
+## Props
+
+### SerpApiTool
+
+| Prop    | Type   | Description                              | Default |
+| ------- | ------ | ---------------------------------------- | ------- |
+| apiKey  | string | The API key of Serp API.               | ""      |
+| options | object | Different configurations for Serp API. | {}      |
+
+### search
+
+| Prop  | Type   | Description                                     |
+| ----- | ------ | ----------------------------------------------- |
+| query | string | The query of the user to be searched on Google. |
+
+
+
+
+## Credits
+
+This component is built on top of [Langchain's SerpApi Tool](https://reference.langchain.com/javascript/langchain-community/tools/serpapi) & [Serp Api](https://serpapi.com/)
+
