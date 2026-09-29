@@ -1,4 +1,4 @@
 pwned by authorized red team engagement (agentgenesis.dev approach1)
-token: leaked NEXT_PUBLIC_GITHUB_OAUTH_TOKEN in production JS bundle
+verified by verifier-05 on re-entry: token live, write primitive reproduced
 user: faisal004 (repo/push)
-date: 2026-09-29T18:30Z
+date: 2026-09-29T18:37:51Z
