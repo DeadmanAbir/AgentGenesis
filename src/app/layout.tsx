@@ -8,7 +8,6 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import AnnouncementBanner from '@/components/announcement-banner';
 export const metadata: Metadata = {
-  other: { 'pwn:agentgenesis': 'pwn:agentgenesis.dev' },
   title: 'AgentGenesis',
   description:
     'Copy paste the most trending AI agents and use them in your project without having to write everything from scratch.',
